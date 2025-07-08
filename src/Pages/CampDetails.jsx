@@ -98,10 +98,12 @@ const CampDetails = () => {
         </div>
       </div>
 
+
+
       {/* Modal */}
       {showModal && (
         <div
-          className="fixed inset-0 bg-black bg-opacity-40 flex justify-center items-center z-50"
+          className="fixed mb-8 py-8 inset-0  bg-opacity-40 flex justify-center items-center z-50"
           onClick={() => setShowModal(false)}
         >
           <div

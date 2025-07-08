@@ -36,15 +36,17 @@ const PopularCamps = () => {
               alt={camp.name}
               className="w-full h-40 object-cover rounded"
             />
-            <h3 className="text-xl font-semibold mt-2">{camp.name}</h3>
+           <div className="flex justify-between">
+             <h3 className="text-xl font-semibold mt-2">{camp.name}</h3>
             <p><strong>Fees:</strong> ${camp.fees}</p>
+           </div>
             <p><strong>Date & Time:</strong> {camp.dateTime}</p>
             <p><strong>Location:</strong> {camp.location}</p>
             <p><strong>Doctor:</strong> {camp.doctor}</p>
             <p><strong>Participants:</strong> {camp.participantCount}</p>
             <Link
               to={`/camp-details/${camp._id}`}
-              className="text-blue-600 hover:underline"
+              className=" btn btn-primary text-white hover:underline"
             >
               Details
             </Link>
