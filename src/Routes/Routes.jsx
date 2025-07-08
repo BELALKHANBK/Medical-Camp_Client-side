@@ -12,6 +12,7 @@ import ManageRegister from "../DashBoard/ManageRegister";
 import PriveteRoute from "./Priveteroute/PrivetRoute";
 import AvailablePages from "../Pages/AvaileblePages";
 import CampDetails from "../Pages/CampDetails";
+import Payments from "../DashBoard/Payments";
 
 export const router = createBrowserRouter([
   {
@@ -66,6 +67,10 @@ export const router = createBrowserRouter([
       {
         path:'managereg',
         Component:ManageRegister
+      },
+      {
+        path:'/dashboard/payment/:campId',
+        Component:Payments
       }
     ]
   }

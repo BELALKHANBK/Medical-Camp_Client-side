@@ -1,15 +1,22 @@
 import axios from "axios";
-import React from "react";
 import { useForm } from "react-hook-form";
 import Swal from "sweetalert2";
+import useAuth from "../AuthProvider/UseAuth"; // ✅ Update path if needed
 
 const AddCamp = () => {
   const { register, handleSubmit, reset } = useForm();
+  const { user } = useAuth();
 
   const onSubmit = async (data) => {
+    if (!user?.email) {
+      Swal.fire("Error", "You must be logged in to add a camp", "error");
+      return;
+    }
+
     try {
       const campData = {
-        name: data.name,
+        name: data.name, // participant name
+        camp_name: data.camp_name, // ✅ new field
         image: data.image,
         fees: Number(data.fees),
         dateTime: data.dateTime,
@@ -17,6 +24,8 @@ const AddCamp = () => {
         doctor: data.doctor,
         participantCount: 0,
         description: data.description,
+        created_user: user.email,
+        payment_status: "unpaid",
       };
 
       const res = await axios.post("http://localhost:5000/camps", campData);
@@ -37,6 +46,12 @@ const AddCamp = () => {
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <input
           {...register("name")}
+          placeholder="Participant Name"
+          required
+          className="input input-bordered w-full"
+        />
+        <input
+          {...register("camp_name")} // ✅ fixed name
           placeholder="Camp Name"
           required
           className="input input-bordered w-full"
