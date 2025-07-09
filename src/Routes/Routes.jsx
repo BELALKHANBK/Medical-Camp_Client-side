@@ -1,4 +1,4 @@
-/* import { createBrowserRouter } from "react-router";
+import { createBrowserRouter } from "react-router";
 import RootLayout from "../RootLayout/RootLayout";
 import Home from "../Pages/Home";
 import LoginLayout from "../LoginPages/LoginLayout";
@@ -75,4 +75,3 @@ export const router = createBrowserRouter([
     ]
   }
 ]);
- */

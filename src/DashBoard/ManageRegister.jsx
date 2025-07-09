@@ -67,6 +67,7 @@ const ManageRegister = () => {
         onPay={handlePay}
         onView={handleView}
         onDetails={handleDetails}
+        
       />
     </div>
   );

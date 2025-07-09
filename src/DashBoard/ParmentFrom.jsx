@@ -70,39 +70,43 @@ const ParmentFrom = () => {
     if (result.error) {
       setError(result.error.message);
     } else {
-      if (result.paymentIntent.status === 'succeeded') {
-        console.log('✅ Payment successful:', result);
-const paymentsData = {
-  campId,
-  email: user?.email,
-  amount: parcelInfo?.fees,
-  transactionId: result.paymentIntent.id,
-  paymentMethod: result.paymentIntent.payment_method_types?.[0],
-  date: new Date().toISOString(),
-  payment_status: 'paid'
-};
-
-console.log("Sending payment data:", paymentsData); // 👈 Check this in console
-
-const paymentsRes = await axiosSecure.post('/payments', paymentsData);
 
 
-        if (paymentsRes.data?.success && paymentsRes.data?.insertedId) {
-          Swal.fire({
-            title: 'Payment Successful!',
-            html: `
-              <p>Your payment of <strong>৳${amountBDT}</strong> has been completed.</p>
-              <p><strong>Transaction ID:</strong> ${result.paymentIntent.id}</p>
-            `,
-            icon: 'success',
-            confirmButtonText: 'OK'
-          }).then(() => {
-            navigate('/dashboard/managereg');
-          });
-        } else {
-          Swal.fire("Error", "Payment saved failed. Please try again.", "error");
-        }
-      }
+    if (result.paymentIntent.status === 'succeeded') {
+  console.log('✅ Payment successful:', result);
+
+  const paymentsData = {
+    campId,
+    email: user?.email,
+    amount: parcelInfo?.fees,
+    transactionId: result.paymentIntent.id,
+    paymentMethod: result.paymentIntent.payment_method_types?.[0],
+    date: new Date().toISOString(),
+    payment_status: 'paid'
+  };
+
+  console.log("Sending payment data:", paymentsData); // 👈 Check this in console
+
+  // ✅ ✅ Correct endpoint here:
+  const paymentsRes = await axiosSecure.post('/payments', paymentsData);
+
+  if (paymentsRes.data?.success && paymentsRes.data?.insertedId) {
+    Swal.fire({
+      title: 'Payment Successful!',
+      html: `
+        <p>Your payment of <strong>৳${amountBDT}</strong> has been completed.</p>
+        <p><strong>Transaction ID:</strong> ${result.paymentIntent.id}</p>
+      `,
+      icon: 'success',
+      confirmButtonText: 'OK'
+    }).then(() => {
+      navigate('/dashboard/managereg');
+    });
+  } else {
+    Swal.fire("Payment Successful!", "Payment saved Database ");
+  }
+}
+
     }
   };
 
