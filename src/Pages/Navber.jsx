@@ -32,6 +32,11 @@ const Navber = () => {
           <NavLink to="/dashboard">Dashboard</NavLink>
         </li>
       )}
+      
+        <li>
+          <NavLink to="/participent">Participant Dashboard</NavLink>
+        </li>
+    
     </>
   );
 

@@ -13,6 +13,10 @@ import PriveteRoute from "./Priveteroute/PrivetRoute";
 import AvailablePages from "../Pages/AvaileblePages";
 import CampDetails from "../Pages/CampDetails";
 import Payments from "../DashBoard/Payments";
+import ParmentFrom from "../DashBoard/ParmentFrom";
+import ParticipantLayout from "../Participant Dashboard/ParticipantLayout";
+import Analytics from "../Participant Dashboard/Analytics";
+import PaymentHistory from "../Participant Dashboard/PaymentHistory";
 
 export const router = createBrowserRouter([
   {
@@ -71,7 +75,25 @@ export const router = createBrowserRouter([
       {
         path:'/dashboard/payment/:campId',
         Component:Payments
-      }
+      },
+     
     ]
+  },
+  {
+     
+path:'/participent',
+element:<PriveteRoute><ParticipantLayout/></PriveteRoute>,
+children:[
+  {
+    path:'analytics',
+    Component:<Analytics/>
+  },
+  {
+    path:"paymenthis",
+    Component:PaymentHistory
+
+  }
+]
+      
   }
 ]);

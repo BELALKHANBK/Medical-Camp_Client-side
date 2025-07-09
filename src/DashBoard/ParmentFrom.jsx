@@ -103,7 +103,10 @@ const ParmentFrom = () => {
       navigate('/dashboard/managereg');
     });
   } else {
-    Swal.fire("Payment Successful!", "Payment saved Database ");
+    Swal.fire(`Payment Successful!,
+       <p>Your payment of <strong>৳${amountBDT}</strong> has been completed.</p>
+        <p><strong>Transaction ID:</strong> ${result.paymentIntent.id}</p>
+   ` );
   }
 }
 
