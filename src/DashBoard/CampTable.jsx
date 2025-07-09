@@ -34,13 +34,13 @@ const CampTable = ({ camps, onDelete, onPay, onView, onDetails }) => {
                     <span className="badge badge-error">Unpaid</span>
                   )}
                 </td>
-                <td>
+            {/*     <td>
                   {camp.payment_status === "paid" ? (
                     <span className="badge badge-success">Confirmed</span>
                   ) : (
                     <span className="badge badge-warning">Pending</span>
                   )}
-                </td>
+                </td> */}
                 <td>
                   <div className="flex items-center gap-2">
                     <button onClick={() => onView(camp)} className="btn btn-xs btn-info" title="View">
@@ -81,7 +81,7 @@ const CampTable = ({ camps, onDelete, onPay, onView, onDetails }) => {
             <p><strong>Camp Name:</strong> {camp.camp_name}</p>
             <p><strong>Fees:</strong> ৳ {camp.fees}</p>
             <p><strong>Location:</strong> {camp.location || "N/A"}</p>
-            <p><strong>Confirmation:</strong> {camp.payment_status === "paid" ? "Confirmed" : "Pending"}</p>
+           
             <div className="flex flex-wrap gap-2 mt-3">
               <button onClick={() => onView(camp)} className="btn btn-xs btn-info">
                 <FaEye /> View
