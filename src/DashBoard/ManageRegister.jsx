@@ -12,13 +12,15 @@ const ManageRegister = () => {
   const navigate=useNavigate()
 
   // ⬇️ useQuery থেকে refetch নিয়ে নিন
-  const { data: campss = [], refetch } = useQuery({
-    queryKey: ['my-camps', user?.email],
-    queryFn: async () => {
-      const res = await axiosSe.get(`/camps?email=${user.email}`);
-      return res.data;
-    },
-  });
+const { data: campss = [],  refetch } = useQuery({
+  queryKey: ['my-camps', user?.email],
+  queryFn: async () => {
+    if(!user?.email) return [];  // safety check (optional)
+    const res = await axiosSe.get(`http://localhost:5000/camps`);
+    return res.data;
+  },
+  enabled: !!user?.email,  // ইউজার লগইন না থাকলে চালাবে না
+});
 
   const handleDelete = (id) => {
     Swal.fire({
@@ -33,7 +35,7 @@ const ManageRegister = () => {
           .then((res) => {
             if (res.data.deletedCount > 0 || res.data.message === "Camp deleted successfully") {
               Swal.fire("Deleted!", "Camp has been deleted.", "success");
-              refetch(); // 🔄 এই লাইন টা delete এর পর fresh data আনবে
+              refetch(); //এই লাইন টা delete এর পর fresh data আনবে
             }
           })
           .catch(() => {
@@ -67,7 +69,7 @@ const ManageRegister = () => {
         onPay={handlePay}
         onView={handleView}
         onDetails={handleDetails}
-        
+       
       />
     </div>
   );

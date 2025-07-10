@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router";
+import useAxoiseSecure from "../AuthProvider/UseAxios";
 
 const AvailablePages = () => {
   const [camps, setCamps] = useState([]);
@@ -9,10 +10,9 @@ const AvailablePages = () => {
   const [sortBy, setSortBy] = useState("");
   const [layout, setLayout] = useState("three"); // three or two columns
   const [loading, setLoading] = useState(true);
-
+const axios=useAxoiseSecure()
   useEffect(() => {
-    axios
-      .get("http://localhost:5000/camps")
+    axios.get("http://localhost:5000/camps")
       .then((res) => {
         setCamps(res.data);
         setFilteredCamps(res.data);

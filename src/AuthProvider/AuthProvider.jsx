@@ -27,6 +27,13 @@ return signInWithPopup(auth,googleProvider)
         return signOut(auth)    
     }
 
+/////image
+const updateUserProfile=profileInfo=>{
+    return updateUserProfile(auth.currentUser,profileInfo)
+}
+
+
+
   useEffect(()=>{
 const unSubscribe=onAuthStateChanged(auth,currentUser=>{
     setUser(currentUser)
@@ -44,12 +51,13 @@ signIn,
 user,
 loading,
 signInWithGoogle,
+ updateUserProfile,
 logOut
     }
     return (
-        <AuthContext value={authInfp}>
+        <AuthContext.Provider value={authInfp}>
            {children}
-        </AuthContext>
+        </AuthContext.Provider>
     );
 };
 

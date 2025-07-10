@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router";
 
+
 const PopularCamps = () => {
   const [camps, setCamps] = useState([]);
   const [loading, setLoading] = useState(true);

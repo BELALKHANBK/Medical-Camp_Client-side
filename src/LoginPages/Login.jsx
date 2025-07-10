@@ -9,6 +9,7 @@ import SignInGoogle from './SignInGoogle';
 const Login = () => {
   const {register,handleSubmit,formState:{errors}}=useForm()
   const{signIn} =useAuth()
+
   const location=useLocation()
   const navigate=useNavigate()
   const from=location.state?.from || '/'
@@ -17,7 +18,7 @@ const Login = () => {
   signIn(data.email, data.password)
   .then(result=>{
     console.log(result)
-    navigate(from)
+    navigate(from, { replace: true });
   })
   .catch(error=>{
     console.log(error)

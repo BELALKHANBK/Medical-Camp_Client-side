@@ -33,9 +33,13 @@ const Navber = () => {
         </li>
       )}
       
-        <li>
+    {
+      user &&(
+            <li>
           <NavLink to="/participent">Participant Dashboard</NavLink>
         </li>
+      )
+    }
     
     </>
   );

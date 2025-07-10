@@ -10,7 +10,7 @@ const PriveteRoute = ({children}) => {
     }
 
     if(!user){
-    return    <Navigate state={{from:location.pathname}} to='/login'></Navigate>
+   return <Navigate to="/login" state={{ from: location.pathname }} replace />;
     }
     return children
 };

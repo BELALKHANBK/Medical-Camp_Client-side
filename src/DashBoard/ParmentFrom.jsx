@@ -50,7 +50,7 @@ const ParmentFrom = () => {
     }
 
     // Create payment intent
-    const res = await axiosSecure.post('http://localhost:5000/create-payment-intent', {
+    const res = await axiosSecure.post('create-payment-intent', {
       amountInCents: amountInCentsBDT,
       campId
     });

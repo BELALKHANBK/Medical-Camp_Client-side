@@ -1,26 +1,35 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { BsPersonCheck } from 'react-icons/bs';
-import { Link } from 'react-router'; // ✅ ঠিক করা হয়েছে
+import { Link, useNavigate } from 'react-router'; // ✅ ঠিক করা হয়েছে
 //import SignInGoole from './SignInGoole';
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { updateProfile } from 'firebase/auth';
 import app from '../../firebase.config';
 import useAuth from '../AuthProvider/UseAuth';
 import SignInGoogle from './SignInGoogle';
+import axios from 'axios';
+import OtherAxios from '../AuthProvider/OtherAxios';
 
 const storage = getStorage(app);
 
 const Register = () => {
   const { register, handleSubmit, formState: { errors } } = useForm();
-  const { createUser } = useAuth();
+  const { createUser, updateUserProfile } = useAuth();
+    const axiosBelal=OtherAxios()///another user role axios
+  const [imageFile, setImageFile] = useState(null);//image declare state
+  
+const navigate=useNavigate()
+  const from=location.state?.from || '/'
 
-  const [imageFile, setImageFile] = useState(null);
 
-  const handleImageUpLoad = (e) => {///image upload korar 
+  const handleImageUpLoad =async (e) => {///image upload korar 
     const file = e.target.files[0];
     setImageFile(file);
-    console.log('Selected image:', file);
+    const formdata = new FormData(); // আগে declare করো
+    formdata.append('image', file); // তারপর use করো
+    const imageURl=`https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_image_key}`
+    const res=await axios.post(imageURl,formdata)
+    console.log(res.data.data.url)
   };
 
   const onSubmit = async (data) => {
@@ -28,17 +37,33 @@ const Register = () => {
       const { name, email, password } = data;
       const userCredential = await createUser(email, password);
       const user = userCredential.user;
+ navigate(from, { replace: true });
+      /////user role/////////
+      const userInfo={
+        email:data.email,
+        role:'user',
+        created_at: new Date().toISOString(),
+        last_login: new Date().toISOString()
+      }
+
+     const userRes=await axiosBelal.post('/users',userInfo)
+     console.log(userRes.data)
+      
+      ////////////
+
+
       let photoURL = '';
       if (imageFile) {
         const storageRef = ref(storage, `profileImages/${Date.now()}-${imageFile.name}`);
         await uploadBytes(storageRef, imageFile);
         photoURL = await getDownloadURL(storageRef);
       }
-      await updateProfile(user, {
+      await updateUserProfile(user, {
         displayName: name,
         photoURL: photoURL || 'https://i.ibb.co/ZYW3VTp/brown-brim.png',
       });
       console.log("✅ User created & profile updated:", user);
+      
     } catch (error) {
       console.error("❌ Error:", error.message);
     }

@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+//import axios from "axios";
 import Swal from "sweetalert2";
 import { useForm } from "react-hook-form";
+import useAxoiseSecure from "../AuthProvider/UseAxios";
 
 const ManageCamps = () => {
   const [camps, setCamps] = useState([]);
   const [loading, setLoading] = useState(true);
   const [editingCamp, setEditingCamp] = useState(null);
+  const axios=useAxoiseSecure()
 
   const { register, handleSubmit, reset } = useForm();
 

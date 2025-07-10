@@ -1,15 +1,17 @@
 import { useParams } from "react-router";
 import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
+//import axios from "axios";
 import Swal from "sweetalert2";
 import { useState } from "react";
 import useAuth from "../AuthProvider/UseAuth";
+import useAxoiseSecure from "../AuthProvider/UseAxios";
 
 
 const CampDetails = () => {
   const { id } = useParams();
   const { user } = useAuth();
   const [showModal, setShowModal] = useState(false);
+const axios=useAxoiseSecure()
 
   // Camp details fetch
   const { data: camp, isLoading, refetch } = useQuery({
@@ -27,7 +29,7 @@ const CampDetails = () => {
 
     const joinData = {
       campId: id,
-      participantName: user?.displayName,
+      participantName: user?.displayName || 'Anonymous',
       participantEmail: user?.email,
       age: form.age.value,
       phone: form.phone.value,
@@ -38,6 +40,7 @@ const CampDetails = () => {
       location: camp.location,
       doctor: camp.doctor,
     };
+   console.log('camp joine ',joinData)
 
     try {
   const res = await axios.post("http://localhost:5000/join-camp", joinData);
