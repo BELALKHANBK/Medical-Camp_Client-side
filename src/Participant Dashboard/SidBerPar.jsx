@@ -16,7 +16,7 @@ const SidBerPar = () => {
         </NavLink>
       </li>
       <li>
-        <NavLink to="" className="flex items-center gap-2">
+        <NavLink to="/participent/registered" className="flex items-center gap-2">
           <FaCreditCard />Registered Camps
         </NavLink>
       </li>

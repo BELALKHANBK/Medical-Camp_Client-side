@@ -21,26 +21,28 @@ const Navber = () => {
 
   const navItems = (
     <>
-      <li>
-        <NavLink to="/">Home</NavLink>
-      </li>
-      <li>
-        <NavLink to="/availecamp">Available Camps</NavLink>
-      </li>
+      
+  <div className="gap-6 space-x-4">
+          <NavLink to="/"><span>Home</span></NavLink>
+    
+    
+        <NavLink to="/availecamp"><span>Available Camps</span></NavLink>
+   
       {user && (
-        <li>
-          <NavLink to="/dashboard">Dashboard</NavLink>
-        </li>
+       
+          <NavLink to="/dashboard"><span>Dashboard</span></NavLink>
+      
       )}
       
     {
       user &&(
-            <li>
+          
           <NavLink to="/participent">Participant Dashboard</NavLink>
-        </li>
+        
       )
     }
     
+  </div>
     </>
   );
 

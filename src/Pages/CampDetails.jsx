@@ -1,19 +1,17 @@
 import { useParams } from "react-router";
 import { useQuery } from "@tanstack/react-query";
-//import axios from "axios";
 import Swal from "sweetalert2";
 import { useState } from "react";
 import useAuth from "../AuthProvider/UseAuth";
-import useAxoiseSecure from "../AuthProvider/UseAxios";
-
+import useAxiosSecure from "../AuthProvider/UseAxios";
 
 const CampDetails = () => {
   const { id } = useParams();
   const { user } = useAuth();
   const [showModal, setShowModal] = useState(false);
-const axios=useAxoiseSecure()
+  const axios = useAxiosSecure();
 
-  // Camp details fetch
+  // Fetch camp details
   const { data: camp, isLoading, refetch } = useQuery({
     queryKey: ["camp-details", id],
     queryFn: async () => {
@@ -22,14 +20,13 @@ const axios=useAxoiseSecure()
     },
   });
 
-  // Join Camp Submit
   const handleJoinSubmit = async (e) => {
     e.preventDefault();
     const form = e.target;
 
     const joinData = {
       campId: id,
-      participantName: user?.displayName || 'Anonymous',
+      participantName: user?.displayName || "Anonymous",
       participantEmail: user?.email,
       age: form.age.value,
       phone: form.phone.value,
@@ -39,18 +36,18 @@ const axios=useAxoiseSecure()
       fees: camp.fees,
       location: camp.location,
       doctor: camp.doctor,
+      payment_status: "unpaid",
     };
-   console.log('camp joine ',joinData)
 
     try {
-  const res = await axios.post("http://localhost:5000/join-camp", joinData);
-
-    if (res.data.insertedId) {
-    Swal.fire("Success!", "You have joined the camp!", "success");
-   setShowModal(false);
-   refetch(); // count update
-}
-    } catch {
+      const res = await axios.post("/joine", joinData);
+      if (res.data.insertedId) {
+        Swal.fire("Success!", "You have joined the camp!", "success");
+        setShowModal(false);
+        refetch();
+      }
+    } catch (error) {
+      console.error("Join error:", error);
       Swal.fire("Error", "Failed to join the camp.", "error");
     }
   };
@@ -59,54 +56,31 @@ const axios=useAxoiseSecure()
 
   return (
     <div className="max-w-5xl mx-auto p-4 mt-10">
-      {/* Camp Details Card */}
-      <div className="bg-white shadow-lg rounded-xl overflow-hidden md:flex md:space-x-6">
+      {/* Camp Details */}
+      <div className="bg-white text-black shadow-lg rounded-xl overflow-hidden md:flex md:space-x-6">
         <div className="md:w-1/2">
-          <img
-            src={camp.image}
-            alt={camp.name}
-            className="w-full h-80 object-cover"
-          />
+          <img src={camp.image} alt={camp.name} className="w-full h-80 object-cover" />
         </div>
-
         <div className="md:w-1/2 p-6 flex flex-col justify-between">
           <div>
-            <h2 className="text-3xl font-bold mb-2 text-blue-700">
-              {camp.name}
-            </h2>
-            <p className="text-gray-700 mb-2">
-              <strong>Camp Fees:</strong> ${camp.fees}
-            </p>
-            <p className="text-gray-700 mb-2">
-              <strong>Date & Time:</strong> {camp.dateTime}
-            </p>
-            <p className="text-gray-700 mb-2">
-              <strong>Location:</strong> {camp.location}
-            </p>
-            <p className="text-gray-700 mb-2">
-              <strong>Healthcare Professional:</strong> {camp.doctor}
-            </p>
-            <p className="text-gray-700 mb-2">
-              <strong>Participants:</strong> {camp.participantCount}
-            </p>
-            <p className="text-gray-600 mt-4">{camp.description}</p>
+            <h2 className="text-3xl font-bold mb-2 text-blue-700">{camp.name}</h2>
+            <p><strong>Camp Fees:</strong> ${camp.fees}</p>
+            <p><strong>Date & Time:</strong> {camp.dateTime}</p>
+            <p><strong>Location:</strong> {camp.location}</p>
+            <p><strong>Healthcare Professional:</strong> {camp.doctor}</p>
+            <p><strong>Participants:</strong> {camp.participantCount}</p>
+            <p className="mt-4 text-gray-600">{camp.description}</p>
           </div>
-
-          <button
-            onClick={() => setShowModal(true)}
-            className="btn btn-primary mt-6 w-full"
-          >
+          <button onClick={() => setShowModal(true)} className="btn btn-primary mt-6 w-full">
             Join Camp
           </button>
         </div>
       </div>
 
-
-
-      {/* Modal */}
+      {/* Join Modal */}
       {showModal && (
         <div
-          className="fixed mb-8 py-8 inset-0  bg-opacity-40 flex justify-center items-center z-50"
+          className="fixed inset-0 bg-black bg-opacity-40 flex justify-center items-center z-50"
           onClick={() => setShowModal(false)}
         >
           <div
@@ -115,63 +89,28 @@ const axios=useAxoiseSecure()
           >
             <button
               onClick={() => setShowModal(false)}
-              className="absolute top-2 right-2 text-xl font-bold text-gray-600 hover:text-red-500"
+              className="absolute top-2 right-2 text-xl font-bold hover:text-red-500"
               aria-label="Close modal"
             >
               ✕
             </button>
-
-            <h2 className="text-xl font-semibold mb-4 text-center">
-              Join Camp Registration
-            </h2>
+            <h2 className="text-xl font-semibold mb-4 text-center">Join Camp Registration</h2>
 
             <form onSubmit={handleJoinSubmit} className="space-y-3">
-              {/* Read-only Inputs */}
-              <input
-                value={camp.name}
-                readOnly
-                className="input input-bordered w-full"
-                placeholder="Camp Name"
-              />
-              <input
-                value={`$${camp.fees}`}
-                readOnly
-                className="input input-bordered w-full"
-                placeholder="Camp Fees"
-              />
-              <input
-                value={camp.location}
-                readOnly
-                className="input input-bordered w-full"
-                placeholder="Location"
-              />
-              <input
-                value={camp.doctor}
-                readOnly
-                className="input input-bordered w-full"
-                placeholder="Healthcare Professional"
-              />
-              <input
-                value={user?.displayName || ""}
-                readOnly
-                className="input input-bordered w-full"
-                placeholder="Participant Name"
-              />
-              <input
-                value={user?.email || ""}
-                readOnly
-                className="input input-bordered w-full"
-                placeholder="Participant Email"
-              />
+              <input value={camp.name} readOnly className="input input-bordered w-full" />
+              <input value={`$${camp.fees}`} readOnly className="input input-bordered w-full" />
+              <input value={camp.location} readOnly className="input input-bordered w-full" />
+              <input value={camp.doctor} readOnly className="input input-bordered w-full" />
+              <input value={user?.displayName || ""} readOnly className="input input-bordered w-full" />
+              <input value={user?.email || ""} readOnly className="input input-bordered w-full" />
 
-              {/* Editable Inputs */}
               <input
                 type="number"
                 name="age"
                 placeholder="Your Age"
                 required
-                className="input input-bordered w-full"
                 min={1}
+                className="input input-bordered w-full"
               />
               <input
                 type="text"
@@ -180,12 +119,7 @@ const axios=useAxoiseSecure()
                 required
                 className="input input-bordered w-full"
               />
-              <select
-                name="gender"
-                required
-                className="select select-bordered w-full"
-                defaultValue=""
-              >
+              <select name="gender" required className="select select-bordered w-full" defaultValue="">
                 <option value="" disabled>
                   Select Gender
                 </option>

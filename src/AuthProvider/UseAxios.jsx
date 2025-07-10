@@ -1,29 +1,27 @@
 import axios from 'axios';
-import useAuth from './UseAuth';
 import { useEffect } from 'react';
+import { getIdToken } from 'firebase/auth';
+import useAuth from './UseAuth';
 
 const axiosSecure = axios.create({
-  baseURL: `http://localhost:5000`
+  baseURL: 'http://localhost:5000',
 });
 
-const useAxoiseSecure = () => {
+const useAxiosSecure = () => {
   const { user } = useAuth();
 
   useEffect(() => {
     const interceptor = axiosSecure.interceptors.request.use(
-      (config) => {
-        // যদি user বা accessToken না থাকে, তাহলে token যোগ করো না
-        if (user && user.accessToken) {
-          config.headers.Authorization = `Bearer ${user.accessToken}`;
+      async (config) => {
+        if (user) {
+          const token = await getIdToken(user);
+          config.headers.Authorization = `Bearer ${token}`;
         }
         return config;
       },
-      (error) => {
-        return Promise.reject(error);
-      }
+      (error) => Promise.reject(error)
     );
 
-    // Cleanup interceptor when component unmounts or user changes
     return () => {
       axiosSecure.interceptors.request.eject(interceptor);
     };
@@ -32,4 +30,4 @@ const useAxoiseSecure = () => {
   return axiosSecure;
 };
 
-export default useAxoiseSecure;
+export default useAxiosSecure;

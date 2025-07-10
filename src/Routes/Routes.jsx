@@ -17,6 +17,7 @@ import ParmentFrom from "../DashBoard/ParmentFrom";
 import ParticipantLayout from "../Participant Dashboard/ParticipantLayout";
 import Analytics from "../Participant Dashboard/Analytics";
 import PaymentHistory from "../Participant Dashboard/PaymentHistory";
+import RegisteredCamps from "../Participant Dashboard/RegisteredCamps";
 
 export const router = createBrowserRouter([
   {
@@ -87,6 +88,10 @@ children:[
   {
     path:'analytics',
     Component:<Analytics/>
+  },
+  {
+    path:'registered',
+    Component:RegisteredCamps
   },
   {
     path:"paymenthis",

@@ -33,41 +33,44 @@ const navigate=useNavigate()
   };
 
   const onSubmit = async (data) => {
-    try {
-      const { name, email, password } = data;
-      const userCredential = await createUser(email, password);
-      const user = userCredential.user;
- navigate(from, { replace: true });
-      /////user role/////////
-      const userInfo={
-        email:data.email,
-        role:'user',
-        created_at: new Date().toISOString(),
-        last_login: new Date().toISOString()
-      }
+  try {
+    const { name, email, password } = data;
+    const userCredential = await createUser(email, password);
+    const user = userCredential.user;
 
-     const userRes=await axiosBelal.post('/users',userInfo)
-     console.log(userRes.data)
-      
-      ////////////
-
-
-      let photoURL = '';
-      if (imageFile) {
-        const storageRef = ref(storage, `profileImages/${Date.now()}-${imageFile.name}`);
-        await uploadBytes(storageRef, imageFile);
-        photoURL = await getDownloadURL(storageRef);
-      }
-      await updateUserProfile(user, {
-        displayName: name,
-        photoURL: photoURL || 'https://i.ibb.co/ZYW3VTp/brown-brim.png',
-      });
-      console.log("✅ User created & profile updated:", user);
-      
-    } catch (error) {
-      console.error("❌ Error:", error.message);
+    // Upload image if provided
+    let photoURL = '';
+    if (imageFile) {
+      const storageRef = ref(storage, `profileImages/${Date.now()}-${imageFile.name}`);
+      await uploadBytes(storageRef, imageFile);
+      photoURL = await getDownloadURL(storageRef);
     }
-  };
+
+    // Update Firebase profile
+    await updateUserProfile(user, {
+      displayName: name,
+      photoURL: photoURL || 'https://i.ibb.co/ZYW3VTp/brown-brim.png',
+    });
+
+    // Save to MongoDB
+    const userInfo = {
+      email,
+      name,
+      role: 'participant',
+      photo: photoURL || 'https://i.ibb.co/ZYW3VTp/brown-brim.png',
+      created_at: new Date().toISOString(),
+      last_login: new Date().toISOString(),
+    };
+
+    const userRes = await axiosBelal.post('/users', userInfo);
+    console.log(userRes.data);
+
+    navigate(from, { replace: true });
+  } catch (error) {
+    console.error("❌ Error:", error.message);
+  }
+};
+
 
 
   
