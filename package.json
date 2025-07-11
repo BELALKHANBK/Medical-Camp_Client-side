@@ -25,6 +25,7 @@
     "react-responsive-carousel": "^3.2.23",
     "react-router": "^7.6.3",
     "react-sweetalert2": "^0.6.0",
+    "recharts": "^3.1.0",
     "sweetalert2": "^11.22.2",
     "tailwindcss": "^4.1.11"
   },

@@ -5,13 +5,13 @@ const SidBerPar = () => {
   return (
     <ul className="menu p-4 space-y-2">
       <li>
-        <Link to="" className="flex items-center gap-2">
-          <FaHome /> Analytics.
+        <Link to="/participent/analytics" className="flex items-center gap-2">
+          <FaHome /> Analytics
 
         </Link>
       </li>
       <li>
-        <NavLink to="" className="flex items-center gap-2">
+        <NavLink to="/participent/profile" className="flex items-center gap-2">
           <FaBox /> Participant Profile
         </NavLink>
       </li>

@@ -15,9 +15,11 @@ import CampDetails from "../Pages/CampDetails";
 import Payments from "../DashBoard/Payments";
 import ParmentFrom from "../DashBoard/ParmentFrom";
 import ParticipantLayout from "../Participant Dashboard/ParticipantLayout";
-import Analytics from "../Participant Dashboard/Analytics";
 import PaymentHistory from "../Participant Dashboard/PaymentHistory";
 import RegisteredCamps from "../Participant Dashboard/RegisteredCamps";
+import Analytics from "../Participant Dashboard/Analytics";
+import PaymentFrom from "../Participant Dashboard/PaymentFrom";
+import ParticipentProfile from "../Participant Dashboard/ParticipentProfile";
 
 export const router = createBrowserRouter([
   {
@@ -87,7 +89,11 @@ element:<PriveteRoute><ParticipantLayout/></PriveteRoute>,
 children:[
   {
     path:'analytics',
-    Component:<Analytics/>
+    Component:Analytics
+  },
+  {
+path:'Profile',
+Component:ParticipentProfile
   },
   {
     path:'registered',
@@ -97,7 +103,11 @@ children:[
     path:"paymenthis",
     Component:PaymentHistory
 
-  }
+  },
+    {
+        path:'payments/:campId',
+        Component:PaymentFrom
+      }
 ]
       
   }

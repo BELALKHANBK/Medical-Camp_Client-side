@@ -1,54 +1,50 @@
+// src/Participant Dashboard/PaymentHistory.jsx
+import React from 'react';
 import { useQuery } from '@tanstack/react-query';
-import moment from 'moment';
 import useAuth from '../AuthProvider/UseAuth';
-import useAxoiseSecure from '../AuthProvider/UseAxios';
+import useAxiosSecure from '../AuthProvider/UseAxios';
+
 
 const PaymentHistory = () => {
   const { user } = useAuth();
-  const axiosSecure = useAxoiseSecure();
+  const axiosSecure = useAxiosSecure();
 
-  const { data: payments = [], isPending, isError } = useQuery({
-    queryKey: ['payments', user?.email],
-    enabled: !!user?.email,
+  const { data: payments = [], isLoading } = useQuery({
+    queryKey: ['paymentHistory', user?.email],
     queryFn: async () => {
-      const res = await axiosSecure.get(`http://localhost:5000/payments?email=${user.email}`);
+      const res = await axiosSecure.get(`/payments/${user.email}`);
       return res.data;
-    }
+    },
+    enabled: !!user?.email
   });
 
-  if (isPending) return <p className="text-center mt-10">Loading payment history...</p>;
-  if (isError) return <p className="text-center text-red-600">Failed to load payment history</p>;
+  if (isLoading) return <p className="text-center mt-6">Loading Payment History...</p>;
 
   return (
-    <div className="max-w-7xl mx-auto p-4">
-      <h2 className="text-2xl font-bold mb-4 text-center">My Payment History</h2>
-
+    <div className="max-w-5xl mx-auto p-6">
+      <h2 className="text-2xl font-bold mb-4 text-center">Payment History</h2>
       {payments.length === 0 ? (
-        <p className="text-center text-gray-500">No payment records found.</p>
+        <p className="text-center text-gray-500">No payment history found.</p>
       ) : (
-        <div className="overflow-x-auto rounded shadow">
-          <table className="table w-full table-zebra">
-            <thead className="bg-base-200 text-gray-700">
+        <div className="overflow-x-auto">
+          <table className="table-auto w-full border-collapse border border-gray-300">
+            <thead className="bg-green-200 text-black">
               <tr>
-                <th>#</th>
-                <th>Camp ID</th>
-                <th>Email</th>
-                <th>Amount</th>
-                <th>Method</th>
-                <th>Transaction ID</th>
-                <th>Date</th>
+                <th className="border border-gray-300 px-4 py-2">Camp Name</th>
+                <th className="border border-gray-300 px-4 py-2">Amount</th>
+                <th className="border border-gray-300 px-4 py-2">Transaction ID</th>
+                <th className="border border-gray-300 px-4 py-2">Date</th>
               </tr>
             </thead>
             <tbody>
-              {payments.map((payment, index) => (
-                <tr key={payment._id}>
-                  <td>{index + 1}</td>
-                  <td className="text-blue-500 break-words">{payment.campId}</td>
-                  <td>{payment.email}</td>
-                  <td className="text-green-700 font-semibold">{payment.amount}৳</td>
-                  <td className="capitalize">{payment.paymentMethod || 'N/A'}</td>
-                  <td className="break-all text-sm">{payment.transactionId}</td>
-                  <td>{moment(payment.paid_at_string).format('DD MMM YYYY, hh:mm A')}</td>
+              {payments.map(payment => (
+                <tr key={payment._id} className="text-center">
+                  <td className="border px-4 py-2">{payment.campName}</td>
+                  <td className="border px-4 py-2">${payment.amount}</td>
+                  <td className="border px-4 py-2">{payment.transactionId}</td>
+                  <td className="border px-4 py-2">
+                    {new Date(payment.date).toLocaleDateString()}
+                  </td>
                 </tr>
               ))}
             </tbody>
@@ -60,5 +56,3 @@ const PaymentHistory = () => {
 };
 
 export default PaymentHistory;
-
-

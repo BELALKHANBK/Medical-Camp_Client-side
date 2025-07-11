@@ -7,18 +7,23 @@ import { RouterProvider } from 'react-router'; // ✅ router-dom হওয়া �
 import { router } from './Routes/Routes';
 import AuthProvider from './AuthProvider/AuthProvider';
 
-// ✅ React Query (TanStack Query) import করো
+//  React Query (TanStack Query) import করো
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-
+import { loadStripe } from '@stripe/stripe-js';
+import { Elements } from '@stripe/react-stripe-js';
+const stripePromise=loadStripe(import.meta.env.VITE_PAYMENT_KEY);
 // ✅ Query Client তৈরি করো
 const queryClient = new QueryClient();
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     {/* ✅ QueryClientProvider দিয়ে পুরো app wrap করো */}
-    <QueryClientProvider client={queryClient}>
+ <QueryClientProvider client={queryClient}>
       <AuthProvider>
-        <RouterProvider router={router} />
+        {/* Elements দিয়ে RouterProvider wrap করো */}
+        <Elements stripe={stripePromise}>
+          <RouterProvider router={router} />
+        </Elements>
       </AuthProvider>
     </QueryClientProvider>
   </StrictMode>
