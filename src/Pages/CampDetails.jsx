@@ -32,10 +32,10 @@ const CampDetails = () => {
       phone: form.phone.value,
       gender: form.gender.value,
       emergencyContact: form.emergency.value,
-      campName: camp.name,
-      fees: camp.fees,
-      location: camp.location,
-      doctor: camp.doctor,
+      campName: camp?.name || "",
+      fees: camp?.fees || 0,
+      location: camp?.location || "",
+      doctor: camp?.doctor || "",
       payment_status: "unpaid",
     };
 
@@ -53,25 +53,45 @@ const CampDetails = () => {
   };
 
   if (isLoading) return <p className="text-center mt-10">Loading...</p>;
+  if (!camp) return <p className="text-center mt-10">Camp not found</p>;
 
   return (
     <div className="max-w-5xl mx-auto p-4 mt-10">
       {/* Camp Details */}
       <div className="bg-white text-black shadow-lg rounded-xl overflow-hidden md:flex md:space-x-6">
         <div className="md:w-1/2">
-          <img src={camp.image} alt={camp.name} className="w-full h-80 object-cover" />
+          <img
+            src={camp?.image || "https://via.placeholder.com/400x300?text=No+Image"}
+            alt={camp?.name || "Camp"}
+            className="w-full h-80 object-cover"
+          />
         </div>
         <div className="md:w-1/2 p-6 flex flex-col justify-between">
           <div>
-            <h2 className="text-3xl font-bold mb-2 text-blue-700">{camp.name}</h2>
-            <p><strong>Camp Fees:</strong> ${camp.fees}</p>
-            <p><strong>Date & Time:</strong> {camp.dateTime}</p>
-            <p><strong>Location:</strong> {camp.location}</p>
-            <p><strong>Healthcare Professional:</strong> {camp.doctor}</p>
-            <p><strong>Participants:</strong> {camp.participantCount}</p>
-            <p className="mt-4 text-gray-600">{camp.description}</p>
+            <h2 className="text-3xl font-bold mb-2 text-blue-700">
+              {camp?.name || "No Name"}
+            </h2>
+            <p>
+              <strong>Camp Fees:</strong> ${camp?.fees ?? "N/A"}
+            </p>
+            <p>
+              <strong>Date & Time:</strong> {camp?.dateTime ?? "N/A"}
+            </p>
+            <p>
+              <strong>Location:</strong> {camp?.location ?? "N/A"}
+            </p>
+            <p>
+              <strong>Healthcare Professional:</strong> {camp?.doctor ?? "N/A"}
+            </p>
+            <p>
+              <strong>Participants:</strong> {camp?.participantCount ?? 0}
+            </p>
+            <p className="mt-4 text-gray-600">{camp?.description ?? "No description available."}</p>
           </div>
-          <button onClick={() => setShowModal(true)} className="btn btn-primary mt-6 w-full">
+          <button
+            onClick={() => setShowModal(true)}
+            className="btn btn-primary mt-6 w-full"
+          >
             Join Camp
           </button>
         </div>
@@ -97,10 +117,10 @@ const CampDetails = () => {
             <h2 className="text-xl font-semibold mb-4 text-center">Join Camp Registration</h2>
 
             <form onSubmit={handleJoinSubmit} className="space-y-3">
-              <input value={camp.name} readOnly className="input input-bordered w-full" />
-              <input value={`$${camp.fees}`} readOnly className="input input-bordered w-full" />
-              <input value={camp.location} readOnly className="input input-bordered w-full" />
-              <input value={camp.doctor} readOnly className="input input-bordered w-full" />
+              <input value={camp?.name || ""} readOnly className="input input-bordered w-full" />
+              <input value={`$${camp?.fees || 0}`} readOnly className="input input-bordered w-full" />
+              <input value={camp?.location || ""} readOnly className="input input-bordered w-full" />
+              <input value={camp?.doctor || ""} readOnly className="input input-bordered w-full" />
               <input value={user?.displayName || ""} readOnly className="input input-bordered w-full" />
               <input value={user?.email || ""} readOnly className="input input-bordered w-full" />
 
@@ -119,7 +139,12 @@ const CampDetails = () => {
                 required
                 className="input input-bordered w-full"
               />
-              <select name="gender" required className="select select-bordered w-full" defaultValue="">
+              <select
+                name="gender"
+                required
+                className="select select-bordered w-full"
+                defaultValue=""
+              >
                 <option value="" disabled>
                   Select Gender
                 </option>

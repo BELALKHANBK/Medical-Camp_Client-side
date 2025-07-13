@@ -1,17 +1,25 @@
-import axios from "axios";
+
 import { useForm } from "react-hook-form";
 import Swal from "sweetalert2";
 import useAuth from "../AuthProvider/UseAuth"; // ✅ Update path if needed
+import useAxiosSecure from "../AuthProvider/UseAxios";
 
 const AddCamp = () => {
   const { register, handleSubmit, reset } = useForm();
   const { user } = useAuth();
-
+const axios=useAxiosSecure()
   const onSubmit = async (data) => {
-    if (!user?.email) {
+   /*  if (!user?.email) {
       Swal.fire("Error", "You must be logged in to add a camp", "error");
       return;
-    }
+    } */
+
+
+// ধরো user.role আছে তোমার auth context এ
+if (user?.role !== 'organizer') {
+  Swal.fire('Error', 'Only organizers can add camps', 'error');
+  return;
+}
 
     try {
       const campData = {
@@ -28,7 +36,7 @@ const AddCamp = () => {
         payment_status: "unpaid",
       };
 
-      const res = await axios.post("http://localhost:5000/camps", campData);
+      const res = await axios.post("/camps", campData);
 
       if (res.data.insertedId || res.data.acknowledged) {
         Swal.fire("Success", "Camp added successfully", "success");

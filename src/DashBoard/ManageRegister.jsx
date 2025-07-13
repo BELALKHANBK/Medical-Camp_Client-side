@@ -4,21 +4,36 @@ import useAuth from "../AuthProvider/UseAuth";
 import useAxiosSecure from "../AuthProvider/UseAxios";
 
 const ManageRegister = () => {
-  const { user } = useAuth();
+  const { user, role } = useAuth();
   const [registrations, setRegistrations] = useState([]);
   const axiosSecure = useAxiosSecure();
 
-  // ধরলাম user object এ role আছে, যদি না থাকে তাহলে সেটাপ দিতে হবে
-  const isOrganizer = user?.role === "organizer";
+  const isOrganizer = role === "organizer";
 
   useEffect(() => {
-    if (user?.email) {
+    if (!user?.email || !role) return;
+
+    console.log("👤 User:", user);
+    console.log("🔐 Role:", role);
+
+    if (role === "organizer") {
+      axiosSecure
+        .get(`/joine/organizer?email=${user.email}`)
+        .then((res) => {
+          console.log("✅ Organizer Registration:", res.data);
+          setRegistrations(res.data);
+        })
+        .catch((err) => console.error("Organizer error:", err));
+    } else {
       axiosSecure
         .get(`/joine?email=${user.email}`)
-        .then((res) => setRegistrations(res.data))
-        .catch((err) => console.error(err));
+        .then((res) => {
+          console.log("✅ Participant Registration:", res.data);
+          setRegistrations(res.data);
+        })
+        .catch((err) => console.error("Participant error:", err));
     }
-  }, [user, axiosSecure]);
+  }, [user, role, axiosSecure]);
 
   const handleConfirm = (id) => {
     axiosSecure
@@ -39,7 +54,6 @@ const ManageRegister = () => {
   };
 
   const handleCancel = (id, isPaid, isConfirmed) => {
-    // যদি ইউজার organizer না হয়, cancel করতে না দেয়া এবং alert দেখাও
     if (!isOrganizer) {
       Swal.fire(
         "Not Allowed",
@@ -49,7 +63,6 @@ const ManageRegister = () => {
       return;
     }
 
-    // Paid & Confirmed হলে cancel করো না (button তো disable আছে)
     if (isPaid && isConfirmed) return;
 
     Swal.fire({
@@ -61,7 +74,7 @@ const ManageRegister = () => {
     }).then((result) => {
       if (result.isConfirmed) {
         axiosSecure
-          .delete(`/joine/cancel/${id}`)  // তোমার backend অনুযায়ী URL ঠিকঠাক সেট করো
+          .delete(`/joine/cancel/${id}`)
           .then((res) => {
             if (res.data.message === "Registration cancelled successfully") {
               Swal.fire("Cancelled!", "Registration removed.", "success");
