@@ -1,18 +1,22 @@
 import React, { useEffect, useState } from "react";
-//import axios from "axios";
 import Swal from "sweetalert2";
 import { useForm } from "react-hook-form";
 import useAxoiseSecure from "../AuthProvider/UseAxios";
+import SearchBar from "../pagination/SearchBar";
+import Pagination from "../pagination/Pagination";
 
 const ManageCamps = () => {
   const [camps, setCamps] = useState([]);
   const [loading, setLoading] = useState(true);
   const [editingCamp, setEditingCamp] = useState(null);
-  const axios=useAxoiseSecure()
 
+  const [searchText, setSearchText] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
+
+  const axios = useAxoiseSecure();
   const { register, handleSubmit, reset } = useForm();
 
-  // Load all camps on component mount
   useEffect(() => {
     fetchCamps();
   }, []);
@@ -23,15 +27,12 @@ const ManageCamps = () => {
       setCamps(res.data);
     } catch (error) {
       Swal.fire("Error", "Failed to load camps", "error");
-      console.error(error);
     } finally {
       setLoading(false);
     }
   };
 
-  // Delete camp handler
   const handleDelete = async (id) => {
-    console.log(id)
     const confirm = await Swal.fire({
       title: "Are you sure?",
       text: "You want to delete this camp?",
@@ -42,18 +43,15 @@ const ManageCamps = () => {
 
     if (confirm.isConfirmed) {
       try {
-       const res= await axios.delete(`http://localhost:5000/delete-camp/${id}`);
-        console.log('delete',res.data)
+        await axios.delete(`http://localhost:5000/delete-camp/${id}`);
         Swal.fire("Deleted!", "Camp has been deleted.", "success");
-        fetchCamps(); // Refresh camp list
+        fetchCamps();
       } catch (error) {
         Swal.fire("Error", "Failed to delete camp", "error");
-        console.error(error);
       }
     }
   };
 
-  // Start editing: fill form with camp data
   const startEditing = (camp) => {
     setEditingCamp(camp);
     reset({
@@ -67,13 +65,11 @@ const ManageCamps = () => {
     });
   };
 
-  // Cancel editing
   const cancelEditing = () => {
     setEditingCamp(null);
     reset();
   };
 
-  // Submit updated camp data
   const onUpdateSubmit = async (data) => {
     try {
       const id = editingCamp._id;
@@ -93,112 +89,130 @@ const ManageCamps = () => {
       }
     } catch (error) {
       Swal.fire("Error", "Failed to update camp", "error");
-      console.error(error);
     }
   };
 
-  if (loading) return <p>Loading camps...</p>;
+  if (loading) return <p className="text-center mt-10 text-lg font-semibold">Loading camps...</p>;
+
+  const filteredCamps = camps.filter((camp) =>
+    `${camp.name} ${camp.dateTime} ${camp.doctor}`.toLowerCase().includes(searchText.toLowerCase())
+  );
+
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const currentItems = filteredCamps.slice(startIndex, startIndex + itemsPerPage);
 
   return (
-    <div className="max-w-6xl mx-auto p-6 rounded shadow mt-10">
-      <h2 className="text-3xl font-bold mb-6">Manage Medical Camps</h2>
+    <div className="max-w-7xl mx-auto px-4 py-10">
+      <h2 className="text-4xl font-bold text-center mb-10 text-blue-700">Manage Medical Camps</h2>
 
-      {/* Camps Table */}
-      <table className="table-auto w-full border-collapse border border-gray-300">
-        <thead>
-          <tr>
-            <th className="border border-gray-300 px-4 py-2">Name</th>
-            <th className="border border-gray-300 px-4 py-2">Date & Time</th>
-            <th className="border border-gray-300 px-4 py-2">Location</th>
-            <th className="border border-gray-300 px-4 py-2">Healthcare Professional</th>
-            <th className="border border-gray-300 px-4 py-2">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {camps.length === 0 ? (
+      <div className="mb-6">
+        <SearchBar
+          placeholder="🔍 Search by Camp name, Date or Doctor..."
+          searchText={searchText}
+          setSearchText={(text) => {
+            setSearchText(text);
+            setCurrentPage(1);
+          }}
+        />
+      </div>
+
+      <div className="overflow-x-auto text-black bg-white rounded-lg shadow-lg">
+        <table className="min-w-full divide-y divide-gray-200">
+          <thead className="bg-gradient-to-r from-green-400 to-blue-500 text-white">
             <tr>
-              <td colSpan="5" className="text-center p-4">
-                No camps found.
-              </td>
+              <th className="px-6 py-3 text-left text-sm font-semibold uppercase">Name</th>
+              <th className="px-6 py-3 text-left text-sm font-semibold uppercase">Date & Time</th>
+              <th className="px-6 py-3 text-left text-sm font-semibold uppercase">Location</th>
+              <th className="px-6 py-3 text-left text-sm font-semibold uppercase">Doctor</th>
+              <th className="px-6 py-3 text-center text-sm font-semibold uppercase">Actions</th>
             </tr>
-          ) : (
-            camps.map((camp) => (
-              <tr key={camp._id}>
-                <td className="border border-gray-300 px-4 py-2">{camp.name}</td>
-                <td className="border border-gray-300 px-4 py-2">{new Date(camp.dateTime).toLocaleString()}</td>
-                <td className="border border-gray-300 px-4 py-2">{camp.location}</td>
-                <td className="border border-gray-300 px-4 py-2">{camp.doctor}</td>
-                <td className="border border-gray-300 px-4 py-2 space-x-2">
-                  <button onClick={() => startEditing(camp)} className="btn btn-sm btn-warning">
-                    Update
-                  </button>
-                  <button onClick={() => handleDelete(camp._id)} className="btn btn-sm btn-error">
-                    Delete
-                  </button>
+          </thead>
+          <tbody className="divide-y divide-gray-200 text-sm">
+            {currentItems.length === 0 ? (
+              <tr>
+                <td colSpan="5" className="text-center py-6">
+                  No camps found.
                 </td>
               </tr>
-            ))
-          )}
-        </tbody>
-      </table>
+            ) : (
+              currentItems.map((camp) => (
+                <tr key={camp._id} className="hover:bg-gray-100 transition">
+                  <td className="px-6 py-4">{camp.name}</td>
+                  <td className="px-6 py-4">{new Date(camp.dateTime).toLocaleString()}</td>
+                  <td className="px-6 py-4">{camp.location}</td>
+                  <td className="px-6 py-4">{camp.doctor}</td>
+                  <td className="px-6 py-4 flex justify-center gap-3 flex-wrap">
+                    <button
+                      onClick={() => startEditing(camp)}
+                      className="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded"
+                    >
+                      ✏️ Update
+                    </button>
+                    <button
+                      onClick={() => handleDelete(camp._id)}
+                      className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded"
+                    >
+                      🗑 Delete
+                    </button>
+                  </td>
+                </tr>
+              ))
+            )}
+          </tbody>
+        </table>
+      </div>
 
-      {/* Update Camp Modal */}
+      <div className="mt-8">
+        <Pagination
+          totalItems={filteredCamps.length}
+          itemsPerPage={itemsPerPage}
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+        />
+      </div>
+
+      {/* Edit Camp Modal */}
       {editingCamp && (
-        <div className="fixed inset-0 bg-black bg-opacity-30 flex justify-center items-center z-50">
-          <div className="bg-white p-6 rounded shadow-lg max-w-xl w-full relative">
-            <h3 className="text-xl font-semibold mb-4">Update Camp: {editingCamp.name}</h3>
+        <div className="fixed inset-0 bg-black bg-opacity-40 z-50 flex justify-center items-center">
+          <div className="bg-white p-8 rounded-lg shadow-lg max-w-xl w-full relative">
+            <h3 className="text-2xl font-semibold mb-6 text-blue-600">
+              Update Camp: {editingCamp.name}
+            </h3>
             <form onSubmit={handleSubmit(onUpdateSubmit)} className="space-y-4">
+              <input {...register("name")} placeholder="Camp Name" className="input input-bordered w-full" />
+              <input {...register("image")} placeholder="Image URL" className="input input-bordered w-full" />
               <input
-                {...register("name", { required: true })}
-                placeholder="Camp Name"
-                className="input input-bordered w-full"
-              />
-              <input
-                {...register("image", { required: true })}
-                placeholder="Image URL"
-                className="input input-bordered w-full"
-              />
-              <input
-                {...register("fees", { required: true, valueAsNumber: true })}
+                {...register("fees")}
                 type="number"
                 placeholder="Camp Fees"
                 className="input input-bordered w-full"
               />
               <input
-                {...register("dateTime", { required: true })}
+                {...register("dateTime")}
                 type="datetime-local"
                 className="input input-bordered w-full"
               />
+              <input {...register("location")} placeholder="Location" className="input input-bordered w-full" />
               <input
-                {...register("location", { required: true })}
-                placeholder="Location"
-                className="input input-bordered w-full"
-              />
-              <input
-                {...register("doctor", { required: true })}
-                placeholder="Healthcare Professional Name"
+                {...register("doctor")}
+                placeholder="Healthcare Professional"
                 className="input input-bordered w-full"
               />
               <textarea
-                {...register("description", { required: true })}
-                placeholder="Description"
-                rows={4}
+                {...register("description")}
+                placeholder="Camp Description"
+                rows="4"
                 className="textarea textarea-bordered w-full"
-              />
-              <div className="flex justify-end space-x-4 mt-4">
-                <button type="submit" className="btn btn-success">
-                  Save Changes
-                </button>
-                <button type="button" onClick={cancelEditing} className="btn btn-outline">
-                  Cancel
-                </button>
+              ></textarea>
+
+              <div className="flex justify-end gap-4 mt-4">
+                <button type="submit" className="btn btn-success">Save</button>
+                <button type="button" onClick={cancelEditing} className="btn btn-outline">Cancel</button>
               </div>
             </form>
-            {/* Close modal button */}
             <button
               onClick={cancelEditing}
-              className="absolute top-2 right-2 text-gray-600 hover:text-gray-900 font-bold text-xl"
-              aria-label="Close"
+              className="absolute top-2 right-3 text-2xl font-bold text-red-500 hover:text-red-700"
             >
               &times;
             </button>

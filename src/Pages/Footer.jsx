@@ -1,10 +1,15 @@
 import { FaFacebook, FaTwitter, FaInstagram, FaEnvelope, FaPhone } from 'react-icons/fa';
 import { motion } from 'framer-motion';
+import img2 from '../assets/image/img2.jpg'
 
 const Footer = () => {
   return (
     <motion.footer
-      className="bg-blue-900 text-white mt-20 py-10 px-6"
+    style={{ 
+        backgroundImage: `url(${img2})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',}}
+      className=" text-white mt-20 py-10 px-6"
       initial={{ opacity: 0, y: 40 }}
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6 }}
@@ -44,9 +49,9 @@ const Footer = () => {
         <div>
           <h3 className="font-semibold text-lg mb-3">Follow Us</h3>
           <div className="flex gap-4 text-xl">
-            <a href="#"><FaFacebook className="hover:text-teal-300" /></a>
-            <a href="#"><FaTwitter className="hover:text-teal-300" /></a>
-            <a href="#"><FaInstagram className="hover:text-teal-300" /></a>
+          <a href="https://www.facebook.com/your-page-name" target="_blank" rel="noopener noreferrer"><FaFacebook/></a>
+          <a href="https://twitter.com/your-username" target="_blank" rel="noopener noreferrer"><FaTwitter/></a>
+           <a href="https://www.instagram.com/your-username" target="_blank" rel="noopener noreferrer"><FaInstagram/></a>
           </div>
         </div>
       </div>
@@ -57,6 +62,6 @@ const Footer = () => {
       </div>
     </motion.footer>
   );
-};
+}; 
 
 export default Footer;

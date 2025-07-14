@@ -1,5 +1,3 @@
-// src/Participant Dashboard/RegisteredCamps.jsx
-
 import React, { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import Swal from 'sweetalert2';
@@ -13,10 +11,12 @@ const RegisteredCamps = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
-  // Feedback Modal state
   const [feedbackModal, setFeedbackModal] = useState({ open: false, campId: null });
+  const [currentPage, setCurrentPage] = useState(1);
+  const [searchQuery, setSearchQuery] = useState('');
 
-  // Fetch Registered Camps (React Query v5 style)
+  const itemsPerPage = 5;
+
   const { data: camps = [], isLoading } = useQuery({
     queryKey: ['registeredCamps', user?.email],
     queryFn: async () => {
@@ -26,7 +26,6 @@ const RegisteredCamps = () => {
     enabled: !!user?.email,
   });
 
-  // Cancel registration mutation (React Query v5 style)
   const cancelMutation = useMutation({
     mutationFn: async (campId) => {
       await axiosSecure.delete(`joine/cancel/${campId}`);
@@ -37,10 +36,9 @@ const RegisteredCamps = () => {
     },
     onError: () => {
       Swal.fire('Error', 'Failed to cancel registration.', 'error');
-    }
+    },
   });
 
-  // Handle cancel button click
   const handleCancel = (campId, paymentStatus) => {
     if (paymentStatus === 'Paid') {
       Swal.fire('Action denied', 'You cannot cancel after payment.', 'info');
@@ -48,7 +46,7 @@ const RegisteredCamps = () => {
     }
     Swal.fire({
       title: 'Are you sure?',
-      text: "Do you want to cancel your registration?",
+      text: 'Do you want to cancel your registration?',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonText: 'Yes, cancel it!',
@@ -59,12 +57,10 @@ const RegisteredCamps = () => {
     });
   };
 
-  // Navigate to Payment page (adjust your route accordingly)
   const handlePay = (campId) => {
-     navigate(`/participent/payments/${campId}`);
+    navigate(`/participent/payments/${campId}`);
   };
 
-  // Feedback form submit handler
   const handleFeedbackSubmit = async (e) => {
     e.preventDefault();
     const form = e.target;
@@ -85,38 +81,59 @@ const RegisteredCamps = () => {
       Swal.fire('Thank you!', 'Your feedback has been submitted.', 'success');
       setFeedbackModal({ open: false, campId: null });
     } catch (error) {
-      Swal.fire('Error', 'Failed to submit feedback.', 'error');
+      Swal.fire('Error', 'Failed to submit feedback.', 'error',error);
     }
   };
 
   if (isLoading) return <p className="text-center mt-6">Loading...</p>;
 
-  return (
-    <div className="p-6 max-w-5xl mx-auto">
-      <h2 className="text-2xl font-bold mb-6 text-center">Your Registered Camps</h2>
+  const filteredCamps = camps.filter(camp =>
+    camp.campName.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
-      {camps.length === 0 ? (
+  const totalPages = Math.ceil(filteredCamps.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const currentCamps = filteredCamps.slice(startIndex, startIndex + itemsPerPage);
+
+  return (
+    <div className="p-4 md:p-6 max-w-7xl mx-auto">
+      <h2 className="text-2xl md:text-3xl font-bold mb-6 text-center">📋 Your Registered Camps</h2>
+
+      <div className="mb-4 flex justify-center">
+        <input
+          type="text"
+          placeholder="🔍 Search by Camp Name..."
+          className="input input-bordered w-full max-w-xs"
+          value={searchQuery}
+          onChange={(e) => {
+            setSearchQuery(e.target.value);
+            setCurrentPage(1);
+          }}
+        />
+      </div>
+
+      {currentCamps.length === 0 ? (
         <p className="text-center text-gray-600">No camps registered yet.</p>
       ) : (
-        <div className="overflow-x-auto">
-          <table className="table-auto w-full border-collapse  border-gray-300">
-            <thead>
-              <tr className="bg-green-200 text-black ">
-                <th className="border border-gray-300 px-4 py-2">Camp Name</th>
-                <th className="border border-gray-300 px-4 py-2">Fees</th>
-                <th className="border border-gray-300 px-4 py-2">Participant Name</th>
-                <th className="border border-gray-300 px-4 py-2">Payment Status</th>
-                <th className="border border-gray-300 px-4 py-2">Confirmation Status</th>
-                <th className="border border-gray-300 px-4 py-2">Actions</th>
+        <div className="overflow-x-auto rounded-lg shadow-md">
+          <table className="table w-full text-sm md:text-base">
+            <thead className="bg-green-200 text-black">
+              <tr>
+                <th className="px-4 py-2">Camp</th>
+                <th className="px-4 py-2">Fees</th>
+                <th className="px-4 py-2 hidden sm:table-cell">Participant</th>
+                <th className="px-4 py-2">Payment</th>
+                <th className="px-4 py-2 hidden sm:table-cell">Status</th>
+                <th className="px-4 py-2">Action</th>
               </tr>
             </thead>
             <tbody>
-              {camps.map((camp) => (
-                <tr key={camp._id} className="text-center border border-gray-300">
-                  <td className="border border-gray-300 px-4 py-2">{camp.campName}</td>
-                  <td className="border border-gray-300 px-4 py-2">${camp.fees}</td>
-                  <td className="border border-gray-300 px-4 py-2">{camp.participantName}</td>
-                  <td className="border border-gray-300 px-4 py-2">
+              {currentCamps.map((camp) => (
+                <tr key={camp._id} className="text-center">
+                  <td className="border px-3 py-2">{camp.campName}</td>
+                  <td className="border px-3 py-2">${camp.fees}</td>
+                  <td className="border px-3 py-2 hidden sm:table-cell">{camp.participantName}</td>
+                  <td className="border px-3 py-2">
                     {camp.paymentStatus === 'Paid' ? (
                       <span className="text-green-600 font-semibold">Paid</span>
                     ) : (
@@ -124,83 +141,95 @@ const RegisteredCamps = () => {
                         <span className="text-red-600 font-semibold">Unpaid</span>
                         <button
                           onClick={() => handlePay(camp._id)}
-                          className="ml-2 bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600 transition"
+                          className="ml-2 btn btn-sm btn-success"
                         >
                           Pay
                         </button>
                       </>
                     )}
                   </td>
-                  <td className="border border-gray-300 px-4 py-2">
+                  <td className="border px-3 py-2 hidden sm:table-cell">
                     {camp.confirmationStatus || 'Pending'}
                   </td>
-                  <td className="border border-gray-300 px-4 py-2 space-x-2">
-                       {camp.paymentStatus !== 'Paid' && (
-                         <button
-                           onClick={() => handleCancel(camp._id, camp.paymentStatus)}
-                           className="px-3 py-1 rounded bg-red-500 hover:bg-red-600 text-white transition"
-                         >
-                           Cancel
-                         </button>
-                                            )}
-
-                       {camp.paymentStatus === 'Paid' && (
-                         <button
-                           onClick={() => setFeedbackModal({ open: true, campId: camp._id })}
-                           className="px-3 py-1 rounded bg-blue-600 hover:bg-blue-700 text-white transition"
-                         >
-                           Feedback
-                         </button>
-                       )}
-                     </td>
-
-                                     </tr>
-                                   ))}
+                  <td className="border px-3 py-2 space-y-1 sm:space-y-0 sm:space-x-2">
+                    {camp.paymentStatus !== 'Paid' && (
+                      <button
+                        onClick={() => handleCancel(camp._id, camp.paymentStatus)}
+                        className="btn btn-sm btn-error"
+                      >
+                        Cancel
+                      </button>
+                    )}
+                    {camp.paymentStatus === 'Paid' && (
+                      <button
+                        onClick={() => setFeedbackModal({ open: true, campId: camp._id })}
+                        className="btn btn-sm btn-info"
+                      >
+                        Feedback
+                      </button>
+                    )}
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>
       )}
 
+      {/* Pagination */}
+      {filteredCamps.length > itemsPerPage && (
+        <div className="flex flex-col sm:flex-row justify-between items-center mt-8 gap-3">
+          <p className="text-sm">
+            Showing {startIndex + 1}-{Math.min(startIndex + itemsPerPage, filteredCamps.length)} of{' '}
+            {filteredCamps.length}
+          </p>
+          <div className="flex flex-wrap gap-2">
+            <button
+              onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+              disabled={currentPage === 1}
+              className="btn btn-sm"
+            >
+              ←
+            </button>
+            {Array.from({ length: totalPages }).map((_, i) => (
+              <button
+                key={i + 1}
+                onClick={() => setCurrentPage(i + 1)}
+                className={`btn btn-sm ${currentPage === i + 1 ? 'btn-primary' : ''}`}
+              >
+                {i + 1}
+              </button>
+            ))}
+            <button
+              onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+              disabled={currentPage === totalPages}
+              className="btn btn-sm"
+            >
+              →
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Feedback Modal */}
       {feedbackModal.open && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-          <div className="bg-white text-black rounded-lg p-6 max-w-md w-full">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50 px-4">
+          <div className="bg-white text-black rounded-lg p-6 w-full max-w-md">
             <h3 className="text-xl font-semibold mb-4">Submit Feedback</h3>
             <form onSubmit={handleFeedbackSubmit}>
-              <label className="block mb-2 font-semibold" htmlFor="rating">Rating (1-5):</label>
-              <input
-                id="rating"
-                name="rating"
-                type="number"
-                min="1"
-                max="5"
-                required
-                className="w-full mb-4 border border-gray-300 rounded px-3 py-2"
-              />
-
-              <label className="block mb-2 font-semibold" htmlFor="comment">Comment:</label>
-              <textarea
-                id="comment"
-                name="comment"
-                rows="4"
-                required
-                className="w-full mb-4 border border-gray-300 rounded px-3 py-2"
-              />
-
-              <div className="flex justify-end space-x-3">
+              <label className="block mb-2 font-semibold">Rating (1-5):</label>
+              <input name="rating" type="number" min="1" max="5" required className="input input-bordered w-full mb-4" />
+              <label className="block mb-2 font-semibold">Comment:</label>
+              <textarea name="comment" rows="4" required className="textarea textarea-bordered w-full mb-4" />
+              <div className="flex justify-end gap-3">
                 <button
                   type="button"
                   onClick={() => setFeedbackModal({ open: false, campId: null })}
-                  className="px-4 py-2 rounded border border-gray-300"
+                  className="btn btn-outline"
                 >
                   Cancel
                 </button>
-                <button
-                  type="submit"
-                  className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
-                >
-                  Submit
-                </button>
+                <button type="submit" className="btn btn-primary">Submit</button>
               </div>
             </form>
           </div>

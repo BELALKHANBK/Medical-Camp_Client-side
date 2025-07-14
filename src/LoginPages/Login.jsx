@@ -14,7 +14,7 @@ const Login = () => {
   const navigate=useNavigate()
   const from=location.state?.from || '/'
   
-  const onSubmit=data=>{
+ /*  const onSubmit=data=>{
   signIn(data.email, data.password)
   .then(result=>{
     console.log(result)
@@ -23,8 +23,23 @@ const Login = () => {
   .catch(error=>{
     console.log(error)
   })
-  }
-    return (
+  } */
+    
+  const onSubmit = data => {
+  signIn(data.email, data.password)
+    .then(async result => {
+      const user = result.user;
+      const idToken = await user.getIdToken();
+      localStorage.setItem("accessToken", idToken);
+      localStorage.setItem("userEmail", user.email);
+      navigate(from, { replace: true });
+    })
+    .catch(error => {
+      console.log(error);
+    });
+};
+
+  return (
         <div className="hero bg-base-200 min-h-screen">
  
   <div className="hero-content flex-col lg:flex-row-reverse">

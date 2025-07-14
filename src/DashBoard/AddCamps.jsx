@@ -6,7 +6,7 @@ import useAxiosSecure from "../AuthProvider/UseAxios";
 
 const AddCamp = () => {
   const { register, handleSubmit, reset } = useForm();
-  const { user } = useAuth();
+  const { user,role } = useAuth();
 const axios=useAxiosSecure()
   const onSubmit = async (data) => {
    /*  if (!user?.email) {
@@ -16,7 +16,7 @@ const axios=useAxiosSecure()
 
 
 // ধরো user.role আছে তোমার auth context এ
-if (user?.role !== 'organizer') {
+if (role !== 'organizer') {
   Swal.fire('Error', 'Only organizers can add camps', 'error');
   return;
 }

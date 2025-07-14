@@ -6,6 +6,9 @@ import useAxiosSecure from "../AuthProvider/UseAxios";
 const ManageRegister = () => {
   const { user, role } = useAuth();
   const [registrations, setRegistrations] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
   const axiosSecure = useAxiosSecure();
 
   const isOrganizer = role === "organizer";
@@ -13,27 +16,27 @@ const ManageRegister = () => {
   useEffect(() => {
     if (!user?.email || !role) return;
 
-    console.log("👤 User:", user);
-    console.log("🔐 Role:", role);
+    axiosSecure
+      .get(`/joine/${user.email}`)
+      .then((res) => {
+        setRegistrations(res.data);
+      })
+      .catch((err) => console.error("Error fetching self-joined camps:", err));
 
-    if (role === "organizer") {
+    if (isOrganizer) {
       axiosSecure
-        .get(`/joine/organizer?email=${user.email}`)
+        .get(`/joine-all?email=${user.email}&role=${role}`)
         .then((res) => {
-          console.log("✅ Organizer Registration:", res.data);
-          setRegistrations(res.data);
+          setRegistrations((prev) => {
+            const newData = res.data.filter(
+              (item) => !prev.some((prevItem) => prevItem._id === item._id)
+            );
+            return [...prev, ...newData];
+          });
         })
-        .catch((err) => console.error("Organizer error:", err));
-    } else {
-      axiosSecure
-        .get(`/joine?email=${user.email}`)
-        .then((res) => {
-          console.log("✅ Participant Registration:", res.data);
-          setRegistrations(res.data);
-        })
-        .catch((err) => console.error("Participant error:", err));
+        .catch((err) => console.error("Organizer managed camps fetch error:", err));
     }
-  }, [user, role, axiosSecure]);
+  }, [user, role, axiosSecure, isOrganizer]);
 
   const handleConfirm = (id) => {
     axiosSecure
@@ -55,11 +58,7 @@ const ManageRegister = () => {
 
   const handleCancel = (id, isPaid, isConfirmed) => {
     if (!isOrganizer) {
-      Swal.fire(
-        "Not Allowed",
-        "Only organizers can cancel registrations.",
-        "warning"
-      );
+      Swal.fire("Not Allowed", "Only organizers can cancel registrations.", "warning");
       return;
     }
 
@@ -78,9 +77,7 @@ const ManageRegister = () => {
           .then((res) => {
             if (res.data.message === "Registration cancelled successfully") {
               Swal.fire("Cancelled!", "Registration removed.", "success");
-              setRegistrations((prev) =>
-                prev.filter((item) => item._id !== id)
-              );
+              setRegistrations((prev) => prev.filter((item) => item._id !== id));
             }
           })
           .catch(() => {
@@ -90,12 +87,34 @@ const ManageRegister = () => {
     });
   };
 
+  const filtered = registrations.filter((reg) =>
+    reg.campName.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  const totalPages = Math.ceil(filtered.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const currentItems = filtered.slice(startIndex, startIndex + itemsPerPage);
+
   return (
-    <div className="p-5">
-      <h2 className="text-2xl font-bold mb-4">Manage Registered Camps</h2>
-      <div className="overflow-x-auto">
-        <table className="table table-zebra w-full">
-          <thead>
+    <div className="p-4 md:p-8 max-w-6xl mx-auto">
+      <h2 className="text-2xl font-bold mb-4 text-center">Manage Registered Camps</h2>
+
+      <div className="mb-4 flex justify-center">
+        <input
+          type="text"
+          placeholder="Search by Camp Name..."
+          value={searchQuery}
+          onChange={(e) => {
+            setSearchQuery(e.target.value);
+            setCurrentPage(1);
+          }}
+          className="input input-bordered w-full sm:w-2/3 md:w-1/2 lg:w-1/3"
+        />
+      </div>
+
+      <div className="overflow-x-auto shadow rounded-lg">
+        <table className="table w-full">
+          <thead className="bg-base-200 text-base font-semibold">
             <tr>
               <th>#</th>
               <th>Camp Name</th>
@@ -107,19 +126,17 @@ const ManageRegister = () => {
             </tr>
           </thead>
           <tbody>
-            {registrations.length > 0 ? (
-              registrations.map((item, index) => (
-                <tr key={item._id}>
-                  <td>{index + 1}</td>
+            {currentItems.length > 0 ? (
+              currentItems.map((item, index) => (
+                <tr key={item._id} className="text-center">
+                  <td>{startIndex + index + 1}</td>
                   <td>{item.campName}</td>
-                  <td>{item.fees}</td>
+                  <td>${item.fees}</td>
                   <td>{item.participantName}</td>
                   <td>
                     <span
                       className={`badge ${
-                        item.paymentStatus === "Paid"
-                          ? "badge-success"
-                          : "badge-error"
+                        item.paymentStatus === "Paid" ? "badge-success" : "badge-error"
                       }`}
                     >
                       {item.paymentStatus}
@@ -128,21 +145,20 @@ const ManageRegister = () => {
                   <td>
                     {item.confirmationStatus === "Confirmed" ? (
                       <span className="badge badge-success">Confirmed</span>
-                    ) : (
+                    ) : isOrganizer ? (
                       <button
                         onClick={() => handleConfirm(item._id)}
                         className="btn btn-sm btn-warning"
                       >
                         Pending
                       </button>
+                    ) : (
+                      <span className="badge badge-warning">Pending</span>
                     )}
                   </td>
                   <td>
                     <button
-                      disabled={
-                        item.paymentStatus === "Paid" &&
-                        item.confirmationStatus === "Confirmed"
-                      }
+                      disabled={item.paymentStatus === "Paid" && item.confirmationStatus === "Confirmed"}
                       onClick={() =>
                         handleCancel(
                           item._id,
@@ -167,6 +183,40 @@ const ManageRegister = () => {
           </tbody>
         </table>
       </div>
+
+      {/* Pagination */}
+      {filtered.length > itemsPerPage && (
+        <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mt-6">
+          <div>
+            Showing {startIndex + 1}-{Math.min(startIndex + itemsPerPage, filtered.length)} of {filtered.length}
+          </div>
+          <div className="flex flex-wrap gap-2">
+            <button
+              onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+              disabled={currentPage === 1}
+              className="btn btn-sm"
+            >
+              ← Prev
+            </button>
+            {Array.from({ length: totalPages }).map((_, i) => (
+              <button
+                key={i + 1}
+                onClick={() => setCurrentPage(i + 1)}
+                className={`btn btn-sm ${currentPage === i + 1 ? "btn-primary" : ""}`}
+              >
+                {i + 1}
+              </button>
+            ))}
+            <button
+              onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+              disabled={currentPage === totalPages}
+              className="btn btn-sm"
+            >
+              Next →
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

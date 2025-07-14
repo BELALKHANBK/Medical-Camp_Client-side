@@ -56,7 +56,7 @@ const CampDetails = () => {
   if (!camp) return <p className="text-center mt-10">Camp not found</p>;
 
   return (
-    <div className="max-w-5xl mx-auto p-4 mt-10">
+    <div className="max-w-5xl min-h-screen mx-auto p-14 mt-40">
       {/* Camp Details */}
       <div className="bg-white text-black shadow-lg rounded-xl overflow-hidden md:flex md:space-x-6">
         <div className="md:w-1/2">
@@ -100,11 +100,11 @@ const CampDetails = () => {
       {/* Join Modal */}
       {showModal && (
         <div
-          className="fixed inset-0 bg-black bg-opacity-40 flex justify-center items-center z-50"
+          className="fixed inset-0 h-full bg-gray-700 bg-opacity-40 flex justify-center items-center z-50"
           onClick={() => setShowModal(false)}
         >
           <div
-            className="bg-white w-full max-w-lg p-6 rounded-xl relative"
+            className="bg-white w-full min-h-screen max-w-lg  p-4 mb-8 rounded-xl relative"
             onClick={(e) => e.stopPropagation()}
           >
             <button

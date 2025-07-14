@@ -1,13 +1,17 @@
-// src/Participant Dashboard/PaymentHistory.jsx
-import React from 'react';
+import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import useAuth from '../AuthProvider/UseAuth';
 import useAxiosSecure from '../AuthProvider/UseAxios';
-
+import vidbg from '../assets/image/1103996_1080p_Disease_3840x2160.mp4';
 
 const PaymentHistory = () => {
   const { user } = useAuth();
   const axiosSecure = useAxiosSecure();
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const itemsPerPage = 5;
 
   const { data: payments = [], isLoading } = useQuery({
     queryKey: ['paymentHistory', user?.email],
@@ -15,42 +19,129 @@ const PaymentHistory = () => {
       const res = await axiosSecure.get(`/payments/${user.email}`);
       return res.data;
     },
-    enabled: !!user?.email
+    enabled: !!user?.email,
   });
 
-  if (isLoading) return <p className="text-center mt-6">Loading Payment History...</p>;
+  if (isLoading) return <p className="text-center mt-6 text-white">Loading Payment History...</p>;
+
+  // Filter by search
+  const filteredPayments = payments.filter(payment =>
+    payment.campName.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  // Pagination logic
+  const indexOfLast = currentPage * itemsPerPage;
+  const indexOfFirst = indexOfLast - itemsPerPage;
+  const currentPayments = filteredPayments.slice(indexOfFirst, indexOfLast);
+
+  const handlePageChange = (pageNumber) => {
+    if (pageNumber >= 1 && pageNumber <= Math.ceil(filteredPayments.length / itemsPerPage)) {
+      setCurrentPage(pageNumber);
+    }
+  };
 
   return (
-    <div className="max-w-5xl mx-auto p-6">
-      <h2 className="text-2xl font-bold mb-4 text-center">Payment History</h2>
-      {payments.length === 0 ? (
-        <p className="text-center text-gray-500">No payment history found.</p>
-      ) : (
-        <div className="overflow-x-auto">
-          <table className="table-auto w-full border-collapse border border-gray-300">
-            <thead className="bg-green-200 text-black">
-              <tr>
-                <th className="border border-gray-300 px-4 py-2">Camp Name</th>
-                <th className="border border-gray-300 px-4 py-2">Amount</th>
-                <th className="border border-gray-300 px-4 py-2">Transaction ID</th>
-                <th className="border border-gray-300 px-4 py-2">Date</th>
-              </tr>
-            </thead>
-            <tbody>
-              {payments.map(payment => (
-                <tr key={payment._id} className="text-center">
-                  <td className="border px-4 py-2">{payment.campName}</td>
-                  <td className="border px-4 py-2">${payment.amount}</td>
-                  <td className="border px-4 py-2">{payment.transactionId}</td>
-                  <td className="border px-4 py-2">
-                    {new Date(payment.date).toLocaleDateString()}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+    <div className="relative min-h-screen">
+      {/* ✅ Background Video */}
+      <video
+        src={vidbg}
+        autoPlay
+        loop
+        muted
+        playsInline
+        className="fixed top-0 left-0 w-full h-full object-cover z-0"
+      />
+
+      {/* ✅ Content Wrapper */}
+      <div className="relative z-10  bg-opacity-70 min-h-screen px-4 sm:px-6 lg:px-10 py-12 text-white">
+        <div className="max-w-6xl mx-auto">
+          <h2 className="text-3xl font-bold mb-6 text-center">💳 Payment History</h2>
+
+          {/* 🔍 Search Input */}
+          <div className="mb-6 flex justify-center">
+            <input
+              type="text"
+              placeholder="Search by Camp Name..."
+              className="input input-bordered w-full sm:w-2/3 md:w-1/2 lg:w-1/3 text-white"
+              value={searchQuery}
+              onChange={(e) => {
+                setSearchQuery(e.target.value);
+                setCurrentPage(1);
+              }}
+            />
+          </div>
+
+          {/* ✅ Payment Table */}
+          {currentPayments.length === 0 ? (
+            <p className="text-center text-gray-300">No payment history found.</p>
+          ) : (
+            <div className="overflow-x-auto shadow-lg rounded-xl bg-white bg-opacity-90 text-black">
+              <table className="table w-full">
+                <thead className="bg-gradient-to-r from-indigo-500 to-purple-500 text-white">
+                  <tr>
+                    <th className="px-4 py-2">Camp Name</th>
+                    <th className="px-4 py-2">Amount</th>
+                    <th className="px-4 py-2">Transaction ID</th>
+                    <th className="px-4 py-2">Date</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {currentPayments.map((payment) => (
+                    <tr key={payment._id} className="hover:bg-gray-100 transition">
+                      <td className="px-4 py-3">{payment.campName}</td>
+                      <td className="px-4 py-3 text-green-600 font-semibold">${payment.amount}</td>
+                      <td className="px-4 py-3">{payment.transactionId}</td>
+                      <td className="px-4 py-3">
+                        {new Date(payment.date).toLocaleDateString()}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+
+          {/* ✅ Pagination */}
+          {filteredPayments.length > itemsPerPage && (
+            <div className="mt-10 flex flex-col sm:flex-row items-center justify-between gap-4 text-white">
+              <div>
+                Showing {indexOfFirst + 1}-{Math.min(indexOfLast, filteredPayments.length)} of {filteredPayments.length}
+              </div>
+              <div className="flex flex-wrap gap-2">
+                <button
+                  onClick={() => handlePageChange(currentPage - 1)}
+                  disabled={currentPage === 1}
+                  className="px-3 py-1 rounded bg-red-500 hover:bg-gray-600 disabled:opacity-40"
+                >
+                  ← Prev
+                </button>
+
+                {Array.from({ length: Math.ceil(filteredPayments.length / itemsPerPage) }).map((_, i) => (
+                  <button
+                    key={i + 1}
+                    onClick={() => handlePageChange(i + 1)}
+                    className={`px-3 py-1 rounded ${
+                      currentPage === i + 1
+                        ? 'bg-green-500 text-white'
+                        : 'bg-gray-700 hover:bg-gray-600'
+                    }`}
+                  >
+                    {i + 1}
+                  </button>
+                ))}
+
+                <button
+                  onClick={() => handlePageChange(currentPage + 1)}
+                  disabled={currentPage >= Math.ceil(filteredPayments.length / itemsPerPage)}
+                  className="px-3 py-1 rounded bg-gray-700 hover:bg-gray-600 disabled:opacity-40"
+                >
+                  Next →
+                </button>
+              </div>
+            </div>
+          )}
         </div>
-      )}
+      </div>
     </div>
   );
 };

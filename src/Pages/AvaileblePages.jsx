@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
-import { Link } from "react-router";
+import { Link } from "react-router"; 
 import useAxoiseSecure from "../AuthProvider/UseAxios";
 
 const AvailablePages = () => {
@@ -8,9 +7,10 @@ const AvailablePages = () => {
   const [filteredCamps, setFilteredCamps] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [sortBy, setSortBy] = useState("");
-  const [layout, setLayout] = useState("three"); // three or two columns
+  const [layout, setLayout] = useState("three");
   const [loading, setLoading] = useState(true);
-const axios=useAxoiseSecure()
+  const axios = useAxoiseSecure();
+
   useEffect(() => {
     axios.get("http://localhost:5000/camps")
       .then((res) => {
@@ -24,20 +24,16 @@ const axios=useAxoiseSecure()
       });
   }, []);
 
-  // Search handler
   useEffect(() => {
-    let temp = camps.filter((camp) => {
-      const keyword = searchTerm.toLowerCase();
-      return (
-        camp.name.toLowerCase().includes(keyword) ||
-        camp.doctor.toLowerCase().includes(keyword) ||
-        camp.location.toLowerCase().includes(keyword)
-      );
-    });
+    const keyword = searchTerm.toLowerCase();
+    const temp = camps.filter((camp) =>
+      camp.name.toLowerCase().includes(keyword) ||
+      camp.doctor.toLowerCase().includes(keyword) ||
+      camp.location.toLowerCase().includes(keyword)
+    );
     setFilteredCamps(temp);
   }, [searchTerm, camps]);
 
-  // Sort handler
   useEffect(() => {
     let temp = [...filteredCamps];
     if (sortBy === "mostRegistered") {
@@ -50,11 +46,11 @@ const axios=useAxoiseSecure()
     setFilteredCamps(temp);
   }, [sortBy]);
 
-  if (loading) return <p>Loading camps...</p>;
+  if (loading) return <p className="text-center text-lg mt-10">Loading camps...</p>;
 
   return (
     <div className="max-w-7xl mx-auto p-6">
-      <h2 className="text-3xl font-bold mb-6">Available Medical Camps</h2>
+      <h2 className="text-3xl font-bold mb-6 text-center text-indigo-600">Available Medical Camps</h2>
 
       {/* Search + Sort + Layout Controls */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6 gap-4">
@@ -87,7 +83,7 @@ const axios=useAxoiseSecure()
 
       {/* Camps Grid */}
       <div
-        className={`grid gap-6 ${
+        className={`grid gap-8 ${
           layout === "three" ? "grid-cols-1 md:grid-cols-3" : "grid-cols-1 md:grid-cols-2"
         }`}
       >
@@ -98,27 +94,27 @@ const axios=useAxoiseSecure()
         {filteredCamps.map((camp) => (
           <div
             key={camp._id}
-            className="border rounded-lg shadow p-4 flex flex-col"
+            className="border rounded-xl shadow-lg p-4 flex flex-col text-black bg-white hover:shadow-2xl transition-transform transform hover:-translate-y-2 duration-300 hover:scale-[1.03] hover:bg-indigo-50"
           >
             <img
               src={camp.image}
               alt={camp.name}
               className="h-48 w-full object-cover rounded mb-4"
             />
-          <div className="flex justify-between">
-              <h3 className="text-xl font-semibold mb-2">{camp.name}</h3>
-            
-            <h3 className="text-xl font-semibold mb-2">Fees:{camp.fees}</h3>
-          </div>
+            <div className="flex justify-between items-center mb-2">
+              <h3 className="text-lg font-bold text-indigo-700">{camp.name}</h3>
+              <p className="text-sm font-medium">💰 ${camp.fees}</p>
+            </div>
 
-            <p><strong>Date & Time:</strong> {new Date(camp.dateTime).toLocaleString()}</p>
-            <p><strong>Location:</strong> {camp.location}</p>
-            <p><strong>Healthcare Professional:</strong> {camp.doctor}</p>
-            <p><strong>Participants:</strong> {camp.participantCount}</p>
-            <p className="flex-grow my-2">{camp.description}</p>
+            <p className="text-sm"><strong>📅 Date & Time:</strong> {new Date(camp.dateTime).toLocaleString()}</p>
+            <p className="text-sm"><strong>📍 Location:</strong> {camp.location}</p>
+            <p className="text-sm"><strong>👨‍⚕️ Doctor:</strong> {camp.doctor}</p>
+            <p className="text-sm"><strong>👥 Participants:</strong> {camp.participantCount}</p>
+            <p className="flex-grow text-sm italic text-gray-700 mt-2">{camp.description}</p>
+
             <Link
               to={`/camp-details/${camp._id}`}
-              className="btn btn-primary mt-auto"
+              className="btn btn-primary mt-4"
             >
               Details
             </Link>
