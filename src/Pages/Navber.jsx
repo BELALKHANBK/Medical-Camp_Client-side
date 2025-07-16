@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, NavLink } from "react-router";
+import { Link, NavLink } from "react-router"; // react-router এর বদলে react-router-dom ব্যবহার করো
 import Swal from "sweetalert2";
 import useAuth from "../AuthProvider/UseAuth";
 import Logo from "../Extrasection/Logo";
@@ -8,7 +8,7 @@ import { IoLogInOutline } from "react-icons/io5";
 import "../Animation/Loader"; // ⬅️ Import the glow effect
 
 const Navber = () => {
-  const { user, logOut } = useAuth();
+  const { user, role, loading, logOut } = useAuth(); // role এবং loading যুক্ত করলাম
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -21,6 +21,15 @@ const Navber = () => {
         console.error(error);
       });
   };
+
+  // লোডিং চলাকালীন UI (ঐচ্ছিক)
+  if (loading) {
+    return (
+      <div className="navbar bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 shadow-sm fixed top-0 z-50 w-full flex justify-center items-center text-white h-16">
+        Loading...
+      </div>
+    );
+  }
 
   const navItems = (
     <div className="flex flex-col lg:flex-row gap-4 lg:gap-6">
@@ -48,7 +57,7 @@ const Navber = () => {
         Available Camps
       </NavLink>
 
-      {user && (
+      {role === "organizer" && (
         <NavLink
           to="/dashboard"
           className={({ isActive }) =>
@@ -62,7 +71,7 @@ const Navber = () => {
         </NavLink>
       )}
 
-      {user && (
+      {role === "participant" && (
         <NavLink
           to="/participent"
           className={({ isActive }) =>
@@ -119,14 +128,20 @@ const Navber = () => {
               <div className="profile-glow-wrapper">
                 <div className="profile-glow"></div>
                 <img
-                  src={user?.photoURL || "https://i.ibb.co/ZYW3VTp/brown-brim.png"}
+                  src={
+                    user?.photoURL ||
+                    "https://i.ibb.co/ZYW3VTp/brown-brim.png"
+                  }
                   alt="Profile"
                   className="profile-image"
                 />
               </div>
             </div>
           ) : (
-            <Link to="/login" className="btn btn-sm btn-primary flex items-center gap-1">
+            <Link
+              to="/login"
+              className="btn btn-sm btn-primary flex items-center gap-1"
+            >
               <CiLogin /> Login
             </Link>
           )}
@@ -153,7 +168,9 @@ const Navber = () => {
             <div className="profile-glow-wrapper">
               <div className="profile-glow"></div>
               <img
-                src={user?.photoURL || "https://i.ibb.co/ZYW3VTp/brown-brim.png"}
+                src={
+                  user?.photoURL || "https://i.ibb.co/ZYW3VTp/brown-brim.png"
+                }
                 className="profile-image"
                 alt="User"
               />

@@ -6,10 +6,13 @@ import SidBer from '../Extrasection/SidBer';
 //import MyParcel from '../pages/dashboard/MyParcel';
 //import Logo from '../Logo';
 //import SidebarLinks from '../pages/dashboard/SidebarLinks';
+import img1 from '../assets/image/pawel-czerwinski-f5ITyZ8pi5I-unsplash.jpg'
 
 const DashBoardLayout = () => {
     return (
-        <div className="drawer lg:drawer-open">
+        <div
+        
+        className="drawer lg:drawer-open">
   <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
   <div className="drawer-content flex flex-col ">
     {/* Page content here */}
@@ -39,9 +42,20 @@ const DashBoardLayout = () => {
 {/* Page content here */}
 
   </div>
-  <div className="drawer-side">
+  <div className="drawer-side"
+  
+    >
     <label htmlFor="my-drawer-2" aria-label="close sidebar" className="drawer-overlay"></label>
-    <ul className="menu bg-base-200 text-base-content min-h-full w-80 p-4">
+    <ul 
+     style={{ 
+        backgroundImage: `url(${img1})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',}}
+   
+      initial={{ opacity: 0, y: 40 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6 }}
+    className="menu  text-base-content min-h-full w-80 p-4">
       {/* Sidebar content here */}
  <NavLink><Logo/></NavLink>
     <SidBer/>

@@ -20,11 +20,13 @@ import RegisteredCamps from "../Participant Dashboard/RegisteredCamps";
 import Analytics from "../Participant Dashboard/Analytics";
 import PaymentFrom from "../Participant Dashboard/PaymentFrom";
 import ParticipentProfile from "../Participant Dashboard/ParticipentProfile";
+import NotFoundPages from "../Pages/NotFoundPages";
 
 export const router = createBrowserRouter([
   {
     path: "/",
-    element: <RootLayout />, // ✅ component instance, not just JSX
+    element: <RootLayout />,
+    errorElement:<NotFoundPages/>, // ✅ component instance, not just JSX
     children: [
     {
       index:true,
@@ -110,5 +112,7 @@ Component:ParticipentProfile
       }
 ]
       
-  }
+  },
+
+ 
 ]);

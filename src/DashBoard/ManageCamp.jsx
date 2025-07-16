@@ -172,53 +172,61 @@ const ManageCamps = () => {
       </div>
 
       {/* Edit Camp Modal */}
-      {editingCamp && (
-        <div className="fixed inset-0 bg-black bg-opacity-40 z-50 flex justify-center items-center">
-          <div className="bg-white p-8 rounded-lg shadow-lg max-w-xl w-full relative">
-            <h3 className="text-2xl font-semibold mb-6 text-blue-600">
-              Update Camp: {editingCamp.name}
-            </h3>
-            <form onSubmit={handleSubmit(onUpdateSubmit)} className="space-y-4">
-              <input {...register("name")} placeholder="Camp Name" className="input input-bordered w-full" />
-              <input {...register("image")} placeholder="Image URL" className="input input-bordered w-full" />
-              <input
-                {...register("fees")}
-                type="number"
-                placeholder="Camp Fees"
-                className="input input-bordered w-full"
-              />
-              <input
-                {...register("dateTime")}
-                type="datetime-local"
-                className="input input-bordered w-full"
-              />
-              <input {...register("location")} placeholder="Location" className="input input-bordered w-full" />
-              <input
-                {...register("doctor")}
-                placeholder="Healthcare Professional"
-                className="input input-bordered w-full"
-              />
-              <textarea
-                {...register("description")}
-                placeholder="Camp Description"
-                rows="4"
-                className="textarea textarea-bordered w-full"
-              ></textarea>
+    {/* Edit Camp Modal */}
+{editingCamp && (
+  <div className="fixed inset-0 bg-black bg-opacity-40 z-50 flex justify-center items-center">
+    <div className="bg-white p-8 rounded-lg shadow-lg max-w-xl w-full relative">
 
-              <div className="flex justify-end gap-4 mt-4">
-                <button type="submit" className="btn btn-success">Save</button>
-                <button type="button" onClick={cancelEditing} className="btn btn-outline">Cancel</button>
-              </div>
-            </form>
-            <button
-              onClick={cancelEditing}
-              className="absolute top-2 right-3 text-2xl font-bold text-red-500 hover:text-red-700"
-            >
-              &times;
-            </button>
-          </div>
+      {/* ⛳️ Close Button (TOP RIGHT) */}
+      <button
+        type="button"
+        onClick={cancelEditing}
+        className="absolute top-6 right-4 text-3xl text-red-600 hover:text-red-800 font-bold z-50"
+        aria-label="Close"
+      >
+        &times;
+      </button>
+
+      <h3 className="text-2xl font-semibold mb-6 text-blue-600">
+        Update Camp: {editingCamp.name}
+      </h3>
+
+      <form onSubmit={handleSubmit(onUpdateSubmit)} className="space-y-4">
+        <input {...register("name")} placeholder="Camp Name" className="input input-bordered w-full" />
+        <input {...register("image")} placeholder="Image URL" className="input input-bordered w-full" />
+        <input
+          {...register("fees")}
+          type="number"
+          placeholder="Camp Fees"
+          className="input input-bordered w-full"
+        />
+        <input
+          {...register("dateTime")}
+          type="datetime-local"
+          className="input input-bordered w-full"
+        />
+        <input {...register("location")} placeholder="Location" className="input input-bordered w-full" />
+        <input
+          {...register("doctor")}
+          placeholder="Healthcare Professional"
+          className="input input-bordered w-full"
+        />
+        <textarea
+          {...register("description")}
+          placeholder="Camp Description"
+          rows="4"
+          className="textarea textarea-bordered w-full"
+        ></textarea>
+
+        <div className="flex justify-end gap-4 mt-4">
+          <button type="submit" className="btn btn-success">Save</button>
+          <button type="button" onClick={cancelEditing} className="btn btn-outline">Cancel</button>
         </div>
-      )}
+      </form>
+    </div>
+  </div>
+)}
+
     </div>
   );
 };

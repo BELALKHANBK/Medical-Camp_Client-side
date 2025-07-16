@@ -1,17 +1,15 @@
 import axios from 'axios';
 import { useEffect } from 'react';
-import { getIdToken, getAuth, onAuthStateChanged } from 'firebase/auth';
+import { getIdToken, getAuth } from 'firebase/auth';
 
-// Create a base axios instance
 const axiosSecure = axios.create({
-  baseURL: 'http://localhost:5000', // Change this to your backend URL if deployed
+  baseURL: 'http://localhost:5000',
 });
 
 const useAxiosSecure = () => {
   useEffect(() => {
     const auth = getAuth();
 
-    // Set up Axios interceptor
     const interceptor = axiosSecure.interceptors.request.use(
       async (config) => {
         const user = auth.currentUser;
@@ -19,21 +17,19 @@ const useAxiosSecure = () => {
           try {
             const token = await getIdToken(user);
             config.headers.Authorization = `Bearer ${token}`;
-            console.log('✅ Token attached to request:', token); // Debug log
+            // console.log('✅ Token attached to request:', token);
           } catch (error) {
             console.error('❌ Failed to get token:', error);
           }
         } else {
-          console.warn('⚠️ No user is currently logged in.');
+          // User not logged in, no Authorization header added
+          // console.warn('⚠️ No user logged in');
         }
         return config;
       },
-      (error) => {
-        return Promise.reject(error);
-      }
+      (error) => Promise.reject(error)
     );
 
-    // Clean up on unmount
     return () => {
       axiosSecure.interceptors.request.eject(interceptor);
     };

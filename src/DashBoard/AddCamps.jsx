@@ -50,7 +50,7 @@ if (role !== 'organizer') {
 
   return (
     <div className="max-w-xl mx-auto p-6 bg-white shadow rounded mt-10">
-      <h2 className="text-2xl font-semibold mb-6">Add a New Medical Camp</h2>
+      <h2 className="text-2xl text-black text-center font-semibold mb-6">Add a New Medical Camp</h2>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <input
           {...register("name")}

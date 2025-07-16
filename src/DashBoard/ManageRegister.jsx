@@ -17,7 +17,7 @@ const ManageRegister = () => {
     if (!user?.email || !role) return;
 
     axiosSecure
-      .get(`/joine/${user.email}`)
+      .get(`//${user.email}`)
       .then((res) => {
         setRegistrations(res.data);
       })
@@ -25,7 +25,7 @@ const ManageRegister = () => {
 
     if (isOrganizer) {
       axiosSecure
-        .get(`/joine-all?email=${user.email}&role=${role}`)
+        .get(`/joine?email=${user.email}&role=${role}`)
         .then((res) => {
           setRegistrations((prev) => {
             const newData = res.data.filter(

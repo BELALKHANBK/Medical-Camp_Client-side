@@ -33,9 +33,27 @@ const AuthProvider = ({ children }) => {
     return signInWithPopup(auth, googleProvider);
   };
 
-  const logOut = () => {
+ /*  const logOut = () => {
     return signOut(auth);
+      window.location.reload();
   };
+ */
+const logOut = async () => {
+  await signOut(auth);
+  window.location.reload();  // page reload করবে
+  // অথবা যদি React Router ব্যবহার করো:
+  // navigate('/login');
+};
+
+// getToken function add করো
+const getToken = async () => {
+  if (user) {
+    return await user.getIdToken();
+  }
+  return null;
+};
+
+
 
   const updateUserProfile = (profileInfo) => {
     return updateProfile(auth.currentUser, profileInfo);
@@ -87,6 +105,7 @@ const AuthProvider = ({ children }) => {
     signInWithGoogle,
     updateUserProfile,
     logOut,
+    getToken
   };
 
   return <AuthContext.Provider value={authInfo}>{children}</AuthContext.Provider>;
