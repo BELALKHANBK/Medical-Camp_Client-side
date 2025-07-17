@@ -116,7 +116,8 @@ const ManageCamps = () => {
         />
       </div>
 
-      <div className="overflow-x-auto text-black bg-white rounded-lg shadow-lg">
+      {/* 🌐 Desktop Table */}
+      <div className="hidden md:block overflow-x-auto text-black bg-white rounded-lg shadow-lg">
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gradient-to-r from-green-400 to-blue-500 text-white">
             <tr>
@@ -162,6 +163,33 @@ const ManageCamps = () => {
         </table>
       </div>
 
+      {/* 📱 Mobile Card View */}
+      <div className="md:hidden">
+        {currentItems.map((camp) => (
+          <div key={camp._id} className="bg-white rounded-lg shadow p-4 mb-4 text-sm text-gray-800">
+            <h4 className="text-lg font-bold text-blue-600">{camp.name}</h4>
+            <p><strong>Date:</strong> {new Date(camp.dateTime).toLocaleString()}</p>
+            <p><strong>Location:</strong> {camp.location}</p>
+            <p><strong>Doctor:</strong> {camp.doctor}</p>
+            <div className="flex justify-start gap-2 mt-3 flex-wrap">
+              <button
+                onClick={() => startEditing(camp)}
+                className="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded"
+              >
+                ✏️ Update
+              </button>
+              <button
+                onClick={() => handleDelete(camp._id)}
+                className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded"
+              >
+                🗑 Delete
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* 🔢 Pagination */}
       <div className="mt-8">
         <Pagination
           totalItems={filteredCamps.length}
@@ -171,62 +199,58 @@ const ManageCamps = () => {
         />
       </div>
 
-      {/* Edit Camp Modal */}
-    {/* Edit Camp Modal */}
-{editingCamp && (
-  <div className="fixed inset-0 bg-black bg-opacity-40 z-50 flex justify-center items-center">
-    <div className="bg-white p-8 rounded-lg shadow-lg max-w-xl w-full relative">
+      {/* ✏️ Edit Modal */}
+      {editingCamp && (
+        <div className="fixed inset-0 bg-gray-600 bg-opacity-40 z-50  flex justify-center items-center">
+          <div className="bg-white p-8 rounded-lg shadow-lg max-w-7xl  relative">
+           {/*  <button
+              type="button"
+              onClick={cancelEditing}
+              className="absolute top-6 right-4 text-3xl text-red-600 hover:text-red-800 font-bold z-50"
+              aria-label="Close"
+            >
+              &times;
+            </button> */}
 
-      {/* ⛳️ Close Button (TOP RIGHT) */}
-      <button
-        type="button"
-        onClick={cancelEditing}
-        className="absolute top-6 right-4 text-3xl text-red-600 hover:text-red-800 font-bold z-50"
-        aria-label="Close"
-      >
-        &times;
-      </button>
+            <h3 className="text-2xl font-semibold mb-6 text-blue-600">
+              Update Camp: {editingCamp.name}
+            </h3>
 
-      <h3 className="text-2xl font-semibold mb-6 text-blue-600">
-        Update Camp: {editingCamp.name}
-      </h3>
+            <form onSubmit={handleSubmit(onUpdateSubmit)} className="space-y-4">
+              <input {...register("name")} placeholder="Camp Name" className="input input-bordered w-full" />
+              <input {...register("image")} placeholder="Image URL" className="input input-bordered w-full" />
+              <input
+                {...register("fees")}
+                type="number"
+                placeholder="Camp Fees"
+                className="input input-bordered w-full"
+              />
+              <input
+                {...register("dateTime")}
+                type="datetime-local"
+                className="input input-bordered w-full"
+              />
+              <input {...register("location")} placeholder="Location" className="input input-bordered w-full" />
+              <input
+                {...register("doctor")}
+                placeholder="Healthcare Professional"
+                className="input input-bordered w-full"
+              />
+              <textarea
+                {...register("description")}
+                placeholder="Camp Description"
+                rows="4"
+                className="textarea textarea-bordered w-full"
+              ></textarea>
 
-      <form onSubmit={handleSubmit(onUpdateSubmit)} className="space-y-4">
-        <input {...register("name")} placeholder="Camp Name" className="input input-bordered w-full" />
-        <input {...register("image")} placeholder="Image URL" className="input input-bordered w-full" />
-        <input
-          {...register("fees")}
-          type="number"
-          placeholder="Camp Fees"
-          className="input input-bordered w-full"
-        />
-        <input
-          {...register("dateTime")}
-          type="datetime-local"
-          className="input input-bordered w-full"
-        />
-        <input {...register("location")} placeholder="Location" className="input input-bordered w-full" />
-        <input
-          {...register("doctor")}
-          placeholder="Healthcare Professional"
-          className="input input-bordered w-full"
-        />
-        <textarea
-          {...register("description")}
-          placeholder="Camp Description"
-          rows="4"
-          className="textarea textarea-bordered w-full"
-        ></textarea>
-
-        <div className="flex justify-end gap-4 mt-4">
-          <button type="submit" className="btn btn-success">Save</button>
-          <button type="button" onClick={cancelEditing} className="btn btn-outline">Cancel</button>
+              <div className="flex justify-end gap-4 mt-4">
+                <button type="submit" className="btn btn-success">Save</button>
+                <button type="button" onClick={cancelEditing} className="btn ">Cancel</button>
+              </div>
+            </form>
+          </div>
         </div>
-      </form>
-    </div>
-  </div>
-)}
-
+      )}
     </div>
   );
 };

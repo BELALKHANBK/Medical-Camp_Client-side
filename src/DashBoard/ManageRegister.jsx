@@ -135,9 +135,8 @@ const ManageRegister = () => {
                   <td>{item.participantName}</td>
                   <td>
                     <span
-                      className={`badge ${
-                        item.paymentStatus === "Paid" ? "badge-success" : "badge-error"
-                      }`}
+                      className={`badge ${item.paymentStatus === "Paid" ? "badge-success" : "badge-error"
+                        }`}
                     >
                       {item.paymentStatus}
                     </span>

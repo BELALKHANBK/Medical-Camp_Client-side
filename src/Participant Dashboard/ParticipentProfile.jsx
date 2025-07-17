@@ -69,7 +69,7 @@ const onSubmit = async (data) => {
   if (loading) return <p className="text-center mt-8">Loading...</p>;
 
   return (
-    <div className="max-w-xl mx-auto p-6 bg-white text-black mt-8 rounded shadow">
+    <div className="w-160 mx-auto p-16 bg-white text-black mt-16 rounded shadow">
       <h2 className="text-2xl font-bold mb-4">Participant Profile</h2>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 mt-8">
         <div>
@@ -77,7 +77,7 @@ const onSubmit = async (data) => {
           <input
             {...register("name", { required: true })}
             type="text"
-            className="input input-bordered text-black w-full"
+            className="input input-bordered text-white text-xl w-full"
           />
         </div>
 
@@ -86,7 +86,7 @@ const onSubmit = async (data) => {
           <input
             value={user.email}
             readOnly
-            className="input input-bordered w-full bg-gray-100 cursor-not-allowed text-gray-600"
+            className="input input-bordered w-full text-2xl bg-gray-100 cursor-not-allowed text-gray-600"
           />
         </div>
 
@@ -95,7 +95,7 @@ const onSubmit = async (data) => {
           <input
             {...register("contactNumber", { required: true })}
             type="text"
-            className="input input-bordered text-black w-full"
+            className="input input-bordered text-white text-xl w-full"
           />
         </div>
 
@@ -105,7 +105,7 @@ const onSubmit = async (data) => {
             {...register("image")}
             type="text"
             placeholder="Image URL"
-            className="input input-bordered text-black w-full"
+            className="input input-bordered text-white text-xl w-full"
           />
         </div>
 

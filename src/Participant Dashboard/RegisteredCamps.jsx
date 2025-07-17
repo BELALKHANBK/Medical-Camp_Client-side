@@ -115,7 +115,7 @@ const RegisteredCamps = () => {
       {currentCamps.length === 0 ? (
         <p className="text-center text-gray-600">No camps registered yet.</p>
       ) : (
-        <div className="overflow-x-auto rounded-lg shadow-md">
+        <div className="overflow-x-auto mt-20 lg:w-260 rounded-lg shadow-md">
           <table className="table w-full text-sm md:text-base">
             <thead className="bg-green-200 text-black">
               <tr>
@@ -129,7 +129,7 @@ const RegisteredCamps = () => {
             </thead>
             <tbody>
               {currentCamps.map((camp) => (
-                <tr key={camp._id} className="text-center">
+                <tr key={camp._id} className="hover:bg-gray-600 text-center">
                   <td className="border px-3 py-2">{camp.campName}</td>
                   <td className="border px-3 py-2">${camp.fees}</td>
                   <td className="border px-3 py-2 hidden sm:table-cell">{camp.participantName}</td>
@@ -213,14 +213,14 @@ const RegisteredCamps = () => {
 
       {/* Feedback Modal */}
       {feedbackModal.open && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50 px-4">
+        <div className="fixed inset-0 w-full  bg-opacity-50 flex justify-center items-center z-50 px-4">
           <div className="bg-white text-black rounded-lg p-6 w-full max-w-md">
             <h3 className="text-xl font-semibold mb-4">Submit Feedback</h3>
             <form onSubmit={handleFeedbackSubmit}>
               <label className="block mb-2 font-semibold">Rating (1-5):</label>
-              <input name="rating" type="number" min="1" max="5" required className="input input-bordered w-full mb-4" />
-              <label className="block mb-2 font-semibold">Comment:</label>
-              <textarea name="comment" rows="4" required className="textarea textarea-bordered w-full mb-4" />
+              <input name="rating" type="number" min="1" max="5" required className="input text-xl text-white input-bordered w-full mb-4" />
+              <label className="block mb-2 text-xl font-semibold">Comment:</label>
+              <textarea name="comment" rows="4" required className="textarea text-xl text-white textarea-bordered w-full mb-4" />
               <div className="flex justify-end gap-3">
                 <button
                   type="button"

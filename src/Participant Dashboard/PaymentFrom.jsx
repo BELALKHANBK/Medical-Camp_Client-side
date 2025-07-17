@@ -114,7 +114,7 @@ if (amountUSDcents < 50) {
             icon: 'success',
             confirmButtonText: 'OK',
           }).then(() => {
-            navigate('/dashboard/managereg');
+           navigate('/participent/paymenthis'); 
           });
         } else {
           Swal.fire('Payment successful, but failed to record payment.');

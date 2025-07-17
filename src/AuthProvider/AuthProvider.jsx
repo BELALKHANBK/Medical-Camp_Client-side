@@ -66,7 +66,7 @@ const getToken = async () => {
           const token = await currentUser.getIdToken();
 
           // Fetch user role from backend
-          const response = await fetch(`http://localhost:5000/users?email=${currentUser.email}`, {
+          const response = await fetch(`https://medical-camp-server-sage.vercel.app/users?email=${currentUser.email}`, {
             headers: {
               Authorization: `Bearer ${token}`,
             },

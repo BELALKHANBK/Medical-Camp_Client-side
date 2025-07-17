@@ -76,7 +76,7 @@ const PaymentHistory = () => {
             <p className="text-center text-gray-300">No payment history found.</p>
           ) : (
             <div className="overflow-x-auto shadow-lg rounded-xl bg-white bg-opacity-90 text-black">
-              <table className="table w-full">
+              <table className="table w-full ">
                 <thead className="bg-gradient-to-r from-indigo-500 to-purple-500 text-white">
                   <tr>
                     <th className="px-4 py-2">Camp Name</th>
@@ -87,7 +87,7 @@ const PaymentHistory = () => {
                 </thead>
                 <tbody>
                   {currentPayments.map((payment) => (
-                    <tr key={payment._id} className="hover:bg-gray-100 transition">
+                    <tr key={payment._id} className="hover:bg-gray-600  transition">
                       <td className="px-4 py-3">{payment.campName}</td>
                       <td className="px-4 py-3 text-green-600 font-semibold">${payment.amount}</td>
                       <td className="px-4 py-3">{payment.transactionId}</td>
