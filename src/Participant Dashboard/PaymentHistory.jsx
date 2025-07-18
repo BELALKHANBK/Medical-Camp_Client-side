@@ -3,6 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import useAuth from '../AuthProvider/UseAuth';
 import useAxiosSecure from '../AuthProvider/UseAxios';
 import vidbg from '../assets/image/1103996_1080p_Disease_3840x2160.mp4';
+import { Helmet } from 'react-helmet-async';
 
 const PaymentHistory = () => {
   const { user } = useAuth();
@@ -22,14 +23,14 @@ const PaymentHistory = () => {
     enabled: !!user?.email,
   });
 
-  if (isLoading) return <p className="text-center mt-6 text-white">Loading Payment History...</p>;
+  if (isLoading) {
+    return <p className="text-center mt-6 text-white">Loading Payment History...</p>;
+  }
 
-  // Filter by search
   const filteredPayments = payments.filter(payment =>
     payment.campName.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  // Pagination logic
   const indexOfLast = currentPage * itemsPerPage;
   const indexOfFirst = indexOfLast - itemsPerPage;
   const currentPayments = filteredPayments.slice(indexOfFirst, indexOfLast);
@@ -41,8 +42,8 @@ const PaymentHistory = () => {
   };
 
   return (
-    <div className="relative min-h-screen">
-      {/* ✅ Background Video */}
+    <div className="relative min-h-screen overflow-hidden">
+      {/* 🔁 Background Video */}
       <video
         src={vidbg}
         autoPlay
@@ -51,18 +52,21 @@ const PaymentHistory = () => {
         playsInline
         className="fixed top-0 left-0 w-full h-full object-cover z-0"
       />
-
-      {/* ✅ Content Wrapper */}
-      <div className="relative z-10  bg-opacity-70 min-h-screen px-4 sm:px-6 lg:px-10 py-12 text-white">
+      <Helmet>
+        <title>ParmentHistory| MedCampMS</title>
+        <meta name="description" content="Welcome to MedCampMS - Your trusted medical camp management system." />
+     </Helmet>
+      {/* 🔲 Content Wrapper */}
+      <div className="relative z-10 min-h-screen  bg-opacity-70 px-4 sm:px-6 lg:px-10 py-12 text-white">
         <div className="max-w-6xl mx-auto">
           <h2 className="text-3xl font-bold mb-6 text-center">💳 Payment History</h2>
 
-          {/* 🔍 Search Input */}
+          {/* 🔍 Search */}
           <div className="mb-6 flex justify-center">
             <input
               type="text"
               placeholder="Search by Camp Name..."
-              className="input input-bordered w-full sm:w-2/3 md:w-1/2 lg:w-1/3 text-white"
+              className="input input-bordered w-full max-w-sm text-black bg-white"
               value={searchQuery}
               onChange={(e) => {
                 setSearchQuery(e.target.value);
@@ -71,29 +75,27 @@ const PaymentHistory = () => {
             />
           </div>
 
-          {/* ✅ Payment Table */}
+          {/* 📊 Table Section */}
           {currentPayments.length === 0 ? (
             <p className="text-center text-gray-300">No payment history found.</p>
           ) : (
-            <div className="overflow-x-auto shadow-lg rounded-xl bg-white bg-opacity-90 text-black">
-              <table className="table w-full ">
+            <div className="w-full overflow-x-auto rounded-xl shadow-lg bg-white bg-opacity-90 text-black">
+              <table className="table min-w-[640px] w-full text-sm md:text-base">
                 <thead className="bg-gradient-to-r from-indigo-500 to-purple-500 text-white">
                   <tr>
-                    <th className="px-4 py-2">Camp Name</th>
-                    <th className="px-4 py-2">Amount</th>
-                    <th className="px-4 py-2">Transaction ID</th>
-                    <th className="px-4 py-2">Date</th>
+                    <th className="px-3 py-2 text-left">Camp Name</th>
+                    <th className="px-3 py-2 text-left">Amount</th>
+                    <th className="px-3 py-2 text-left">Transaction ID</th>
+                    <th className="px-3 py-2 text-left">Date</th>
                   </tr>
                 </thead>
                 <tbody>
                   {currentPayments.map((payment) => (
-                    <tr key={payment._id} className="hover:bg-gray-600  transition">
-                      <td className="px-4 py-3">{payment.campName}</td>
-                      <td className="px-4 py-3 text-green-600 font-semibold">${payment.amount}</td>
-                      <td className="px-4 py-3">{payment.transactionId}</td>
-                      <td className="px-4 py-3">
-                        {new Date(payment.date).toLocaleDateString()}
-                      </td>
+                    <tr key={payment._id} className="hover:bg-gray-200 transition">
+                      <td className="px-3 py-2">{payment.campName}</td>
+                      <td className="px-3 py-2 text-green-600 font-semibold">${payment.amount}</td>
+                      <td className="px-3 py-2 break-all">{payment.transactionId}</td>
+                      <td className="px-3 py-2">{new Date(payment.date).toLocaleDateString()}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -101,11 +103,12 @@ const PaymentHistory = () => {
             </div>
           )}
 
-          {/* ✅ Pagination */}
+          {/* ⏩ Pagination */}
           {filteredPayments.length > itemsPerPage && (
             <div className="mt-10 flex flex-col sm:flex-row items-center justify-between gap-4 text-white">
               <div>
-                Showing {indexOfFirst + 1}-{Math.min(indexOfLast, filteredPayments.length)} of {filteredPayments.length}
+                Showing {indexOfFirst + 1}–
+                {Math.min(indexOfLast, filteredPayments.length)} of {filteredPayments.length}
               </div>
               <div className="flex flex-wrap gap-2">
                 <button

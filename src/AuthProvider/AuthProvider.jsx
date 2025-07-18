@@ -59,42 +59,40 @@ const getToken = async () => {
     return updateProfile(auth.currentUser, profileInfo);
   };
 
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
-      if (currentUser) {
-        try {
-          const token = await currentUser.getIdToken();
+useEffect(() => {
+  const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+    setUser(currentUser); // ✅ আগেই user সেট করো
 
-          // Fetch user role from backend
-          const response = await fetch(`https://medical-camp-server-sage.vercel.app/users?email=${currentUser.email}`, {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          });
+    if (currentUser) {
+      try {
+        const token = await currentUser.getIdToken();
 
-          if (response.ok) {
-            const userData = await response.json();
-            setRole(userData.role || 'participant'); // default to participant if no role
-          } else {
-            setRole('participant');
-          }
+        // ✅ Backend থেকে role আনো
+        const response = await fetch(`https://medical-camp-server-sage.vercel.app/users?email=${currentUser.email}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
 
-          setUser(currentUser); // Set actual Firebase user object
-
-        } catch (error) {
-          console.error('Failed to fetch user role:', error);
-          setUser(currentUser);
+        if (response.ok) {
+          const userData = await response.json();
+          setRole(userData.role || 'participant');
+        } else {
           setRole('participant');
         }
-      } else {
-        setUser(null);
-        setRole(null);
+      } catch (error) {
+        console.error('Failed to fetch user role:', error);
+        setRole('participant');
       }
-      setLoading(false);
-    });
+    } else {
+      setRole(null);
+    }
 
-    return () => unsubscribe();
-  }, []);
+    setLoading(false);
+  });
+
+  return () => unsubscribe();
+}, []);
 
   const authInfo = {
     user,        // Firebase user object

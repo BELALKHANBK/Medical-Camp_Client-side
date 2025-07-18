@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import axios from "axios";
 import Swal from "sweetalert2";
 import useAuth from "../AuthProvider/UseAuth"; // তোমার ফায়ারবেস auth hook
+import { Helmet } from "react-helmet-async";
 
 const OrganizerPro = () => {
   const { user, getToken,updateUserProfile } = useAuth();  // getToken: ফায়ারবেস থেকে idToken পেতে সাহায্য করবে
@@ -14,7 +15,7 @@ const OrganizerPro = () => {
     const fetchProfile = async () => {
       try {
         const token = await getToken();
-        const res = await axios.get(`http://localhost:5000/users?email=${user.email}`, {
+        const res = await axios.get(`https://medical-camp-server-sage.vercel.app/users?email=${user.email}`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         setProfile(res.data);
@@ -40,7 +41,7 @@ const onSubmit = async (data) => {
 
     if (profile?._id) {
       // ব্যাকএন্ডে প্রোফাইল আপডেট
-      const res = await axios.put(`http://localhost:5000/users/${profile._id}`, data, {
+      const res = await axios.put(`https://medical-camp-server-sage.vercel.app/users/${profile._id}`, data, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -69,7 +70,11 @@ const onSubmit = async (data) => {
   if (loading) return <p className="text-center mt-8">Loading...</p>;
 
   return (
-    <div className="max-w-xl mx-auto p-6 bg-white text-black mt-8 rounded shadow">
+    <div className="max-w-xl mx-auto p-6  bg-white h-145 text-black mt-8 rounded shadow">
+       <Helmet>
+        <title>OrganizerPro| MedCampMS</title>
+        <meta name="description" content="Welcome to MedCampMS - Your trusted medical camp management system." />
+     </Helmet>
       <h2 className="text-2xl font-bold mb-4">Participant Profile</h2>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 mt-8">
         <div>
@@ -77,7 +82,7 @@ const onSubmit = async (data) => {
           <input
             {...register("name", { required: true })}
             type="text"
-            className="input input-bordered text-black w-full"
+            className="input input-bordered text-white w-full"
           />
         </div>
 
@@ -95,7 +100,7 @@ const onSubmit = async (data) => {
           <input
             {...register("contactNumber", { required: true })}
             type="text"
-            className="input input-bordered text-black w-full"
+            className="input input-bordered text-white w-full"
           />
         </div>
 
@@ -105,7 +110,7 @@ const onSubmit = async (data) => {
             {...register("image")}
             type="text"
             placeholder="Image URL"
-            className="input input-bordered text-black w-full"
+            className="input input-bordered text-white w-full"
           />
         </div>
 

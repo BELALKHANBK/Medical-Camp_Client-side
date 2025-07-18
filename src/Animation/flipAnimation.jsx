@@ -6,7 +6,6 @@ import img2 from '../assets/image/medical-nurse-helping-african-american-pediatr
 import img3 from '../assets/image/medical-technologist-doing-blood-draw-services-patient-lab-assistant-with-sterile-rubber-gloves-taking-blood-sample-from-patient.jpg'
 import img4 from '../assets/image/people-are-practicing-medicine.jpg' 
 
-
 import "swiper/css";
 import "swiper/css/effect-coverflow";
 import "swiper/css/navigation";
@@ -37,13 +36,20 @@ const successStories = [
     image: img3
   },
   {
-    id: 1,
-    title: "Free Vaccination Camp in Dhaka",
+    id: 4,
+    title: "Health Awareness Camp",
     description:
-      "Successfully vaccinated over 500 children and adults, improving community health significantly.",
+      "Educated hundreds on healthy living and preventive care, empowering the community.",
     image: img4
   },
-  // আরো stories যোগ করতে পারো এখানে
+];
+
+// এখানে বিভিন্ন রঙের সেটিংস দেওয়া হলো
+const colors = [
+  { titleColor: "#00796b", descColor: "#444" },  // Green shade
+  { titleColor: "#6a1b9a", descColor: "#333" },  // Purple shade
+  { titleColor: "#d84315", descColor: "#222" },  // Orange shade
+  { titleColor: "#1565c0", descColor: "#333" },  // Blue shade
 ];
 
 const SuccessStoriesSlider = () => {
@@ -79,35 +85,40 @@ const SuccessStoriesSlider = () => {
         pagination={{ clickable: true }}
         style={{ paddingBottom: "60px" }}
       >
-        {successStories.map(({ id, title, description, image }) => (
-          <SwiperSlide
-            key={id}
-            style={{
-              width: "320px",
-              backgroundColor: "#fff",
-              borderRadius: "12px",
-              boxShadow: "0 6px 15px rgba(0,0,0,0.1)",
-              padding: "20px",
-              boxSizing: "border-box",
-            }}
-          >
-            <img
-              src={image}
-              alt={title}
+        {successStories.map(({ id, title, description, image }, index) => {
+          const colorSet = colors[index % colors.length]; // রঙ ঘুরে ফিরে ব্যবহার হবে
+          return (
+            <SwiperSlide
+              key={id + "-" + index}
               style={{
-                width: "100%",
-                height: "180px",
-                objectFit: "cover",
-                borderRadius: "10px",
-                marginBottom: "15px",
+                width: "320px",
+                backgroundColor: "#fff",
+                borderRadius: "12px",
+                boxShadow: "0 6px 15px rgba(0,0,0,0.1)",
+                padding: "20px",
+                boxSizing: "border-box",
               }}
-            />
-            <h3 style={{ fontSize: "1.3rem", marginBottom: "10px", color: "#00796b" }}>
-              {title}
-            </h3>
-            <p style={{ fontSize: "1rem", color: "#444" }}>{description}</p>
-          </SwiperSlide>
-        ))}
+            >
+              <img
+                src={image}
+                alt={title}
+                style={{
+                  width: "100%",
+                  height: "180px",
+                  objectFit: "cover",
+                  borderRadius: "10px",
+                  marginBottom: "15px",
+                }}
+              />
+              <h3 style={{ fontSize: "1.3rem", marginBottom: "10px", color: colorSet.titleColor }}>
+                {title}
+              </h3>
+              <p style={{ fontSize: "1rem", color: colorSet.descColor }}>
+                {description}
+              </p>
+            </SwiperSlide>
+          );
+        })}
       </Swiper>
     </section>
   );

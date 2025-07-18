@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router"; 
 import useAxoiseSecure from "../AuthProvider/UseAxios";
+import { Helmet } from "react-helmet-async";
 
 const AvailablePages = () => {
   const [camps, setCamps] = useState([]);
@@ -12,7 +13,7 @@ const AvailablePages = () => {
   const axios = useAxoiseSecure();
 
   useEffect(() => {
-    axios.get("http://localhost:5000/camps")
+    axios.get("https://medical-camp-server-sage.vercel.app/camps")
       .then((res) => {
         setCamps(res.data);
         setFilteredCamps(res.data);
@@ -50,6 +51,10 @@ const AvailablePages = () => {
 
   return (
     <div className="max-w-7xl mx-auto p-6">
+      <Helmet>
+        <title>Available Camps | MedCampMS</title>
+        <meta name="description" content="Welcome to MedCampMS - Your trusted medical camp management system." />
+      </Helmet>
       <h2 className="text-3xl font-bold mb-6 text-center text-indigo-600">Available Medical Camps</h2>
 
       {/* Search + Sort + Layout Controls */}

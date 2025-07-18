@@ -7,12 +7,15 @@ import SidBer from '../Extrasection/SidBer';
 //import Logo from '../Logo';
 //import SidebarLinks from '../pages/dashboard/SidebarLinks';
 import img1 from '../assets/image/pawel-czerwinski-f5ITyZ8pi5I-unsplash.jpg'
-
+import img2 from '../assets/image/img2.jpg'
+import { Helmet } from 'react-helmet-async';
 const DashBoardLayout = () => {
     return (
-        <div
-        
-        className="drawer lg:drawer-open">
+        <div className="drawer lg:drawer-open">
+           <Helmet>
+                  <title>Organizer Dashboard| MedCampMS</title>
+                  <meta name="description" content="Welcome to MedCampMS - Your trusted medical camp management system." />
+                </Helmet>
   <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
   <div className="drawer-content flex flex-col ">
     {/* Page content here */}
@@ -38,7 +41,18 @@ const DashBoardLayout = () => {
       
     </div>
 
- <Outlet></Outlet>
+<div
+   style={{ 
+        backgroundImage: `url(${img2})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',}}
+      className=" text-white  px-6"
+      initial={{ opacity: 0, y: 40 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6 }}
+>
+  <Outlet></Outlet>
+</div>
 {/* Page content here */}
 
   </div>

@@ -125,17 +125,15 @@ const Navber = () => {
               className="tooltip tooltip-bottom cursor-pointer"
               data-tip={user?.displayName || "User"}
             >
-              <div className="profile-glow-wrapper">
-                <div className="profile-glow"></div>
-                <img
-                  src={
-                    user?.photoURL ||
-                    "https://i.ibb.co/ZYW3VTp/brown-brim.png"
-                  }
-                  alt="Profile"
-                  className="profile-image"
-                />
-              </div>
+                 <div className="profile-glow-wrapper">
+  <div className="outer-border"></div> {/* 🟢 এটা নতুন যোগ করো */}
+  <div className="profile-glow"></div>
+  <img
+    src={user?.photoURL || "https://i.ibb.co/ZYW3VTp/brown-brim.png"}
+    alt="Profile"
+    className="profile-image"
+  />
+</div>
             </div>
           ) : (
             <Link
@@ -157,6 +155,8 @@ const Navber = () => {
       {/* Profile Drawer */}
       {isDrawerOpen && (
         <div className="fixed top-0 right-0 h-full w-72 bg-white shadow-lg p-6 z-50">
+        
+        
           <button
             onClick={() => setIsDrawerOpen(false)}
             className="absolute top-2 right-2 text-xl text-gray-500 hover:text-red-500 transition"
@@ -165,16 +165,16 @@ const Navber = () => {
           </button>
 
           <div className="flex flex-col items-center text-center text-black mt-6 space-y-3">
-            <div className="profile-glow-wrapper">
-              <div className="profile-glow"></div>
-              <img
-                src={
-                  user?.photoURL || "https://i.ibb.co/ZYW3VTp/brown-brim.png"
-                }
-                className="profile-image"
-                alt="User"
-              />
-            </div>
+         <div className="profile-glow-wrapper">
+  <div className="outer-border"></div> {/* 🟢 এটা নতুন যোগ করো */}
+  <div className="profile-glow"></div>
+  <img
+    src={user?.photoURL || "https://i.ibb.co/ZYW3VTp/brown-brim.png"}
+    alt="Profile"
+    className="profile-image"
+  />
+</div>
+
             <h3 className="font-bold text-lg">{user?.displayName || "User Name"}</h3>
             <p className="text-gray-600 text-sm">{user?.email}</p>
 

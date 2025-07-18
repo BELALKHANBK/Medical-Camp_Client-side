@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router';
-import { FaChartBar, FaUserCircle, FaClipboardCheck, FaCreditCard } from 'react-icons/fa';
+import { FaChartBar, FaUserCircle, FaClipboardCheck, FaCreditCard, FaHome } from 'react-icons/fa';
 
 const SidBerPar = () => {
   const linkStyle = ({ isActive }) =>
@@ -8,8 +8,15 @@ const SidBerPar = () => {
     }`;
 
   return (
-    <ul className="menu p-4 space-y-2 text-base">
+    <ul className="menu p-4 space-y-2  text-base">
       {/* Analytics */}
+    <li>
+        <NavLink to="/" className={linkStyle}>
+      <FaHome/>
+      
+          <span>Home</span>
+        </NavLink>
+      </li>
       <li>
         <NavLink to="/participent/analytics" className={linkStyle}>
           <FaChartBar className="text-lg" />

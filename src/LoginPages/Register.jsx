@@ -7,6 +7,7 @@ import { getIdToken } from 'firebase/auth';
 import useAuth from '../AuthProvider/UseAuth';
 import SignInGoogle from './SignInGoogle';
 import OtherAxios from '../AuthProvider/OtherAxios';
+import { Helmet } from 'react-helmet-async';
 
 const Register = () => {
   const { register, handleSubmit, formState: { errors } } = useForm();
@@ -96,12 +97,16 @@ const Register = () => {
 
   return (
     <div className=''>
+       <Helmet>
+              <title>Register Pages | MedCampMS</title>
+              <meta name="description" content="Welcome to MedCampMS - Your trusted medical camp management system." />
+            </Helmet>
       <div className="hero bg-base-200 min-h-screen">
         <div className="hero-content flex-col lg:flex-row-reverse">
           <div className="card bg-base-100 w-full max-w-sm shrink-0 shadow-2xl">
             <div className='items-center text-center mt-4'>
               <h1 className='text-2xl font-extrabold'>Create an Account</h1>
-              <p>Register with Medical camp</p>
+              <p>Register with MedCampMs</p>
             </div>
 
             <h1 className='ml-6 opacity-10 border w-8 h-8 items-center rounded-4xl'>

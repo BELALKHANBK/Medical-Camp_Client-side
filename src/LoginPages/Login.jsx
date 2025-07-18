@@ -4,6 +4,7 @@ import { FcGoogle } from 'react-icons/fc';
 import { Link, useLocation, useNavigate } from 'react-router';
 import useAuth from '../AuthProvider/UseAuth';
 import SignInGoogle from './SignInGoogle';
+import { Helmet } from 'react-helmet-async';
 
 
 const Login = () => {
@@ -41,13 +42,17 @@ const Login = () => {
 
   return (
         <div className="hero bg-base-200 min-h-screen">
+           <Helmet>
+                  <title>Login Page | MedCampMS</title>
+                  <meta name="description" content="Welcome to MedCampMS - Your trusted medical camp management system." />
+            </Helmet>
  
   <div className="hero-content flex-col lg:flex-row-reverse">
    
     <div className="card bg-base-100 w-full max-w-sm shrink-0 shadow-2xl">
           <div className='mt-4'>
          <h1 className="text-2xl text-center font-bold">Welcome Back</h1>
-          <p className='text-center'>Login with Profast</p>
+          <p className='text-center'>Login with MedCampMs</p>
 
     </div>
       <div className="card-body">

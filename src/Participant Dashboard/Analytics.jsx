@@ -62,7 +62,7 @@ const Analytics = () => {
       maxWidth: 700,
       margin: '40px auto',
       padding: 20,
-      backgroundColor: '#fefefe',
+    
       borderRadius: 20,
       boxShadow: '0 8px 20px rgba(0,0,0,0.1)',
       fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
@@ -113,6 +113,7 @@ const Analytics = () => {
             <Tooltip content={<CustomTooltip />} />
             <Bar
               dataKey="fee"
+              
               radius={[10, 10, 0, 0]}
               barSize={40}
               style={{ filter: 'drop-shadow(0 2px 2px rgba(34,197,94,0.4))' }}

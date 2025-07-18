@@ -5,6 +5,7 @@ import Swal from 'sweetalert2';
 import { useQuery } from '@tanstack/react-query';
 import useAuth from '../AuthProvider/UseAuth';
 import useAxoiseSecure from '../AuthProvider/UseAxios';
+import { Helmet } from 'react-helmet-async';
 
 const ParmentFrom = () => {
   const { user } = useAuth();
@@ -115,6 +116,10 @@ const ParmentFrom = () => {
 
   return (
     <div>
+       <Helmet>
+        <title>PaymentFrom| MedCampMS</title>
+        <meta name="description" content="Welcome to MedCampMS - Your trusted medical camp management system." />
+     </Helmet>
       <form
         onSubmit={handleSubmit}
         className="w-full max-w-md mx-auto bg-white p-6 rounded shadow space-y-4"

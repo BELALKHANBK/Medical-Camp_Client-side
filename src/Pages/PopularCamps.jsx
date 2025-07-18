@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router";
+import { Helmet } from "react-helmet-async";
 //import video from '../assets/image/img1.jpg'; // ভিডিও বা ব্যাকগ্রাউন্ড ইমেজ
 
 const PopularCamps = () => {
@@ -8,7 +9,7 @@ const PopularCamps = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    axios.get("http://localhost:5000/camps")
+    axios.get("https://medical-camp-server-sage.vercel.app/camps")
       .then(res => {
         const sortedCamps = res.data.sort(
           (a, b) => b.participantCount - a.participantCount
@@ -26,17 +27,10 @@ const PopularCamps = () => {
 
   return (
     <div className="relative max-w-6xl mx-auto px-4 my-10">
-      {/* Background video or image */}
-     {/*  <video
-        src={video}
-        autoPlay
-        loop
-        muted
-        playsInline
-        className="fixed top-0 left-0 w-full h-full object-cover z-0"
-      /> */}
-
-      {/* Overlay so content is readable */}
+    <Helmet>
+        <title>Popular Camp | MedCampMS</title>
+        <meta name="description" content="Welcome to MedCampMS - Your trusted medical camp management system." />
+      </Helmet>
       <div className="absolute inset-0  bg-opacity-50 z-0"></div>
 
       <h2 className="relative z-10 text-3xl font-bold mb-8 text-center text-white">

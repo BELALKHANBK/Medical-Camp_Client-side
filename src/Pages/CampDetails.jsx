@@ -4,6 +4,7 @@ import Swal from "sweetalert2";
 import { useState } from "react";
 import useAuth from "../AuthProvider/UseAuth";
 import useAxiosSecure from "../AuthProvider/UseAxios";
+import { Helmet } from "react-helmet-async";
 
 const CampDetails = () => {
   const { id } = useParams();
@@ -15,7 +16,7 @@ const CampDetails = () => {
   const { data: camp, isLoading, refetch } = useQuery({
     queryKey: ["camp-details", id],
     queryFn: async () => {
-      const res = await axios.get(`http://localhost:5000/camps/${id}`);
+      const res = await axios.get(`https://medical-camp-server-sage.vercel.app/camps/${id}`);
       return res.data;
     },
   });
@@ -56,9 +57,16 @@ const CampDetails = () => {
   if (!camp) return <p className="text-center mt-10">Camp not found</p>;
 
   return (
-    <div className="max-w-5xl min-h-screen mx-auto p-14 mt-40">
+    
+    <div className="max-w-5xl min-h-screen mx-auto p-14 mt-20">
+          <Helmet>
+        <title>Camp Details | MedCampMS</title>
+        <meta name="description" content="Welcome to MedCampMS - Your trusted medical camp management system." />
+      </Helmet>
       {/* Camp Details */}
       <div className="bg-white text-black shadow-lg rounded-xl overflow-hidden md:flex md:space-x-6">
+        
+        
         <div className="md:w-1/2">
           <img
             src={camp?.image || "https://via.placeholder.com/400x300?text=No+Image"}

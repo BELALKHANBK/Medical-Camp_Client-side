@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import useAxoiseSecure from "../AuthProvider/UseAxios";
 import SearchBar from "../pagination/SearchBar";
 import Pagination from "../pagination/Pagination";
+import { Helmet } from "react-helmet-async";
 
 const ManageCamps = () => {
   const [camps, setCamps] = useState([]);
@@ -23,7 +24,7 @@ const ManageCamps = () => {
 
   const fetchCamps = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/camps");
+      const res = await axios.get("https://medical-camp-server-sage.vercel.app/camps");
       setCamps(res.data);
     } catch (error) {
       Swal.fire("Error", "Failed to load camps", "error");
@@ -43,7 +44,7 @@ const ManageCamps = () => {
 
     if (confirm.isConfirmed) {
       try {
-        await axios.delete(`http://localhost:5000/delete-camp/${id}`);
+        await axios.delete(`https://medical-camp-server-sage.vercel.app/delete-camp/${id}`);
         Swal.fire("Deleted!", "Camp has been deleted.", "success");
         fetchCamps();
       } catch (error) {
@@ -78,7 +79,7 @@ const ManageCamps = () => {
         fees: Number(data.fees),
       };
 
-      const res = await axios.put(`http://localhost:5000/update-camp/${id}`, updatedCamp);
+      const res = await axios.put(`https://medical-camp-server-sage.vercel.app/update-camp/${id}`, updatedCamp);
 
       if (res.data.modifiedCount > 0 || res.data.acknowledged) {
         Swal.fire("Success", "Camp updated successfully", "success");
@@ -103,6 +104,10 @@ const ManageCamps = () => {
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-10">
+       <Helmet>
+        <title>ManageCamps| MedCampMS</title>
+        <meta name="description" content="Welcome to MedCampMS - Your trusted medical camp management system." />
+     </Helmet>
       <h2 className="text-4xl font-bold text-center mb-10 text-blue-700">Manage Medical Camps</h2>
 
       <div className="mb-6">

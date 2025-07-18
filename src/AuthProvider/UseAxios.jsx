@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { getIdToken, getAuth } from 'firebase/auth';
 
 const axiosSecure = axios.create({
-  baseURL: 'http://localhost:5000',
+  baseURL: 'https://medical-camp-server-sage.vercel.app',
 });
 
 const useAxiosSecure = () => {

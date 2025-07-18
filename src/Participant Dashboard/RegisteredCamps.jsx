@@ -4,6 +4,7 @@ import Swal from 'sweetalert2';
 import useAuth from '../AuthProvider/UseAuth';
 import useAxiosSecure from '../AuthProvider/UseAxios';
 import { useNavigate } from 'react-router';
+import { Helmet } from 'react-helmet-async';
 
 const RegisteredCamps = () => {
   const { user } = useAuth();
@@ -81,7 +82,7 @@ const RegisteredCamps = () => {
       Swal.fire('Thank you!', 'Your feedback has been submitted.', 'success');
       setFeedbackModal({ open: false, campId: null });
     } catch (error) {
-      Swal.fire('Error', 'Failed to submit feedback.', 'error',error);
+      Swal.fire('Error', 'Failed to submit feedback.', 'error');
     }
   };
 
@@ -97,8 +98,13 @@ const RegisteredCamps = () => {
 
   return (
     <div className="p-4 md:p-6 max-w-7xl mx-auto">
+                      <Helmet>
+                        <title>RegisterCamps| MedCampMS</title>
+                        <meta name="description" content="Welcome to MedCampMS - Your trusted medical camp management system." />
+                      </Helmet>
       <h2 className="text-2xl md:text-3xl font-bold mb-6 text-center">📋 Your Registered Camps</h2>
 
+      {/* 🔍 Search Box */}
       <div className="mb-4 flex justify-center">
         <input
           type="text"
@@ -112,11 +118,12 @@ const RegisteredCamps = () => {
         />
       </div>
 
+      {/* ✅ Table */}
       {currentCamps.length === 0 ? (
         <p className="text-center text-gray-600">No camps registered yet.</p>
       ) : (
-        <div className="overflow-x-auto mt-20 lg:w-260 rounded-lg shadow-md">
-          <table className="table w-full text-sm md:text-base">
+        <div className="overflow-x-auto mt-8 rounded-lg shadow-md">
+          <table className="table min-w-[640px] w-full text-sm md:text-base">
             <thead className="bg-green-200 text-black">
               <tr>
                 <th className="px-4 py-2">Camp</th>
@@ -129,7 +136,7 @@ const RegisteredCamps = () => {
             </thead>
             <tbody>
               {currentCamps.map((camp) => (
-                <tr key={camp._id} className="hover:bg-gray-600 text-center">
+                <tr key={camp._id} className="hover:bg-gray-100 text-center">
                   <td className="border px-3 py-2">{camp.campName}</td>
                   <td className="border px-3 py-2">${camp.fees}</td>
                   <td className="border px-3 py-2 hidden sm:table-cell">{camp.participantName}</td>
@@ -141,7 +148,7 @@ const RegisteredCamps = () => {
                         <span className="text-red-600 font-semibold">Unpaid</span>
                         <button
                           onClick={() => handlePay(camp._id)}
-                          className="ml-2 btn btn-sm btn-success"
+                          className="ml-2 btn btn-sm btn-success mt-2 sm:mt-0"
                         >
                           Pay
                         </button>
@@ -151,7 +158,7 @@ const RegisteredCamps = () => {
                   <td className="border px-3 py-2 hidden sm:table-cell">
                     {camp.confirmationStatus || 'Pending'}
                   </td>
-                  <td className="border px-3 py-2 space-y-1 sm:space-y-0 sm:space-x-2">
+                  <td className="border px-3 py-2 flex flex-col sm:flex-row items-center justify-center gap-2">
                     {camp.paymentStatus !== 'Paid' && (
                       <button
                         onClick={() => handleCancel(camp._id, camp.paymentStatus)}
@@ -176,7 +183,7 @@ const RegisteredCamps = () => {
         </div>
       )}
 
-      {/* Pagination */}
+      {/* ✅ Pagination */}
       {filteredCamps.length > itemsPerPage && (
         <div className="flex flex-col sm:flex-row justify-between items-center mt-8 gap-3">
           <p className="text-sm">
@@ -211,16 +218,28 @@ const RegisteredCamps = () => {
         </div>
       )}
 
-      {/* Feedback Modal */}
+      {/* ✅ Feedback Modal */}
       {feedbackModal.open && (
-        <div className="fixed inset-0 w-full  bg-opacity-50 flex justify-center items-center z-50 px-4">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50 px-4">
           <div className="bg-white text-black rounded-lg p-6 w-full max-w-md">
             <h3 className="text-xl font-semibold mb-4">Submit Feedback</h3>
             <form onSubmit={handleFeedbackSubmit}>
               <label className="block mb-2 font-semibold">Rating (1-5):</label>
-              <input name="rating" type="number" min="1" max="5" required className="input text-xl text-white input-bordered w-full mb-4" />
-              <label className="block mb-2 text-xl font-semibold">Comment:</label>
-              <textarea name="comment" rows="4" required className="textarea text-xl text-white textarea-bordered w-full mb-4" />
+              <input
+                name="rating"
+                type="number"
+                min="1"
+                max="5"
+                required
+                className="input input-bordered w-full mb-4"
+              />
+              <label className="block mb-2 font-semibold">Comment:</label>
+              <textarea
+                name="comment"
+                rows="4"
+                required
+                className="textarea textarea-bordered w-full mb-4"
+              />
               <div className="flex justify-end gap-3">
                 <button
                   type="button"
@@ -229,7 +248,9 @@ const RegisteredCamps = () => {
                 >
                   Cancel
                 </button>
-                <button type="submit" className="btn btn-primary">Submit</button>
+                <button type="submit" className="btn btn-primary">
+                  Submit
+                </button>
               </div>
             </form>
           </div>

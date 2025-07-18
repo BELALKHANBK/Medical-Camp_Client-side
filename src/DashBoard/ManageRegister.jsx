@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import useAuth from "../AuthProvider/UseAuth";
 import useAxiosSecure from "../AuthProvider/UseAxios";
+import { Helmet } from "react-helmet-async";
 
 const ManageRegister = () => {
   const { user, role } = useAuth();
@@ -14,34 +15,42 @@ const ManageRegister = () => {
   const isOrganizer = role === "organizer";
 
   useEffect(() => {
-    if (!user?.email || !role) return;
+  if (!user?.email || !role) return;
 
-    axiosSecure
-      .get(`//${user.email}`)
-      .then((res) => {
-        setRegistrations(res.data);
-      })
-      .catch((err) => console.error("Error fetching self-joined camps:", err));
+  const fetchData = async () => {
+  try {
+    const [participantRes, organizerRes] = await Promise.all([
+      axiosSecure.get(`/joine/${user.email}`),
+      role === "organizer"
+        ? axiosSecure.get(`/joine?email=${user.email}&role=organizer`)
+        : Promise.resolve({ data: [] }),
+    ]);
 
-    if (isOrganizer) {
-      axiosSecure
-        .get(`/joine?email=${user.email}&role=${role}`)
-        .then((res) => {
-          setRegistrations((prev) => {
-            const newData = res.data.filter(
-              (item) => !prev.some((prevItem) => prevItem._id === item._id)
-            );
-            return [...prev, ...newData];
-          });
-        })
-        .catch((err) => console.error("Organizer managed camps fetch error:", err));
-    }
-  }, [user, role, axiosSecure, isOrganizer]);
+    console.log('Participant join data:', participantRes.data);
+    console.log('Organizer join data:', organizerRes.data);
+
+    const combined = [...participantRes.data, ...organizerRes.data];
+
+    // Remove duplicates based on _id
+    const unique = Array.from(
+      new Map(combined.map((item) => [item._id, item])).values()
+    );
+
+    setRegistrations(unique);
+  } catch (error) {
+    console.error("Fetch error:", error);
+  }
+};
+
+  fetchData();
+}, [user, role, axiosSecure]);
+
 
   const handleConfirm = (id) => {
     axiosSecure
       .patch(`/joine/${id}`)
       .then((res) => {
+    
         if (res.data.modifiedCount > 0) {
           Swal.fire("Confirmed!", "Participant status updated.", "success");
           setRegistrations((prev) =>
@@ -58,7 +67,7 @@ const ManageRegister = () => {
 
   const handleCancel = (id, isPaid, isConfirmed) => {
     if (!isOrganizer) {
-      Swal.fire("Not Allowed", "Only organizers can cancel registrations.", "warning");
+      Swal.fire("Not Allowed", "Only organizers can cancel.", "warning");
       return;
     }
 
@@ -77,7 +86,9 @@ const ManageRegister = () => {
           .then((res) => {
             if (res.data.message === "Registration cancelled successfully") {
               Swal.fire("Cancelled!", "Registration removed.", "success");
-              setRegistrations((prev) => prev.filter((item) => item._id !== id));
+              setRegistrations((prev) =>
+                prev.filter((item) => item._id !== id)
+              );
             }
           })
           .catch(() => {
@@ -96,8 +107,14 @@ const ManageRegister = () => {
   const currentItems = filtered.slice(startIndex, startIndex + itemsPerPage);
 
   return (
-    <div className="p-4 md:p-8 max-w-6xl mx-auto">
-      <h2 className="text-2xl font-bold mb-4 text-center">Manage Registered Camps</h2>
+    <div className="p-4 md:p-8 max-w-6xl h-145 mx-auto">
+       <Helmet>
+        <title>ManageRegister| MedCampMS</title>
+        <meta name="description" content="Welcome to MedCampMS - Your trusted medical camp management system." />
+     </Helmet>
+      <h2 className="text-2xl font-bold mb-4 text-center">
+        Manage Registered Camps
+      </h2>
 
       <div className="mb-4 flex justify-center">
         <input
@@ -135,10 +152,13 @@ const ManageRegister = () => {
                   <td>{item.participantName}</td>
                   <td>
                     <span
-                      className={`badge ${item.paymentStatus === "Paid" ? "badge-success" : "badge-error"
-                        }`}
+                      className={`badge ${
+                        item.payment_status === "Paid"
+                          ? "badge-success"
+                          : "badge-error"
+                      }`}
                     >
-                      {item.paymentStatus}
+                      {item.payment_status}
                     </span>
                   </td>
                   <td>
@@ -157,11 +177,14 @@ const ManageRegister = () => {
                   </td>
                   <td>
                     <button
-                      disabled={item.paymentStatus === "Paid" && item.confirmationStatus === "Confirmed"}
+                      disabled={
+                        item.payment_status === "Paid" &&
+                        item.confirmationStatus === "Confirmed"
+                      }
                       onClick={() =>
                         handleCancel(
                           item._id,
-                          item.paymentStatus === "Paid",
+                          item.payment_status === "Paid",
                           item.confirmationStatus === "Confirmed"
                         )
                       }
@@ -187,7 +210,9 @@ const ManageRegister = () => {
       {filtered.length > itemsPerPage && (
         <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mt-6">
           <div>
-            Showing {startIndex + 1}-{Math.min(startIndex + itemsPerPage, filtered.length)} of {filtered.length}
+            Showing {startIndex + 1}-
+            {Math.min(startIndex + itemsPerPage, filtered.length)} of{" "}
+            {filtered.length}
           </div>
           <div className="flex flex-wrap gap-2">
             <button
@@ -201,13 +226,17 @@ const ManageRegister = () => {
               <button
                 key={i + 1}
                 onClick={() => setCurrentPage(i + 1)}
-                className={`btn btn-sm ${currentPage === i + 1 ? "btn-primary" : ""}`}
+                className={`btn btn-sm ${
+                  currentPage === i + 1 ? "btn-primary" : ""
+                }`}
               >
                 {i + 1}
               </button>
             ))}
             <button
-              onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+              onClick={() =>
+                setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+              }
               disabled={currentPage === totalPages}
               className="btn btn-sm"
             >

@@ -6,6 +6,7 @@ import { useQuery } from '@tanstack/react-query';
 import useAuth from '../AuthProvider/UseAuth';
 import useAxiosSecure from '../AuthProvider/UseAxios';
 import img1 from '../assets/image/img1.jpg'  
+import { Helmet } from 'react-helmet-async';
 
 
 const PaymentFrom = () => {
@@ -133,6 +134,11 @@ if (amountUSDcents < 50) {
   }}
   className="p-6 rounded shadow min-h-screen"
     >
+
+       <Helmet>
+                        <title>Organizer From| MedCampMS</title>
+                        <meta name="description" content="Welcome to MedCampMS - Your trusted medical camp management system." />
+                      </Helmet>
       <form
         onSubmit={handleSubmit}
         className="w-full max-w-md mt-30 mx-auto h-40 bg-white p-6 rounded shadow space-y-4"

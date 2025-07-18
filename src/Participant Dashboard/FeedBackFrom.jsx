@@ -7,7 +7,7 @@ const FeedBackFrom = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    fetch('http://localhost:5000/feedbacks')
+    fetch('https://medical-camp-server-sage.vercel.app/feedbacks')
       .then((res) => res.json())
       .then((data) => {
         setFeedbacks(data);
@@ -39,7 +39,7 @@ const FeedBackFrom = () => {
       </div>
 
       {/* ✅ Main Content */}
-      <div className="relative z-10 max-w-6xl  mx-auto p-6">
+      <div className="relative z-10 max-w-6xl mx-auto p-6">
         <h2 className="text-3xl font-bold mb-10 text-center text-white">📣 Participant Feedback</h2>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
