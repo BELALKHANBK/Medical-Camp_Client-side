@@ -8,7 +8,7 @@ A full-stack Medical Camp Management System (MCMS) built with the MERN stack to 
 
 - 🔴 **Live Website:** [https://medical-camp-10888.web.app](https://medical-camp-10888.web.app)
 - 💻 **Client GitHub Repo:** [Client Repository](https://github.com/Programming-Hero-Web-Course4/ b11a12-client-side-BELALKHANBK)
-- 🛠️ **Server GitHub Repo:** [Server Repository](https://github.com/Programming-Hero-Web-Course4/b11a12-server-side-BELALKHANBK)
+- 🛠️ **Server GitHub Repo:** [Server Repository](https://github.com/Programming-Hero-Web-Course4/b11a12-server-side-BELALKHANB)
          
 ---
 
