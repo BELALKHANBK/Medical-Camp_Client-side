@@ -14,37 +14,37 @@ const ManageRegister = () => {
 
   const isOrganizer = role === "organizer";
 
-  useEffect(() => {
+useEffect(() => {
   if (!user?.email || !role) return;
 
   const fetchData = async () => {
-  try {
+    try {
     const [participantRes, organizerRes] = await Promise.all([
-      axiosSecure.get(`/joine/${user.email}`),
-      role === "organizer"
-        ? axiosSecure.get(`/joine?email=${user.email}&role=organizer`)
-        : Promise.resolve({ data: [] }),
-    ]);
+  axiosSecure.get(`/joine/${user.email}`),
+  role === "organizer"
+    ? axiosSecure.get(`/joine/organizer?email=${user.email}`)
+    : Promise.resolve({ data: [] }),
+]);
 
-    console.log('Participant join data:', participantRes.data);
-    console.log('Organizer join data:', organizerRes.data);
 
-    const combined = [...participantRes.data, ...organizerRes.data];
+      console.log('Participant join data:', participantRes.data);
+      console.log('Organizer camp participants:', organizerRes.data);
 
-    // Remove duplicates based on _id
-    const unique = Array.from(
-      new Map(combined.map((item) => [item._id, item])).values()
-    );
+      const combined = [...participantRes.data, ...organizerRes.data];
 
-    setRegistrations(unique);
-  } catch (error) {
-    console.error("Fetch error:", error);
-  }
-};
+      // Remove duplicates based on _id
+      const unique = Array.from(
+        new Map(combined.map((item) => [item._id, item])).values()
+      );
+
+      setRegistrations(unique);
+    } catch (error) {
+      console.error("Fetch error:", error);
+    }
+  };
 
   fetchData();
 }, [user, role, axiosSecure]);
-
 
   const handleConfirm = (id) => {
     axiosSecure
@@ -107,7 +107,7 @@ const ManageRegister = () => {
   const currentItems = filtered.slice(startIndex, startIndex + itemsPerPage);
 
   return (
-    <div className="p-4 md:p-8 max-w-6xl h-145 mx-auto">
+    <div className="p-4 md:p-8 max-w-6xl 5 mx-auto">
        <Helmet>
         <title>ManageRegister| MedCampMS</title>
         <meta name="description" content="Welcome to MedCampMS - Your trusted medical camp management system." />

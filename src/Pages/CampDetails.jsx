@@ -1,4 +1,4 @@
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { useQuery } from "@tanstack/react-query";
 import Swal from "sweetalert2";
 import { useState } from "react";
@@ -11,6 +11,7 @@ const CampDetails = () => {
   const { user } = useAuth();
   const [showModal, setShowModal] = useState(false);
   const axios = useAxiosSecure();
+  const navigate=useNavigate()
 
   // Fetch camp details
   const { data: camp, isLoading, refetch } = useQuery({
@@ -45,7 +46,9 @@ const CampDetails = () => {
       if (res.data.insertedId) {
         Swal.fire("Success!", "You have joined the camp!", "success");
         setShowModal(false);
+        navigate('/availecamp')
         refetch();
+        
       }
     } catch (error) {
       console.error("Join error:", error);

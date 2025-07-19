@@ -58,11 +58,12 @@ const Analytics = () => {
   }));
 
   return (
-    <div style={{
+    <div
+    style={{
       maxWidth: 700,
       margin: '40px auto',
       padding: 20,
-    
+  
       borderRadius: 20,
       boxShadow: '0 8px 20px rgba(0,0,0,0.1)',
       fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",

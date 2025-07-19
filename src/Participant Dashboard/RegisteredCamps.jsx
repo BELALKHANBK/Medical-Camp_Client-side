@@ -97,7 +97,7 @@ const RegisteredCamps = () => {
   const currentCamps = filteredCamps.slice(startIndex, startIndex + itemsPerPage);
 
   return (
-    <div className="p-4 md:p-6 max-w-7xl mx-auto">
+    <div className="p-4 md:p-6 max-w-7xl  mx-auto">
                       <Helmet>
                         <title>RegisterCamps| MedCampMS</title>
                         <meta name="description" content="Welcome to MedCampMS - Your trusted medical camp management system." />

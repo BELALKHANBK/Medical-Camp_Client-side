@@ -40,6 +40,7 @@ const ParticipantLayout = () => {
    style={{ 
         backgroundImage: `url(${img2})`,
         backgroundSize: 'cover',
+          minHeight: '100vh' ,
         backgroundPosition: 'center',}}
       className=" text-white  px-6"
       initial={{ opacity: 0, y: 40 }}

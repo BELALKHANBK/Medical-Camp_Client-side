@@ -45,11 +45,13 @@ const DashBoardLayout = () => {
    style={{ 
         backgroundImage: `url(${img2})`,
         backgroundSize: 'cover',
+          minHeight: '100vh' ,
         backgroundPosition: 'center',}}
       className=" text-white  px-6"
       initial={{ opacity: 0, y: 40 }}
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6 }}
+      
 >
   <Outlet></Outlet>
 </div>

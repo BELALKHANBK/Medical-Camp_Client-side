@@ -40,6 +40,7 @@ const SidBer = () => {
           <span>Manage Register Camps</span>
         </NavLink>
       </li>
+    
     </ul>
   );
 };

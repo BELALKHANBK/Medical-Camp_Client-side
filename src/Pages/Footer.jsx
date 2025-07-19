@@ -39,8 +39,8 @@ const Footer = () => {
         <div>
           <h3 className="font-semibold text-lg mb-3">Contact Us</h3>
           <ul className="space-y-2 text-sm">
-            <li className="flex items-center gap-2"><FaEnvelope /> info@medcamp.org</li>
-            <li className="flex items-center gap-2"><FaPhone /> +880-1234-567890</li>
+            <li className="flex items-center gap-2"><FaEnvelope /> belalkhanloverboy2004@gmail.com</li>
+            <li className="flex items-center gap-2"><FaPhone /> +880-1309707330</li>
             <li>123 Health Street, Dhaka, Bangladesh</li>
           </ul>
         </div>
@@ -49,7 +49,7 @@ const Footer = () => {
         <div>
           <h3 className="font-semibold text-lg mb-3">Follow Us</h3>
           <div className="flex gap-4 text-xl">
-          <a href="https://www.facebook.com/your-page-name" target="_blank" rel="noopener noreferrer"><FaFacebook/></a>
+          <a href="https://www.facebook.com/belal.khan.203198" target="_blank" rel="noopener noreferrer"><FaFacebook/></a>
           <a href="https://twitter.com/your-username" target="_blank" rel="noopener noreferrer"><FaTwitter/></a>
            <a href="https://www.instagram.com/your-username" target="_blank" rel="noopener noreferrer"><FaInstagram/></a>
           </div>
