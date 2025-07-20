@@ -7,12 +7,12 @@ import { Helmet } from "react-helmet-async";
 const ManageRegister = () => {
   const { user, role } = useAuth();
   const [registrations, setRegistrations] = useState([]);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 5;
-  const axiosSecure = useAxiosSecure();
+  const [searchQuery, setSearchQuery] = useState("");//search
+  const [currentPage, setCurrentPage] = useState(1); //pagiantin pages
+  const itemsPerPage = 5;///page limit
+  const axiosSecure = useAxiosSecure();//hook
 
-  const isOrganizer = role === "organizer";
+  const isOrganizer = role === "organizer";//role
 
 useEffect(() => {
   if (!user?.email || !role) return;
@@ -46,6 +46,8 @@ useEffect(() => {
   fetchData();
 }, [user, role, axiosSecure]);
 
+
+///seccess code
   const handleConfirm = (id) => {
     axiosSecure
       .patch(`/joine/${id}`)
@@ -64,7 +66,7 @@ useEffect(() => {
         Swal.fire("Error!", "Failed to update status.", "error");
       });
   };
-
+//////register camp delete 
   const handleCancel = (id, isPaid, isConfirmed) => {
     if (!isOrganizer) {
       Swal.fire("Not Allowed", "Only organizers can cancel.", "warning");
@@ -101,7 +103,7 @@ useEffect(() => {
   const filtered = registrations.filter((reg) =>
     reg.campName.toLowerCase().includes(searchQuery.toLowerCase())
   );
-
+///////pagination 
   const totalPages = Math.ceil(filtered.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const currentItems = filtered.slice(startIndex, startIndex + itemsPerPage);

@@ -61,13 +61,13 @@ const getToken = async () => {
 
 useEffect(() => {
   const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
-    setUser(currentUser); // ✅ আগেই user সেট করো
+    setUser(currentUser); // আগেই user সেট করো
 
     if (currentUser) {
       try {
         const token = await currentUser.getIdToken();
 
-        // ✅ Backend থেকে role আনো
+        //  Backend থেকে role আনো
         const response = await fetch(`https://medical-camp-server-sage.vercel.app/users?email=${currentUser.email}`, {
           headers: {
             Authorization: `Bearer ${token}`,
