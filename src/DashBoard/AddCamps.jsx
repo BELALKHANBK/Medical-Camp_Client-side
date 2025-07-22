@@ -1,46 +1,69 @@
-
 import { useForm } from "react-hook-form";
 import Swal from "sweetalert2";
-import useAuth from "../AuthProvider/UseAuth"; // ✅ Update path if needed
+import useAuth from "../AuthProvider/UseAuth";
 import useAxiosSecure from "../AuthProvider/UseAxios";
+import { useState } from "react";
 
 const AddCamp = () => {
   const { register, handleSubmit, reset } = useForm();
-  const { user,role } = useAuth();
-const axios=useAxiosSecure()
-  const onSubmit = async (data) => {
-   /*  if (!user?.email) {
-      Swal.fire("Error", "You must be logged in to add a camp", "error");
-      return;
-    } */
+  const { user, role } = useAuth();
+  const axios = useAxiosSecure();
 
+  const [imageFile, setImageFile] = useState(null);
 
-// ধরো user.role আছে তোমার auth context এ
-if (role !== 'organizer') {
-  Swal.fire('Error', 'Only organizers can add camps', 'error');
-  return;
-}
+  // ⬇️ Image Upload Function
+  const uploadToImgBB = async () => {
+    const apiKey = import.meta.env.VITE_image_key;
+    const formData = new FormData();
+    formData.append("image", imageFile);
 
     try {
-      const campData = {
-        name: data.name, // participant name
-        camp_name: data.camp_name, // ✅ new field
-        image: data.image,
-        fees: Number(data.fees),
-        dateTime: data.dateTime,
-        location: data.location,
-        doctor: data.doctor,
-        participantCount: 0,
-        description: data.description,
-        created_user: user.email,
-        payment_status: "unpaid",
-      };
+      const res = await fetch(`https://api.imgbb.com/1/upload?key=${apiKey}`, {
+        method: "POST",
+        body: formData,
+      });
+      const data = await res.json();
+      return data?.data?.display_url;
+    } catch (error) {
+      console.error("Image upload failed:", error);
+      return null;
+    }
+  };
 
+  // ⬇️ Form Submit Handler
+  const onSubmit = async (data) => {
+    if (role !== 'organizer') {
+      Swal.fire('Error', 'Only organizers can add camps', 'error');
+      return;
+    }
+
+    const imageUrl = await uploadToImgBB();
+    if (!imageUrl) {
+      Swal.fire("Error", "Image upload failed", "error");
+      return;
+    }
+
+    const campData = {
+      name: data.name,
+      camp_name: data.camp_name,
+      image: imageUrl,
+      fees: Number(data.fees),
+      dateTime: data.dateTime,
+      location: data.location,
+      doctor: data.doctor,
+      participantCount: 0,
+      description: data.description,
+      created_user: user.email,
+      payment_status: "unpaid",
+    };
+
+    try {
       const res = await axios.post("/camps", campData);
 
       if (res.data.insertedId || res.data.acknowledged) {
         Swal.fire("Success", "Camp added successfully", "success");
         reset();
+        setImageFile(null);
       }
     } catch (error) {
       Swal.fire("Error", "Failed to add camp", "error");
@@ -54,22 +77,26 @@ if (role !== 'organizer') {
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <input
           {...register("name")}
-          placeholder="Participant Name"
+          placeholder="Organizer Name"
           required
           className="input input-bordered w-full"
         />
         <input
-          {...register("camp_name")} // ✅ fixed name
+          {...register("camp_name")}
           placeholder="Camp Name"
           required
           className="input input-bordered w-full"
         />
+
+        {/* File Upload Field */}
         <input
-          {...register("image")}
-          placeholder="Image URL"
+          type="file"
+          accept="image/*"
+          onChange={(e) => setImageFile(e.target.files[0])}
           required
-          className="input input-bordered w-full"
+          className="file-input file-input-bordered w-full"
         />
+
         <input
           {...register("fees")}
           type="number"

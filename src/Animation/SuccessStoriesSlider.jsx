@@ -2,6 +2,7 @@ import React from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import SwiperCore, { EffectCoverflow, Navigation, Autoplay, Pagination } from "swiper";
 import { motion } from "framer-motion";
+import { FaHeartbeat } from "react-icons/fa"; // ✅ FontAwesome Icon
 
 import img1 from '../assets/image/male-doctor-vaccinating-little-girl.jpg';
 import img2 from '../assets/image/medical-nurse-helping-african-american-pediatrician-doctor-bandage-fractured-arm-little-kid-patient-clinical-physiotherapy-hospital-office-team-with-face-mask-against-covid19.jpg';
@@ -49,9 +50,11 @@ const successStories = [
 const SuccessStoriesSlider = () => {
   return (
     <>
-      {/* Inline keyframes style for gradient animation */}
+      {/* Inline keyframes style for gradient animation + Google Font */}
       <style>
         {`
+          @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+
           @keyframes gradientBG {
             0% {
               background-position: 0% 50%;
@@ -62,6 +65,10 @@ const SuccessStoriesSlider = () => {
             100% {
               background-position: 0% 50%;
             }
+          }
+
+          body {
+            font-family: 'Poppins', sans-serif;
           }
         `}
       </style>
@@ -74,8 +81,8 @@ const SuccessStoriesSlider = () => {
         style={{ padding: "60px 20px", backgroundColor: "#f7f9fc" }}
       >
         <div style={{ maxWidth: "900px", margin: "auto", textAlign: "center" }}>
-          <h2 style={{ fontSize: "2.5rem", marginBottom: "1rem", color: "#004d40" }}>
-            Success Stories from Our Medical Camps
+          <h2 style={{ fontFamily: 'Poppins, sans-serif', fontSize: "2.5rem", marginBottom: "1rem", color: "#004d40" }}>
+            <FaHeartbeat className="inline text-red-500 mr-2" /> Success Stories from Our Medical Camps
           </h2>
           <p style={{ fontSize: "1.1rem", marginBottom: "40px", color: "#555" }}>
             Celebrating impactful moments and achievements from our past camps.
@@ -121,6 +128,7 @@ const SuccessStoriesSlider = () => {
                   borderRadius: "15px",
                   padding: "20px",
                   boxShadow: "0 8px 25px rgba(0, 0, 0, 0.1)",
+                  fontFamily: 'Poppins, sans-serif'
                 }}
               >
                 <img

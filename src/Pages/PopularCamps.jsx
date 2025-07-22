@@ -26,7 +26,7 @@ const PopularCamps = () => {
   if (loading) return <p className="text-center mt-10">Loading...</p>;
 
   return (
-    <div className="relative max-w-6xl mx-auto px-4 my-10">
+    <div className="relative max-w-8xl mx-auto px-4 my-10">
     <Helmet>
         <title>Popular Camp | MedCampMS</title>
         <meta name="description" content="Welcome to MedCampMS - Your trusted medical camp management system." />
@@ -46,25 +46,29 @@ const PopularCamps = () => {
           >
             <img
               src={camp.image}
-              alt={camp.name}
+             
               className="w-full h-48 object-cover"
             />
+            <h1 className="text-center font-bold">OrganizerName: {camp.name}</h1>
             <div className="p-6">
               <div className="flex justify-between items-center mb-3">
-                <h3 className="text-2xl font-semibold text-indigo-800">{camp.name}</h3>
-                <p className="text-lg font-semibold text-green-600">${camp.fees}</p>
+                <h3 className="text-md font-semibold text-indigo-800">camp: {camp.camp_name}</h3>
+                <p className="text-lg  text-green-600">💰Camp Fees: ${camp.fees}</p>
               </div>
-              <p className="mb-1"><strong>Date & Time:</strong> {camp.dateTime}</p>
-              <p className="mb-1"><strong>Location:</strong> {camp.location}</p>
-              <p className="mb-3"><strong>Doctor:</strong> {camp.doctor}</p>
-              <p className="mb-3"><strong>Participants:</strong> {camp.participantCount}</p>
+              <p className="mb-1"><strong>📅 Date & Time:</strong> {camp.dateTime}</p>
+              <p className="mb-1"><strong>📍Location:</strong> {camp.location}</p>
+              <p className="mb-3"><strong>👨‍⚕️Professional:</strong> {camp.doctor}</p>
+              <p className="mb-3"><strong>👥participant count: </strong> {camp.participantCount}</p>
 
-              <Link
-                to={`/camp-details/${camp._id}`}
-                className="inline-block bg-indigo-600 text-white px-5 py-2 rounded-lg hover:bg-indigo-700 transition-colors duration-300 font-semibold"
-              >
-                Details
-              </Link>
+             <div className="flex justify-end">
+  <Link
+    to={`/camp-details/${camp._id}`}
+    className="inline-block bg-indigo-600 text-white px-5 py-2 rounded-lg hover:bg-indigo-700 transition-colors duration-300 font-semibold"
+  >
+    Details
+  </Link>
+</div>
+
             </div>
           </div>
         ))}

@@ -1,28 +1,43 @@
 import React, { useState } from "react";
-import { Link, NavLink } from "react-router"; // react-router এর বদলে react-router-dom ব্যবহার করো
+import { Link, NavLink } from "react-router"; // react-router-dom ব্যবহার করো
 import Swal from "sweetalert2";
 import useAuth from "../AuthProvider/UseAuth";
 import Logo from "../Extrasection/Logo";
 import { CiLogin } from "react-icons/ci";
 import { IoLogInOutline } from "react-icons/io5";
-import "../Animation/Loader"; // ⬅️ Import the glow effect
+import "../Animation/Loader"; // Glow effect ইম্পোর্ট
 
 const Navber = () => {
-  const { user, role, loading, logOut } = useAuth(); // role এবং loading যুক্ত করলাম
+  const { user, role, loading, logOut } = useAuth();
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  const handleLogOut = () => {
-    logOut()
-      .then(() => {
-        Swal.fire("Logged Out!", "You have been logged out.", "success");
-      })
-      .catch((error) => {
-        console.error(error);
+  const handleLogOut = async () => {
+    try {
+      await logOut();
+
+      await Swal.fire({
+        icon: "success",
+        title: "Logged Out!",
+        text: "You have been logged out successfully.",
+        showConfirmButton: true,
+        confirmButtonText: "OK",
+        allowOutsideClick: false,
+        allowEscapeKey: false,
       });
+
+      setIsDrawerOpen(false);
+    } catch (error) {
+      console.error(error);
+      Swal.fire({
+        icon: "error",
+        title: "Logout Failed",
+        text: error.message || "Something went wrong!",
+        showConfirmButton: true,
+      });
+    }
   };
 
-  // লোডিং চলাকালীন UI (ঐচ্ছিক)
   if (loading) {
     return (
       <div className="navbar bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 shadow-sm fixed top-0 z-50 w-full flex justify-center items-center text-white h-16">
@@ -37,7 +52,7 @@ const Navber = () => {
         to="/"
         className={({ isActive }) =>
           isActive
-            ? "text-yellow-300 font-semibold"
+            ? "text-yellow-300 font-semibold underline"
             : "text-white hover:text-yellow-300 transition-colors duration-300"
         }
         onClick={() => setIsMenuOpen(false)}
@@ -49,7 +64,7 @@ const Navber = () => {
         to="/availecamp"
         className={({ isActive }) =>
           isActive
-            ? "text-yellow-300 font-semibold"
+            ? "text-yellow-300 font-semibold underline"
             : "text-white hover:text-yellow-300 transition-colors duration-300"
         }
         onClick={() => setIsMenuOpen(false)}
@@ -62,7 +77,7 @@ const Navber = () => {
           to="/dashboard"
           className={({ isActive }) =>
             isActive
-              ? "text-yellow-300 font-semibold"
+              ? "text-yellow-300 font-semibold underline"
               : "text-white hover:text-yellow-300 transition-colors duration-300"
           }
           onClick={() => setIsMenuOpen(false)}
@@ -125,15 +140,15 @@ const Navber = () => {
               className="tooltip tooltip-bottom cursor-pointer"
               data-tip={user?.displayName || "User"}
             >
-                 <div className="profile-glow-wrapper">
-  <div className="outer-border"></div> {/* 🟢 এটা নতুন যোগ করো */}
-  <div className="profile-glow"></div>
-  <img
-    src={user?.photoURL || "https://i.ibb.co/ZYW3VTp/brown-brim.png"}
-    alt="Profile"
-    className="profile-image"
-  />
-</div>
+              <div className="profile-glow-wrapper">
+                <div className="outer-border"></div>
+                <div className="profile-glow"></div>
+                <img
+                  src={user?.photoURL || "https://i.ibb.co/ZYW3VTp/brown-brim.png"}
+                  alt="Profile"
+                  className="profile-image"
+                />
+              </div>
             </div>
           ) : (
             <Link
@@ -155,8 +170,6 @@ const Navber = () => {
       {/* Profile Drawer */}
       {isDrawerOpen && (
         <div className="fixed top-0 right-0 h-full w-72 bg-white shadow-lg p-6 z-50">
-        
-        
           <button
             onClick={() => setIsDrawerOpen(false)}
             className="absolute top-2 right-2 text-xl text-gray-500 hover:text-red-500 transition"
@@ -165,18 +178,32 @@ const Navber = () => {
           </button>
 
           <div className="flex flex-col items-center text-center text-black mt-6 space-y-3">
-         <div className="profile-glow-wrapper">
-  <div className="outer-border"></div> {/* 🟢 এটা নতুন যোগ করো */}
-  <div className="profile-glow"></div>
-  <img
-    src={user?.photoURL || "https://i.ibb.co/ZYW3VTp/brown-brim.png"}
-    alt="Profile"
-    className="profile-image"
-  />
-</div>
+            <div className="profile-glow-wrapper">
+              <div className="outer-border"></div>
+              <div className="profile-glow"></div>
+              <img
+                src={user?.photoURL || "https://i.ibb.co/ZYW3VTp/brown-brim.png"}
+                alt="Profile"
+                className="profile-image"
+              />
+            </div>
 
             <h3 className="font-bold text-lg">{user?.displayName || "User Name"}</h3>
             <p className="text-gray-600 text-sm">{user?.email}</p>
+
+            {role === "organizer" && (
+              <NavLink
+                to="/dashboard"
+                className={({ isActive }) =>
+                  isActive
+                    ? "text-yellow-300 font-semibold"
+                    : "text-white btn hover:text-blue-800 p-4 hover:bg-amber-400 transition-colors duration-300"
+                }
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Dashboard
+              </NavLink>
+            )}
 
             <button
               onClick={handleLogOut}

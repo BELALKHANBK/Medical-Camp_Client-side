@@ -6,6 +6,7 @@ import FeedbackFrom from '../Participant Dashboard/FeedBackFrom';
 //import FlipAnimation from '../Animation/flipAnimation';
 import { Helmet } from 'react-helmet-async';
 import SuccessStoriesSlider from '../Animation/SuccessStoriesSlider';
+import CountDown from './CountDown';
 //import Loader from '../Animation/Loader';
 
 const Home = () => {
@@ -20,7 +21,7 @@ const Home = () => {
       <PopularCamps/>
       <FeedbackFrom/>
       <UnComingEvent/>
-
+<CountDown/>
       
     </dev>
     );

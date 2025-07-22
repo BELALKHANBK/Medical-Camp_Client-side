@@ -43,7 +43,7 @@ const SignInGoogle = () => {
     return (
         <div>
            
-           <button onClick={handleGoogle} className='btn ml-20'><FcGoogle />Register With Google</button>
+           <button onClick={handleGoogle} className='btn ml-10 md:ml-44 lg:ml-20'><FcGoogle />Register With Google</button>
         </div>
     );
 };

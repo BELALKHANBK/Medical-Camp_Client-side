@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router"; 
+import { Link } from "react-router";
 import useAxoiseSecure from "../AuthProvider/UseAxios";
+import Pagination from "../pagination/Pagination";
 import { Helmet } from "react-helmet-async";
 
 const AvailablePages = () => {
@@ -10,6 +11,8 @@ const AvailablePages = () => {
   const [sortBy, setSortBy] = useState("");
   const [layout, setLayout] = useState("three");
   const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 6;
   const axios = useAxoiseSecure();
 
   useEffect(() => {
@@ -33,6 +36,7 @@ const AvailablePages = () => {
       camp.location.toLowerCase().includes(keyword)
     );
     setFilteredCamps(temp);
+    setCurrentPage(1);
   }, [searchTerm, camps]);
 
   useEffect(() => {
@@ -45,19 +49,24 @@ const AvailablePages = () => {
       temp.sort((a, b) => a.name.localeCompare(b.name));
     }
     setFilteredCamps(temp);
+    setCurrentPage(1);
   }, [sortBy]);
+
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const currentItems = filteredCamps.slice(startIndex, startIndex + itemsPerPage);
 
   if (loading) return <p className="text-center text-lg mt-10">Loading camps...</p>;
 
   return (
-    <div className="max-w-7xl mx-auto p-6">
+    <div className="max-w-8xl mx-auto p-6" style={{ fontFamily: "'Poppins', sans-serif" }}>
       <Helmet>
         <title>Available Camps | MedCampMS</title>
         <meta name="description" content="Welcome to MedCampMS - Your trusted medical camp management system." />
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
       </Helmet>
+
       <h2 className="text-3xl font-bold mb-6 text-center text-indigo-600">Available Medical Camps</h2>
 
-      {/* Search + Sort + Layout Controls */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6 gap-4">
         <input
           type="text"
@@ -86,35 +95,31 @@ const AvailablePages = () => {
         </button>
       </div>
 
-      {/* Camps Grid */}
       <div
-        className={`grid gap-8 ${
-          layout === "three" ? "grid-cols-1 md:grid-cols-3" : "grid-cols-1 md:grid-cols-2"
-        }`}
+        className={`grid gap-8 ${layout === "three" ? "grid-cols-1 md:grid-cols-3" : "grid-cols-1 md:grid-cols-2"}`}
       >
-        {filteredCamps.length === 0 && (
+        {currentItems.length === 0 && (
           <p className="col-span-full text-center">No camps found.</p>
         )}
 
-        {filteredCamps.map((camp) => (
+        {currentItems.map((camp) => (
           <div
             key={camp._id}
             className="border rounded-xl shadow-lg p-4 flex flex-col text-black bg-white hover:shadow-2xl transition-transform transform hover:-translate-y-2 duration-300 hover:scale-[1.03] hover:bg-indigo-50"
           >
             <img
               src={camp.image}
-              alt={camp.name}
               className="h-48 w-full object-cover rounded mb-4"
             />
+            <h1 className="text-center font-bold">OrganizerName: {camp.name}</h1>
             <div className="flex justify-between items-center mb-2">
-              <h3 className="text-lg font-bold text-indigo-700">{camp.name}</h3>
-              <p className="text-sm font-medium">💰 ${camp.fees}</p>
+              <h3 className="text-lg font-bold text-indigo-700">campName: {camp.name}</h3>
+              <p className="text-sm font-medium">💰Camp Fees: ${camp.fees}</p>
             </div>
-
             <p className="text-sm"><strong>📅 Date & Time:</strong> {new Date(camp.dateTime).toLocaleString()}</p>
             <p className="text-sm"><strong>📍 Location:</strong> {camp.location}</p>
-            <p className="text-sm"><strong>👨‍⚕️ Doctor:</strong> {camp.doctor}</p>
-            <p className="text-sm"><strong>👥 Participants:</strong> {camp.participantCount}</p>
+            <p className="text-sm"><strong>👨‍⚕️ Professional:</strong> {camp.doctor}</p>
+            <p className="text-sm"><strong>👥 Participants count:</strong> {camp.participantCount}</p>
             <p className="flex-grow text-sm italic text-gray-700 mt-2">{camp.description}</p>
 
             <Link
@@ -125,6 +130,16 @@ const AvailablePages = () => {
             </Link>
           </div>
         ))}
+      </div>
+
+      {/* Pagination */}
+      <div className="mt-10">
+        <Pagination
+          totalItems={filteredCamps.length}
+          itemsPerPage={itemsPerPage}
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+        />
       </div>
     </div>
   );

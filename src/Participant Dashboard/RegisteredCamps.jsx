@@ -12,13 +12,14 @@ const RegisteredCamps = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
-  const [feedbackModal, setFeedbackModal] = useState({ open: false, campId: null });
+  const [feedbackModal, setFeedbackModal] = useState({ open: false, campId: null, campName: null });
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState('');
 
   const itemsPerPage = 5;
 
-  const { data: camps = [], isLoading } = useQuery({
+  // ইউজারের রেজিস্টার্ড ক্যাম্প গুলো ফেচ
+  const { data: camps = [], isLoading: campsLoading } = useQuery({
     queryKey: ['registeredCamps', user?.email],
     queryFn: async () => {
       const res = await axiosSecure.get(`joine/${user.email}`);
@@ -27,6 +28,17 @@ const RegisteredCamps = () => {
     enabled: !!user?.email,
   });
 
+  // ইউজারের দেওয়া ফিডব্যাক গুলো ফেচ
+  const { data: userFeedbacks = [], isLoading: feedbacksLoading } = useQuery({
+    queryKey: ['userFeedbacks', user?.email],
+    queryFn: async () => {
+      const res = await axiosSecure.get(`/feedbacks?participantEmail=${user.email}`);
+      return res.data;
+    },
+    enabled: !!user?.email,
+  });
+
+  // Registration Cancel করার মিউটেশন
   const cancelMutation = useMutation({
     mutationFn: async (campId) => {
       await axiosSecure.delete(`joine/cancel/${campId}`);
@@ -62,16 +74,23 @@ const RegisteredCamps = () => {
     navigate(`/participent/payments/${campId}`);
   };
 
+  // ইউজার ঐ camp এ ফিডব্যাক দিয়েছে কিনা চেক করার ফাংশন
+  const hasGivenFeedback = (campId) => {
+    return userFeedbacks.some((feedback) => feedback.campId === campId);
+  };
+
   const handleFeedbackSubmit = async (e) => {
     e.preventDefault();
     const form = e.target;
     const rating = form.rating.value;
     const comment = form.comment.value;
     const campId = feedbackModal.campId;
+    const campName = feedbackModal.campName;
 
     try {
       await axiosSecure.post('/feedbacks', {
         campId,
+        campName,
         participantEmail: user.email,
         participantName: user.displayName,
         rating: Number(rating),
@@ -80,15 +99,19 @@ const RegisteredCamps = () => {
       });
 
       Swal.fire('Thank you!', 'Your feedback has been submitted.', 'success');
-      setFeedbackModal({ open: false, campId: null });
+      setFeedbackModal({ open: false, campId: null, campName: null });
+      form.reset();
+
+      // ফিডব্যাক দেওয়ার পর ইউজারের ফিডব্যাক লিস্ট রিফ্রেশ করো
+      queryClient.invalidateQueries(['userFeedbacks', user?.email]);
     } catch (error) {
       Swal.fire('Error', 'Failed to submit feedback.', 'error');
     }
   };
 
-  if (isLoading) return <p className="text-center mt-6">Loading...</p>;
+  if (campsLoading || feedbacksLoading) return <p className="text-center mt-6">Loading...</p>;
 
-  const filteredCamps = camps.filter(camp =>
+  const filteredCamps = camps.filter((camp) =>
     camp.campName.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
@@ -97,14 +120,18 @@ const RegisteredCamps = () => {
   const currentCamps = filteredCamps.slice(startIndex, startIndex + itemsPerPage);
 
   return (
-    <div className="p-4 md:p-6 max-w-7xl  mx-auto">
-                      <Helmet>
-                        <title>RegisterCamps| MedCampMS</title>
-                        <meta name="description" content="Welcome to MedCampMS - Your trusted medical camp management system." />
-                      </Helmet>
+    <div className="p-4 md:p-6 max-w-7xl mx-auto">
+      <Helmet>
+        <title>RegisterCamps | MedCampMS</title>
+        <meta
+          name="description"
+          content="Welcome to MedCampMS - Your trusted medical camp management system."
+        />
+      </Helmet>
+
       <h2 className="text-2xl md:text-3xl font-bold mb-6 text-center">📋 Your Registered Camps</h2>
 
-      {/* 🔍 Search Box */}
+      {/* Search Box */}
       <div className="mb-4 flex justify-center">
         <input
           type="text"
@@ -118,7 +145,7 @@ const RegisteredCamps = () => {
         />
       </div>
 
-      {/* ✅ Table */}
+      {/* Camps Table */}
       {currentCamps.length === 0 ? (
         <p className="text-center text-gray-600">No camps registered yet.</p>
       ) : (
@@ -136,7 +163,7 @@ const RegisteredCamps = () => {
             </thead>
             <tbody>
               {currentCamps.map((camp) => (
-                <tr key={camp._id} className="hover:bg-gray-100 text-center">
+                <tr key={camp._id} className="hover:bg-gray-500 text-center">
                   <td className="border px-3 py-2">{camp.campName}</td>
                   <td className="border px-3 py-2">${camp.fees}</td>
                   <td className="border px-3 py-2 hidden sm:table-cell">{camp.participantName}</td>
@@ -167,13 +194,20 @@ const RegisteredCamps = () => {
                         Cancel
                       </button>
                     )}
-                    {camp.paymentStatus === 'Paid' && (
+
+                    {camp.paymentStatus === 'Paid' && !hasGivenFeedback(camp._id) && (
                       <button
-                        onClick={() => setFeedbackModal({ open: true, campId: camp._id })}
+                        onClick={() =>
+                          setFeedbackModal({ open: true, campId: camp._id, campName: camp.campName })
+                        }
                         className="btn btn-sm btn-info"
                       >
                         Feedback
                       </button>
+                    )}
+
+                    {camp.paymentStatus === 'Paid' && hasGivenFeedback(camp._id) && (
+                      <span className="text-green-600 font-semibold">Feedback Submitted</span>
                     )}
                   </td>
                 </tr>
@@ -183,7 +217,7 @@ const RegisteredCamps = () => {
         </div>
       )}
 
-      {/* ✅ Pagination */}
+      {/* Pagination */}
       {filteredCamps.length > itemsPerPage && (
         <div className="flex flex-col sm:flex-row justify-between items-center mt-8 gap-3">
           <p className="text-sm">
@@ -218,11 +252,22 @@ const RegisteredCamps = () => {
         </div>
       )}
 
-      {/* ✅ Feedback Modal */}
+      {/* Feedback Modal */}
       {feedbackModal.open && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50 px-4">
-          <div className="bg-white text-black rounded-lg p-6 w-full max-w-md">
-            <h3 className="text-xl font-semibold mb-4">Submit Feedback</h3>
+        <div className="fixed inset-0 bg-opacity-50 flex justify-center items-center z-50 px-4">
+          <div className="bg-white text-white text-2xl rounded-lg p-6 w-full max-w-md relative">
+            <button
+              onClick={() => setFeedbackModal({ open: false, campId: null, campName: null })}
+              className="absolute top-2 right-3 text-xl text-red-600 hover:text-red-800"
+              aria-label="Close"
+            >
+              &times;
+            </button>
+
+            <h3 className="text-xl font-semibold mb-4 text-center text-blue-600">
+              Submit Feedback for <span className="italic">{feedbackModal.campName}</span>
+            </h3>
+
             <form onSubmit={handleFeedbackSubmit}>
               <label className="block mb-2 font-semibold">Rating (1-5):</label>
               <input
@@ -233,6 +278,7 @@ const RegisteredCamps = () => {
                 required
                 className="input input-bordered w-full mb-4"
               />
+
               <label className="block mb-2 font-semibold">Comment:</label>
               <textarea
                 name="comment"
@@ -240,10 +286,11 @@ const RegisteredCamps = () => {
                 required
                 className="textarea textarea-bordered w-full mb-4"
               />
+
               <div className="flex justify-end gap-3">
                 <button
                   type="button"
-                  onClick={() => setFeedbackModal({ open: false, campId: null })}
+                  onClick={() => setFeedbackModal({ open: false, campId: null, campName: null })}
                   className="btn btn-outline"
                 >
                   Cancel

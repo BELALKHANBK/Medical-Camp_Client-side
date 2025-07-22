@@ -68,13 +68,7 @@ const Analytics = () => {
       boxShadow: '0 8px 20px rgba(0,0,0,0.1)',
       fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
     }}>
-      <h2 style={{
-        textAlign: 'center',
-        fontSize: 24,
-        fontWeight: '700',
-        marginBottom: 10,
-        color: '#111',
-      }}>
+      <h2 className='text-center font-bold text-2xl'>
         📈 Camp Registration Analytics
       </h2>
 

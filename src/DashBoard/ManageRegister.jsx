@@ -132,7 +132,7 @@ useEffect(() => {
       </div>
 
       <div className="overflow-x-auto shadow rounded-lg">
-        <table className="table w-full">
+        <table className="table w-full ">
           <thead className="bg-base-200 text-base font-semibold">
             <tr>
               <th>#</th>
@@ -147,12 +147,12 @@ useEffect(() => {
           <tbody>
             {currentItems.length > 0 ? (
               currentItems.map((item, index) => (
-                <tr key={item._id} className="text-center">
-                  <td>{startIndex + index + 1}</td>
-                  <td>{item.campName}</td>
-                  <td>${item.fees}</td>
-                  <td>{item.participantName}</td>
-                  <td>
+                <tr key={item._id} className="text-center hover:bg-gray-500">
+                  <td className="border" >{startIndex + index + 1}</td>
+                  <td className="border">{item.campName}</td>
+                  <td className="border">${item.fees}</td>
+                  <td className="border">{item.participantName}</td>
+                  <td className="border">
                     <span
                       className={`badge ${
                         item.payment_status === "Paid"
@@ -163,7 +163,7 @@ useEffect(() => {
                       {item.payment_status}
                     </span>
                   </td>
-                  <td>
+                  <td className="border">
                     {item.confirmationStatus === "Confirmed" ? (
                       <span className="badge badge-success">Confirmed</span>
                     ) : isOrganizer ? (
@@ -177,7 +177,7 @@ useEffect(() => {
                       <span className="badge badge-warning">Pending</span>
                     )}
                   </td>
-                  <td>
+                  <td className="border">
                     <button
                       disabled={
                         item.payment_status === "Paid" &&

@@ -13,7 +13,7 @@ const ManageCamps = () => {
 
   const [searchText, setSearchText] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
+  const itemsPerPage = 6;
 
   const axios = useAxoiseSecure();
   const { register, handleSubmit, reset } = useForm();
@@ -142,7 +142,7 @@ const ManageCamps = () => {
               </tr>
             ) : (
               currentItems.map((camp) => (
-                <tr key={camp._id} className="hover:bg-gray-100 transition">
+                <tr key={camp._id} className="hover:bg-gray-600 transition">
                   <td className="px-6 py-4">{camp.name}</td>
                   <td className="px-6 py-4">{new Date(camp.dateTime).toLocaleString()}</td>
                   <td className="px-6 py-4">{camp.location}</td>
