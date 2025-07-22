@@ -4,19 +4,12 @@ A full-stack Medical Camp Management System (MCMS) built with the MERN stack to 
 
 ---
 
-## 🔐 Organizer Login Info
-
-- **Email:** organizer@example.com
-- **Password:** organizer123
-
----
-
 ## 🔗 Live Links
 
 - 🔴 **Live Website:** [https://medical-camp-10888.web.app](https://medical-camp-10888.web.app)
-- 💻 **Client GitHub Repo:** [Client Repository](https://github.com/Programming-Hero-Web-Course4/ b11a12-client-side-BELALKHANBK)
-- 🛠️ **Server GitHub Repo:** [Server Repository](https://github.com/Programming-Hero-Web-Course4/b11a12-server-side-BELALKHANBK)
-
+- 💻 **Client GitHub Repo:** [Client Repository](https://github.com/Programming-Hero-Web-Course4/b11a12-client-side-BELALKHANBK)
+- 🛠️ **Server GitHub Repo:** [Server Repository](https://github.com/Programming-Hero-Web-Course4/b11a12-server-side-BELALKHANB)
+         
 ---
 
 ## 💡 Key Features
@@ -143,6 +136,6 @@ _Add some screenshots of home, dashboard, payment, etc. here if you want._
 
 ## 👨‍💻 Developed By
 
-Belal Khan – [LinkedIn](https://linkedin.com/in/your-profile) | [GitHub](https://github.com/your-username)
+Belal Khan – [GitHub](https://github.com/BELALKHANBK)
 
 ---
