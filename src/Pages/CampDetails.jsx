@@ -11,13 +11,13 @@ const CampDetails = () => {
   const { user } = useAuth();
   const [showModal, setShowModal] = useState(false);
   const axios = useAxiosSecure();
-  const navigate=useNavigate()
+  const navigate = useNavigate();
 
   // Fetch camp details
   const { data: camp, isLoading, refetch } = useQuery({
     queryKey: ["camp-details", id],
     queryFn: async () => {
-      const res = await axios.get(`https://medical-camp-server-sage.vercel.app/camps/${id}`);
+      const res = await axios.get(`http://localhost:5000/camps/${id}`);
       return res.data;
     },
   });
@@ -42,13 +42,12 @@ const CampDetails = () => {
     };
 
     try {
-      const res = await axios.post("/joine", joinData);
+      const res = await axios.post("/join-camp", joinData);
       if (res.data.insertedId) {
         Swal.fire("Success!", "You have joined the camp!", "success");
         setShowModal(false);
-        navigate('/availecamp')
+        navigate('/availecamp');
         refetch();
-        
       }
     } catch (error) {
       console.error("Join error:", error);
@@ -60,43 +59,29 @@ const CampDetails = () => {
   if (!camp) return <p className="text-center mt-10">Camp not found</p>;
 
   return (
-    
-    <div className="max-w-5xl min-h-screen mx-auto p-14 mt-20">
-          <Helmet>
+    <div className="max-w-6xl mx-auto px-4 py-10 sm:px-6 md:px-10 mt-10 md:mt-20">
+      <Helmet>
         <title>Camp Details | MedCampMS</title>
         <meta name="description" content="Welcome to MedCampMS - Your trusted medical camp management system." />
       </Helmet>
+
       {/* Camp Details */}
       <div className="bg-white text-black shadow-lg rounded-xl overflow-hidden md:flex md:space-x-6">
-        
-        
         <div className="md:w-1/2">
           <img
             src={camp?.image || "https://via.placeholder.com/400x300?text=No+Image"}
             alt={camp?.name || "Camp"}
-            className="w-full h-80 object-cover"
+            className="w-full h-60 sm:h-72 md:h-80 object-cover"
           />
         </div>
         <div className="md:w-1/2 p-6 flex flex-col justify-between">
           <div>
-            <h2 className="text-3xl font-bold mb-2 text-blue-700">
-              {camp?.name || "No Name"}
-            </h2>
-            <p>
-              <strong>Camp Fees:</strong> ${camp?.fees ?? "N/A"}
-            </p>
-            <p>
-              <strong>Date & Time:</strong> {camp?.dateTime ?? "N/A"}
-            </p>
-            <p>
-              <strong>Location:</strong> {camp?.location ?? "N/A"}
-            </p>
-            <p>
-              <strong>Healthcare Professional:</strong> {camp?.doctor ?? "N/A"}
-            </p>
-            <p>
-              <strong>Participants:</strong> {camp?.participantCount ?? 0}
-            </p>
+            <h2 className="text-3xl font-bold mb-2 text-blue-700">{camp?.name || "No Name"}</h2>
+            <p><strong>Camp Fees:</strong> ${camp?.fees ?? "N/A"}</p>
+            <p><strong>Date & Time:</strong> {camp?.dateTime ?? "N/A"}</p>
+            <p><strong>Location:</strong> {camp?.location ?? "N/A"}</p>
+            <p><strong>Healthcare Professional:</strong> {camp?.doctor ?? "N/A"}</p>
+            <p><strong>Participants:</strong> {camp?.participantCount ?? 0}</p>
             <p className="mt-4 text-gray-600">{camp?.description ?? "No description available."}</p>
           </div>
           <button
@@ -111,16 +96,16 @@ const CampDetails = () => {
       {/* Join Modal */}
       {showModal && (
         <div
-          className="fixed inset-0 h-full bg-gray-700 bg-opacity-40 flex justify-center items-center z-50"
+          className="fixed inset-0 bg-opacity-40 flex justify-center items-center z-50 px-4"
           onClick={() => setShowModal(false)}
         >
           <div
-            className="bg-white w-full min-h-screen max-w-lg  p-4 mb-8 rounded-xl relative"
+            className="bg-white w-full max-w-lg p-6 sm:p-8 rounded-xl relative max-h-[90vh] overflow-y-auto"
             onClick={(e) => e.stopPropagation()}
           >
             <button
               onClick={() => setShowModal(false)}
-              className="absolute top-2 right-2 text-xl font-bold hover:text-red-500"
+              className="absolute top-2 right-2 text-xl font-bold text-gray-600 hover:text-red-500"
               aria-label="Close modal"
             >
               ✕

@@ -88,15 +88,19 @@ const RegisteredCamps = () => {
     const campName = feedbackModal.campName;
 
     try {
-      await axiosSecure.post('/feedbacks', {
-        campId,
-        campName,
-        participantEmail: user.email,
-        participantName: user.displayName,
-        rating: Number(rating),
-        comment,
-        date: new Date().toISOString(),
-      });
+     await axiosSecure.post('/feedbacks', {
+  campId,
+  campName,
+  participantEmail: user.email,
+  participantName: user.displayName,
+  participantImage: user.photoURL || "",  // এই লাইন যোগ করো
+  rating: Number(rating),
+  comment,
+  date: new Date().toISOString(),
+});
+console.log("User Image:", user?.photoURL);
+
+
 
       Swal.fire('Thank you!', 'Your feedback has been submitted.', 'success');
       setFeedbackModal({ open: false, campId: null, campName: null });
@@ -132,16 +136,17 @@ const RegisteredCamps = () => {
       <h2 className="text-2xl md:text-3xl font-bold mb-6 text-center">📋 Your Registered Camps</h2>
 
       {/* Search Box */}
-      <div className="mb-4 flex justify-center">
+      <div className="mb-4 flex justify-center text-black md:text-white lg:text-white">
         <input
           type="text"
           placeholder="🔍 Search by Camp Name..."
-          className="input input-bordered w-full max-w-xs"
+          className="input input-bordered w-full max-w-xs placeholder-blue-700 text-black md:text-white lg:text-white"
           value={searchQuery}
           onChange={(e) => {
             setSearchQuery(e.target.value);
             setCurrentPage(1);
           }}
+          
         />
       </div>
 
@@ -253,56 +258,76 @@ const RegisteredCamps = () => {
       )}
 
       {/* Feedback Modal */}
-      {feedbackModal.open && (
-        <div className="fixed inset-0 bg-opacity-50 flex justify-center items-center z-50 px-4">
-          <div className="bg-white text-white text-2xl rounded-lg p-6 w-full max-w-md relative">
-            <button
-              onClick={() => setFeedbackModal({ open: false, campId: null, campName: null })}
-              className="absolute top-2 right-3 text-xl text-red-600 hover:text-red-800"
-              aria-label="Close"
-            >
-              &times;
-            </button>
+{feedbackModal.open && (
+  <div className="fixed inset-0 bg-opacity-50 flex justify-center items-center z-50 px-4">
+    <div className="bg-white text-black rounded-lg p-6 w-full max-w-md relative">
+      <button
+        onClick={() => setFeedbackModal({ open: false, campId: null, campName: null })}
+        className="absolute top-2 right-3 text-xl text-red-600 hover:text-red-800"
+        aria-label="Close"
+      >
+        &times;
+      </button>
 
-            <h3 className="text-xl font-semibold mb-4 text-center text-blue-600">
-              Submit Feedback for <span className="italic">{feedbackModal.campName}</span>
-            </h3>
+      <h3 className="text-xl font-semibold mb-4 text-center text-blue-600">
+        Submit Feedback for <span className="italic">{feedbackModal.campName}</span>
+      </h3>
 
-            <form onSubmit={handleFeedbackSubmit}>
-              <label className="block mb-2 font-semibold">Rating (1-5):</label>
-              <input
-                name="rating"
-                type="number"
-                min="1"
-                max="5"
-                required
-                className="input input-bordered w-full mb-4"
-              />
-
-              <label className="block mb-2 font-semibold">Comment:</label>
-              <textarea
-                name="comment"
-                rows="4"
-                required
-                className="textarea textarea-bordered w-full mb-4"
-              />
-
-              <div className="flex justify-end gap-3">
-                <button
-                  type="button"
-                  onClick={() => setFeedbackModal({ open: false, campId: null, campName: null })}
-                  className="btn btn-outline"
-                >
-                  Cancel
-                </button>
-                <button type="submit" className="btn btn-primary">
-                  Submit
-                </button>
-              </div>
-            </form>
-          </div>
+      {user?.photoURL ? (
+        <div className="flex justify-center mb-4">
+          <img
+            src={user.photoURL}
+            alt={user.displayName}
+            className="w-20 h-20 rounded-full object-cover border"
+          />
+        </div>
+      ) : (
+        <div className="flex justify-center mb-4">
+          <img
+            src="https://via.placeholder.com/80"
+            alt="default user"
+            className="w-20 h-20 rounded-full object-cover border"
+          />
         </div>
       )}
+
+      <form onSubmit={handleFeedbackSubmit}>
+        <label className="block mb-2 font-semibold">Rating (1-5):</label>
+        <input
+          name="rating"
+          type="number"
+          min="1"
+          max="5"
+          required
+          className="input input-bordered text-white lg:text-white  w-full mb-4"
+        />
+
+        <label className="block mb-2 font-semibold">Comment:</label>
+        <textarea
+          name="comment"
+          rows="4"
+          required
+          className="textarea textarea-bordered text-white lg:text-white  w-full mb-4"
+        />
+
+        <div className="flex justify-end gap-3">
+          <button
+            type="button"
+            onClick={() => setFeedbackModal({ open: false, campId: null, campName: null })}
+            className="btn btn-outline"
+          >
+            Cancel
+          </button>
+          <button type="submit" className="btn btn-primary">
+            Submit
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+)}
+
+
     </div>
   );
 };

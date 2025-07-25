@@ -64,7 +64,7 @@ if (amountUSDcents < 50) {
       return;
     } else {
       setError('');
-      console.log('✅ Payment method created:', paymentMethod);
+      console.log(' Payment method created:', paymentMethod);
     }
 
   
@@ -89,7 +89,7 @@ if (amountUSDcents < 50) {
       setError(result.error.message);
     } else {
       if (result.paymentIntent.status === 'succeeded') {
-        console.log('✅ Payment successful:', result);
+        console.log('Payment successful:', result);
 
         const paymentsData = {
           campId,

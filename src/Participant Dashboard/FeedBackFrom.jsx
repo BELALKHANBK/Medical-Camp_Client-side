@@ -10,7 +10,7 @@ const FeedBackFrom = () => {
   const itemsPerPage = 6;
 
   useEffect(() => {
-    fetch('https://medical-camp-server-sage.vercel.app/feedbacks')
+    fetch('http://localhost:5000/feedbacks')
       .then((res) => res.json())
       .then((data) => {
         setFeedbacks(data);
@@ -33,6 +33,7 @@ const FeedBackFrom = () => {
   return (
     <div className="relative min-h-screen overflow-hidden">
       {/* Background Video */}
+   
       <div className="absolute inset-0 z-0 overflow-hidden">
         <video
           src={bgVideo}
@@ -56,7 +57,10 @@ const FeedBackFrom = () => {
               className="bg-white bg-opacity-90 backdrop-blur-md rounded-xl shadow-lg p-6 transition-transform hover:scale-105 duration-300"
             >
               <div className="flex justify-between items-center mb-3">
-                <h3 className="font-semibold text-indigo-700">{fb.participantName}</h3>
+                <div>
+                  <img className='w-14 rounded-2xl' src={fb.participantImage} alt="" />
+                  <h3 className="font-semibold text-indigo-700">{fb.participantName}</h3>
+                </div>
                 <div className="flex items-center gap-1 text-yellow-500 font-bold">
                   {Array.from({ length: Math.round(fb.rating) }, (_, i) => (
                     <FaStar key={i} />

@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { getIdToken, getAuth } from 'firebase/auth';
 
 const axiosSecure = axios.create({
-  baseURL: 'https://medical-camp-server-sage.vercel.app',
+  baseURL: 'http://localhost:5000',
 });
 
 const useAxiosSecure = () => {
@@ -17,13 +17,13 @@ const useAxiosSecure = () => {
           try {
             const token = await getIdToken(user);
             config.headers.Authorization = `Bearer ${token}`;
-            // console.log('✅ Token attached to request:', token);
+            // console.log(' Token attached to request:', token);
           } catch (error) {
-            console.error('❌ Failed to get token:', error);
+            console.error(' Failed to get token:', error);
           }
         } else {
           // User not logged in, no Authorization header added
-          // console.warn('⚠️ No user logged in');
+          // console.warn(' No user logged in');
         }
         return config;
       },

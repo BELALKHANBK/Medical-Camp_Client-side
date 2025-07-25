@@ -1,13 +1,14 @@
 import React from 'react';
-//import Banner from './Banner';
+
 import PopularCamps from './PopularCamps';
 import UnComingEvent from './UnComingEvent';
 import FeedbackFrom from '../Participant Dashboard/FeedBackFrom';
-//import FlipAnimation from '../Animation/flipAnimation';
+
 import { Helmet } from 'react-helmet-async';
 import SuccessStoriesSlider from '../Animation/SuccessStoriesSlider';
 import CountDown from './CountDown';
-//import Loader from '../Animation/Loader';
+
+
 
 const Home = () => {
     return (
@@ -22,6 +23,7 @@ const Home = () => {
       <FeedbackFrom/>
       <UnComingEvent/>
 <CountDown/>
+
       
     </dev>
     );

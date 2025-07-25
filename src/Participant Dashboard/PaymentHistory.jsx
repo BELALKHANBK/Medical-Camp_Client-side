@@ -43,7 +43,7 @@ const PaymentHistory = () => {
 
   return (
     <div className="relative min-h-screen overflow-hidden">
-      {/* 🔁 Background Video */}
+      {/*  Background Video */}
       <video
         src={vidbg}
         autoPlay
@@ -61,7 +61,7 @@ const PaymentHistory = () => {
         <div className="max-w-6xl mx-auto">
           <h2 className="text-3xl font-bold mb-6 text-center">💳 Payment History</h2>
 
-          {/* 🔍 Search */}
+          {/*  Search */}
           <div className="mb-6 flex justify-center">
             <input
               type="text"
@@ -75,7 +75,7 @@ const PaymentHistory = () => {
             />
           </div>
 
-          {/* 📊 Table Section */}
+          {/*  Table Section */}
           {currentPayments.length === 0 ? (
             <p className="text-center text-gray-300">No payment history found.</p>
           ) : (
@@ -103,7 +103,7 @@ const PaymentHistory = () => {
             </div>
           )}
 
-          {/* ⏩ Pagination */}
+          {/*  Pagination */}
           {filteredPayments.length > itemsPerPage && (
             <div className="mt-10 flex flex-col sm:flex-row items-center justify-between gap-4 text-white">
               <div>

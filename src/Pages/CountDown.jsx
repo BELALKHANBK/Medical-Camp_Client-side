@@ -13,7 +13,7 @@ const CountDown = () => {
 
   useEffect(() => {
     // Replace with real API if needed
-    fetch('https://medical-camp-server-sage.vercel.app/stats') // optional endpoint
+    fetch('http://localhost:5000/stats') // optional endpoint
       .then(res => res.json())
       .then(data => {
         setStats(data);
@@ -21,11 +21,11 @@ const CountDown = () => {
       .catch(() => {
         // fallback mock data
         setStats({
-          totalCamps:142,
-          totalParticipants: 168,
-          totalFeedbacks: 95,
-          totalOrganizers: 32,
-          totalPayments: 139,
+          totalCamps:1422,
+          totalParticipants: 1628,
+          totalFeedbacks: 1395,
+          totalOrganizers: 232,
+          totalPayments: 3139,
         });
       });
   }, []);
@@ -39,8 +39,10 @@ const CountDown = () => {
   ];
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-100 to-blue-200 p-8">
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 max-w-5xl w-full">
+    
+    <div className="min-h-screen  items-center justify-center bg-gradient-to-br from-indigo-100  p-8">
+   <h1 className='text-3xl text-center text-white'>Our Community Impact</h1>
+      <div className="grid grid-cols-1 lg:ml-24 mt-8 sm:grid-cols-2 md:grid-cols-3 gap-8 max-w-5xl w-full">
         {items.map((item, idx) => (
           <div
             key={idx}

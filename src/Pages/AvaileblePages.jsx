@@ -16,7 +16,7 @@ const AvailablePages = () => {
   const axios = useAxoiseSecure();
 
   useEffect(() => {
-    axios.get("https://medical-camp-server-sage.vercel.app/camps")
+    axios.get("http://localhost:5000/camps")
       .then((res) => {
         setCamps(res.data);
         setFilteredCamps(res.data);
@@ -99,7 +99,7 @@ const AvailablePages = () => {
         className={`grid gap-8 ${layout === "three" ? "grid-cols-1 md:grid-cols-3" : "grid-cols-1 md:grid-cols-2"}`}
       >
         {currentItems.length === 0 && (
-          <p className="col-span-full text-center">No camps found.</p>
+          <p className="col-span-full text-center mt-20 text-white">No camps found.</p>
         )}
 
         {currentItems.map((camp) => (
@@ -126,7 +126,7 @@ const AvailablePages = () => {
               to={`/camp-details/${camp._id}`}
               className="btn btn-primary mt-4"
             >
-              Details
+            View Details
             </Link>
           </div>
         ))}

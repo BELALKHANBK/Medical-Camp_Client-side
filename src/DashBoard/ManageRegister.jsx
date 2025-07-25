@@ -1,250 +1,205 @@
 import { useEffect, useState } from "react";
+import axios from "axios";
 import Swal from "sweetalert2";
 import useAuth from "../AuthProvider/UseAuth";
-import useAxiosSecure from "../AuthProvider/UseAxios";
-import { Helmet } from "react-helmet-async";
 
 const ManageRegister = () => {
-  const { user, role } = useAuth();
+  const { user, role, loading } = useAuth();
   const [registrations, setRegistrations] = useState([]);
-  const [searchQuery, setSearchQuery] = useState("");//search
-  const [currentPage, setCurrentPage] = useState(1); //pagiantin pages
-  const itemsPerPage = 5;///page limit
-  const axiosSecure = useAxiosSecure();//hook
+  const [searchTerm, setSearchTerm] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 6;
 
-  const isOrganizer = role === "organizer";//role
-
-useEffect(() => {
-  if (!user?.email || !role) return;
-
-  const fetchData = async () => {
-    try {
-    const [participantRes, organizerRes] = await Promise.all([
-  axiosSecure.get(`/joine/${user.email}`),
-  role === "organizer"
-    ? axiosSecure.get(`/joine/organizer?email=${user.email}`)
-    : Promise.resolve({ data: [] }),
-]);
-
-
-      console.log('Participant join data:', participantRes.data);
-      console.log('Organizer camp participants:', organizerRes.data);
-
-      const combined = [...participantRes.data, ...organizerRes.data];
-
-      // Remove duplicates based on _id
-      const unique = Array.from(
-        new Map(combined.map((item) => [item._id, item])).values()
-      );
-
-      setRegistrations(unique);
-    } catch (error) {
-      console.error("Fetch error:", error);
+  useEffect(() => {
+    if (role === "organizer") {
+      axios
+        .get("http://localhost:5000/registrations")
+        .then((res) => setRegistrations(res.data))
+        .catch((err) => console.error("Error loading data:", err));
     }
-  };
+  }, [role]);
 
-  fetchData();
-}, [user, role, axiosSecure]);
-
-
-///seccess code
-  const handleConfirm = (id) => {
-    axiosSecure
-      .patch(`/joine/${id}`)
-      .then((res) => {
-    
-        if (res.data.modifiedCount > 0) {
-          Swal.fire("Confirmed!", "Participant status updated.", "success");
-          setRegistrations((prev) =>
-            prev.map((reg) =>
-              reg._id === id ? { ...reg, confirmationStatus: "Confirmed" } : reg
-            )
-          );
-        }
-      })
-      .catch(() => {
-        Swal.fire("Error!", "Failed to update status.", "error");
-      });
-  };
-//////register camp delete 
-  const handleCancel = (id, isPaid, isConfirmed) => {
-    if (!isOrganizer) {
-      Swal.fire("Not Allowed", "Only organizers can cancel.", "warning");
-      return;
-    }
-
-    if (isPaid && isConfirmed) return;
-
+  const handleCancel = (id) => {
     Swal.fire({
       title: "Are you sure?",
-      text: "You want to cancel this registration.",
+      text: "You want to cancel this registration!",
       icon: "warning",
       showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
       confirmButtonText: "Yes, cancel it!",
+      cancelButtonText: "No, keep it",
     }).then((result) => {
       if (result.isConfirmed) {
-        axiosSecure
-          .delete(`/joine/cancel/${id}`)
-          .then((res) => {
-            if (res.data.message === "Registration cancelled successfully") {
-              Swal.fire("Cancelled!", "Registration removed.", "success");
-              setRegistrations((prev) =>
-                prev.filter((item) => item._id !== id)
-              );
-            }
+        axios
+          .delete(`http://localhost:5000/registrations/${id}`)
+          .then(() => {
+            setRegistrations((prev) => prev.filter((reg) => reg._id !== id));
+            Swal.fire({
+              icon: "success",
+              title: "Cancelled",
+              timer: 1500,
+              showConfirmButton: false,
+              toast: true,
+              position: "top-end",
+            });
           })
-          .catch(() => {
-            Swal.fire("Error!", "Failed to cancel registration.", "error");
+          .catch((err) => {
+            console.error("Cancellation failed:", err);
+            Swal.fire({
+              icon: "error",
+              title: "Cancellation Failed",
+              text: "Something went wrong, please try again.",
+            });
           });
       }
     });
   };
 
-  const filtered = registrations.filter((reg) =>
-    reg.campName.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-///////pagination 
-  const totalPages = Math.ceil(filtered.length / itemsPerPage);
+  if (loading) {
+    return <div className="text-center mt-10">Loading...</div>;
+  }
+
+  if (role !== "organizer") {
+    return (
+      <div className="text-center text-red-600 mt-10 text-xl">
+         You are not authorized to view this page.
+      </div>
+    );
+  }
+
+  // === Search filtering ===
+  const filteredRegistrations = registrations.filter((reg) => {
+    const term = searchTerm.toLowerCase();
+    return (
+      reg.participantName.toLowerCase().includes(term) ||
+      reg.participantEmail.toLowerCase().includes(term) ||
+      (reg.campName && reg.campName.toLowerCase().includes(term)) ||
+      (reg.location && reg.location.toLowerCase().includes(term))
+    );
+  });
+
+  // === Pagination calculations ===
+  const totalPages = Math.ceil(filteredRegistrations.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
-  const currentItems = filtered.slice(startIndex, startIndex + itemsPerPage);
+  const currentRegistrations = filteredRegistrations.slice(
+    startIndex,
+    startIndex + itemsPerPage
+  );
+
+  // === Handle page change ===
+  const goToPage = (pageNum) => {
+    if (pageNum < 1) pageNum = 1;
+    else if (pageNum > totalPages) pageNum = totalPages;
+    setCurrentPage(pageNum);
+  };
 
   return (
-    <div className="p-4 md:p-8 max-w-6xl 5 mx-auto">
-       <Helmet>
-        <title>ManageRegister| MedCampMS</title>
-        <meta name="description" content="Welcome to MedCampMS - Your trusted medical camp management system." />
-     </Helmet>
-      <h2 className="text-2xl font-bold mb-4 text-center">
-        Manage Registered Camps
+    <div className="p-4 max-w-full mx-auto">
+      <h2 className="text-2xl md:text-3xl font-bold mb-6 text-center text-blue-700">
+        All Camp Registrations
       </h2>
 
+      {/* Search Input */}
       <div className="mb-4 flex justify-center">
         <input
           type="text"
-          placeholder="Search by Camp Name..."
-          value={searchQuery}
+          placeholder="Search by name, email, camp or location..."
+          className="input input-bordered w-full max-w-md"
+          value={searchTerm}
           onChange={(e) => {
-            setSearchQuery(e.target.value);
-            setCurrentPage(1);
+            setSearchTerm(e.target.value);
+            setCurrentPage(1); // reset page on search
           }}
-          className="input input-bordered w-full sm:w-2/3 md:w-1/2 lg:w-1/3"
         />
       </div>
 
       <div className="overflow-x-auto shadow rounded-lg">
-        <table className="table w-full ">
-          <thead className="bg-base-200 text-base font-semibold">
+        <table className="min-w-full table-auto border border-collapse border-gray-300">
+          <thead className="bg-blue-100 text-gray-800">
             <tr>
-              <th>#</th>
-              <th>Camp Name</th>
-              <th>Fees</th>
-              <th>Participant Name</th>
-              <th>Payment</th>
-              <th>Confirmation</th>
-              <th>Cancel</th>
+              <th className="border px-2 py-1 text-xs">No.</th>
+              <th className="border px-2 py-1 text-xs">Name</th>
+              <th className="border px-2 py-1 text-xs">Email</th>
+              <th className="border px-2 py-1 text-xs">Age</th>
+              <th className="border px-2 py-1 text-xs">Phone</th>
+              <th className="border px-2 py-1 text-xs">Camp</th>
+              <th className="border px-2 py-1 text-xs">Location</th>
+              <th className="border px-2 py-1 text-xs">Doctor</th>
+              <th className="border px-2 py-1 text-xs">Fee</th>
+              <th className="border px-2 py-1 text-xs">Payment</th>
+              <th className="border px-2 py-1 text-xs">Status</th>
+              <th className="border px-2 py-1 text-xs">Action</th>
             </tr>
           </thead>
           <tbody>
-            {currentItems.length > 0 ? (
-              currentItems.map((item, index) => (
-                <tr key={item._id} className="text-center hover:bg-gray-500">
-                  <td className="border" >{startIndex + index + 1}</td>
-                  <td className="border">{item.campName}</td>
-                  <td className="border">${item.fees}</td>
-                  <td className="border">{item.participantName}</td>
-                  <td className="border">
-                    <span
-                      className={`badge ${
-                        item.payment_status === "Paid"
-                          ? "badge-success"
-                          : "badge-error"
-                      }`}
-                    >
-                      {item.payment_status}
-                    </span>
+            {currentRegistrations.map((reg, index) => {
+              const paidStatus = (reg.paymentStatus || reg.payment_status || "").toLowerCase();
+              const isPaid = paidStatus === "paid";
+
+              return (
+                <tr key={reg._id} className="hover:bg-blue-500 text-xs">
+                  <td className="border px-2 py-1 text-center">
+                    {(currentPage - 1) * itemsPerPage + index + 1}
                   </td>
-                  <td className="border">
-                    {item.confirmationStatus === "Confirmed" ? (
-                      <span className="badge badge-success">Confirmed</span>
-                    ) : isOrganizer ? (
-                      <button
-                        onClick={() => handleConfirm(item._id)}
-                        className="btn btn-sm btn-warning"
-                      >
-                        Pending
-                      </button>
-                    ) : (
-                      <span className="badge badge-warning">Pending</span>
-                    )}
-                  </td>
-                  <td className="border">
+                  <td className="border px-2 py-1">{reg.participantName}</td>
+                  <td className="border px-2 py-1">{reg.participantEmail}</td>
+                  <td className="border px-2 py-1 text-center">{reg.age}</td>
+                  <td className="border px-2 py-1">{reg.phone}</td>
+                  <td className="border px-2 py-1">{reg.campName}</td>
+                  <td className="border px-2 py-1">{reg.location}</td>
+                  <td className="border px-2 py-1">{reg.doctor}</td>
+                  <td className="border px-2 py-1 text-right">{reg.fees}৳</td>
+                  <td className="border px-2 py-1">{reg.paymentStatus || "Unpaid"}</td>
+                  <td className="border px-2 py-1">{reg.confirmationStatus || "Pending"}</td>
+                  <td className="border px-2 py-1 text-center">
                     <button
-                      disabled={
-                        item.payment_status === "Paid" &&
-                        item.confirmationStatus === "Confirmed"
-                      }
-                      onClick={() =>
-                        handleCancel(
-                          item._id,
-                          item.payment_status === "Paid",
-                          item.confirmationStatus === "Confirmed"
-                        )
-                      }
-                      className="btn btn-sm btn-error"
+                      disabled={isPaid}
+                      onClick={() => handleCancel(reg._id)}
+                      className={`font-semibold px-2 py-1 rounded text-xs ${
+                        isPaid
+                          ? "bg-gray-400 cursor-not-allowed"
+                          : "bg-red-500 hover:bg-red-700 text-white"
+                      }`}
                     >
                       Cancel
                     </button>
                   </td>
                 </tr>
-              ))
-            ) : (
-              <tr>
-                <td colSpan="7" className="text-center text-red-500">
-                  No Registered Camps Found
-                </td>
-              </tr>
-            )}
+              );
+            })}
           </tbody>
         </table>
       </div>
 
-      {/* Pagination */}
-      {filtered.length > itemsPerPage && (
-        <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mt-6">
-          <div>
-            Showing {startIndex + 1}-
-            {Math.min(startIndex + itemsPerPage, filtered.length)} of{" "}
-            {filtered.length}
-          </div>
-          <div className="flex flex-wrap gap-2">
+      {/* Pagination Controls */}
+      {totalPages > 1 && (
+        <div className="flex justify-center mt-4 gap-2 flex-wrap">
+          <button
+            onClick={() => goToPage(currentPage - 1)}
+            disabled={currentPage === 1}
+            className="btn btn-sm"
+          >
+            ← Prev
+          </button>
+
+          {Array.from({ length: totalPages }).map((_, i) => (
             <button
-              onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-              disabled={currentPage === 1}
-              className="btn btn-sm"
+              key={i + 1}
+              onClick={() => goToPage(i + 1)}
+              className={`btn btn-sm ${currentPage === i + 1 ? "btn-primary" : ""}`}
             >
-              ← Prev
+              {i + 1}
             </button>
-            {Array.from({ length: totalPages }).map((_, i) => (
-              <button
-                key={i + 1}
-                onClick={() => setCurrentPage(i + 1)}
-                className={`btn btn-sm ${
-                  currentPage === i + 1 ? "btn-primary" : ""
-                }`}
-              >
-                {i + 1}
-              </button>
-            ))}
-            <button
-              onClick={() =>
-                setCurrentPage((prev) => Math.min(prev + 1, totalPages))
-              }
-              disabled={currentPage === totalPages}
-              className="btn btn-sm"
-            >
-              Next →
-            </button>
-          </div>
+          ))}
+
+          <button
+            onClick={() => goToPage(currentPage + 1)}
+            disabled={currentPage === totalPages}
+            className="btn btn-sm"
+          >
+            Next →
+          </button>
         </div>
       )}
     </div>

@@ -9,6 +9,9 @@ import SidBer from '../Extrasection/SidBer';
 import img1 from '../assets/image/pawel-czerwinski-f5ITyZ8pi5I-unsplash.jpg'
 import img2 from '../assets/image/img2.jpg'
 import { Helmet } from 'react-helmet-async';
+
+
+
 const DashBoardLayout = () => {
     return (
         <div className="drawer lg:drawer-open">
@@ -73,8 +76,8 @@ const DashBoardLayout = () => {
       transition={{ duration: 0.6 }}
     className="menu  text-base-content min-h-full w-80 p-4">
       {/* Sidebar content here */}
- <NavLink><Logo/></NavLink>
-    <SidBer/>
+    <NavLink><Logo/></NavLink>
+    <SidBer />
 
     </ul>
   </div>

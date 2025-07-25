@@ -73,10 +73,14 @@ export const router = createBrowserRouter([
         path:'managecamps',
         Component:ManageCamp
       },
-      {
-        path:'managereg',
-        Component:ManageRegister
-      },
+    
+{
+   path:"/dashboard/managereg",
+    element:<ManageRegister />
+},
+
+ 
+
       {
         path:'/dashboard/payment/:campId',
         Component:Payments

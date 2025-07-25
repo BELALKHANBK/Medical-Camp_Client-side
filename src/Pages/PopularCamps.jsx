@@ -9,7 +9,7 @@ const PopularCamps = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    axios.get("https://medical-camp-server-sage.vercel.app/camps")
+    axios.get("http://localhost:5000/camps")
       .then(res => {
         const sortedCamps = res.data.sort(
           (a, b) => b.participantCount - a.participantCount
@@ -65,7 +65,7 @@ const PopularCamps = () => {
     to={`/camp-details/${camp._id}`}
     className="inline-block bg-indigo-600 text-white px-5 py-2 rounded-lg hover:bg-indigo-700 transition-colors duration-300 font-semibold"
   >
-    Details
+   View Details
   </Link>
 </div>
 

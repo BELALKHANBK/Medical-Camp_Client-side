@@ -24,7 +24,7 @@ const ManageCamps = () => {
 
   const fetchCamps = async () => {
     try {
-      const res = await axios.get("https://medical-camp-server-sage.vercel.app/camps");
+      const res = await axios.get("http://localhost:5000/camps");
       setCamps(res.data);
     } catch (error) {
       Swal.fire("Error", "Failed to load camps", "error");
@@ -44,7 +44,7 @@ const ManageCamps = () => {
 
     if (confirm.isConfirmed) {
       try {
-        await axios.delete(`https://medical-camp-server-sage.vercel.app/delete-camp/${id}`);
+        await axios.delete(`http://localhost:5000/delete-camp/${id}`);
         Swal.fire("Deleted!", "Camp has been deleted.", "success");
         fetchCamps();
       } catch (error) {
@@ -79,7 +79,7 @@ const ManageCamps = () => {
         fees: Number(data.fees),
       };
 
-      const res = await axios.put(`https://medical-camp-server-sage.vercel.app/update-camp/${id}`, updatedCamp);
+      const res = await axios.put(`http://localhost:5000/update-camp/${id}`, updatedCamp);
 
       if (res.data.modifiedCount > 0 || res.data.acknowledged) {
         Swal.fire("Success", "Camp updated successfully", "success");
@@ -110,7 +110,7 @@ const ManageCamps = () => {
      </Helmet>
       <h2 className="text-4xl font-bold text-center mb-10 text-blue-700">Manage Medical Camps</h2>
 
-      <div className="mb-6">
+       <div className="mb-4 flex justify-center  text-black md:text-white lg:text-white">
         <SearchBar
           placeholder="🔍 Search by Camp name, Date or Doctor..."
           searchText={searchText}
@@ -118,10 +118,11 @@ const ManageCamps = () => {
             setSearchText(text);
             setCurrentPage(1);
           }}
+            className="input input-bordered placeholder-blue-700 text-black md:text-white lg:text-white w-full sm:w-2/3 md:w-1/2 lg:w-1/3"
         />
       </div>
 
-      {/* 🌐 Desktop Table */}
+      {/*  Desktop Table */}
       <div className="hidden md:block overflow-x-auto text-black bg-white rounded-lg shadow-lg">
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gradient-to-r from-green-400 to-blue-500 text-white">
@@ -143,7 +144,7 @@ const ManageCamps = () => {
             ) : (
               currentItems.map((camp) => (
                 <tr key={camp._id} className="hover:bg-gray-600 transition">
-                  <td className="px-6 py-4">{camp.name}</td>
+                  <td className="px-6 py-4 text-black ">{camp.name}</td>
                   <td className="px-6 py-4">{new Date(camp.dateTime).toLocaleString()}</td>
                   <td className="px-6 py-4">{camp.location}</td>
                   <td className="px-6 py-4">{camp.doctor}</td>
@@ -168,10 +169,10 @@ const ManageCamps = () => {
         </table>
       </div>
 
-      {/* 📱 Mobile Card View */}
+      {/* Mobile Card View */}
       <div className="md:hidden">
         {currentItems.map((camp) => (
-          <div key={camp._id} className="bg-white rounded-lg shadow p-4 mb-4 text-sm text-gray-800">
+          <div key={camp._id} className="bg-white  rounded-lg shadow p-4 mb-4 text-sm text-gray-800">
             <h4 className="text-lg font-bold text-blue-600">{camp.name}</h4>
             <p><strong>Date:</strong> {new Date(camp.dateTime).toLocaleString()}</p>
             <p><strong>Location:</strong> {camp.location}</p>
@@ -194,7 +195,7 @@ const ManageCamps = () => {
         ))}
       </div>
 
-      {/* 🔢 Pagination */}
+      {/*  Pagination */}
       <div className="mt-8">
         <Pagination
           totalItems={filteredCamps.length}
@@ -204,7 +205,7 @@ const ManageCamps = () => {
         />
       </div>
 
-      {/* ✏️ Edit Modal */}
+      {/*  Edit Modal */}
       {editingCamp && (
         <div className="fixed inset-0 bg-gray-600 bg-opacity-40 z-50  flex justify-center items-center">
           <div className="bg-white p-8 rounded-lg shadow-lg max-w-7xl  relative">
@@ -222,30 +223,30 @@ const ManageCamps = () => {
             </h3>
 
             <form onSubmit={handleSubmit(onUpdateSubmit)} className="space-y-4">
-              <input {...register("name")} placeholder="Camp Name" className="input input-bordered w-full" />
-              <input {...register("image")} placeholder="Image URL" className="input input-bordered w-full" />
+              <input {...register("name")} placeholder="Camp Name" className="input input-bordered  text-black md:text-white lg:text-white w-full" />
+              <input {...register("image")} placeholder="Image URL" className="input input-bordered  text-black md:text-white lg:text-white w-full" />
               <input
                 {...register("fees")}
                 type="number"
                 placeholder="Camp Fees"
-                className="input input-bordered w-full"
+                className="input input-bordered text-black md:text-white lg:text-white w-full"
               />
               <input
                 {...register("dateTime")}
                 type="datetime-local"
-                className="input input-bordered w-full"
+                className="input input-bordered  text-black md:text-white lg:text-white w-full"
               />
-              <input {...register("location")} placeholder="Location" className="input input-bordered w-full" />
+              <input {...register("location")} placeholder="Location" className="input  text-black md:text-white lg:text-white input-bordered w-full" />
               <input
                 {...register("doctor")}
                 placeholder="Healthcare Professional"
-                className="input input-bordered w-full"
+                className="input input-bordered  text-black md:text-white lg:text-white w-full"
               />
               <textarea
                 {...register("description")}
                 placeholder="Camp Description"
                 rows="4"
-                className="textarea textarea-bordered w-full"
+                className="textarea textarea-bordered  text-black md:text-white lg:text-white w-full"
               ></textarea>
 
               <div className="flex justify-end gap-4 mt-4">

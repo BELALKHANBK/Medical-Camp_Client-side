@@ -2,7 +2,7 @@ import React from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import SwiperCore, { EffectCoverflow, Navigation, Autoplay, Pagination } from "swiper";
 import { motion } from "framer-motion";
-import { FaHeartbeat } from "react-icons/fa"; // ✅ FontAwesome Icon
+import { FaHeartbeat } from "react-icons/fa"; // FontAwesome Icon
 
 import img1 from '../assets/image/male-doctor-vaccinating-little-girl.jpg';
 import img2 from '../assets/image/medical-nurse-helping-african-american-pediatrician-doctor-bandage-fractured-arm-little-kid-patient-clinical-physiotherapy-hospital-office-team-with-face-mask-against-covid19.jpg';
