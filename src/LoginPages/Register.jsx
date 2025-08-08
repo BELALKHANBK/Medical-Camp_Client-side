@@ -49,61 +49,61 @@ const Register = () => {
   };
 
 
-// onSubmit function এর মধ্যে error ও success handling
+  // onSubmit function এর মধ্যে error ও success handling
 
-const onSubmit = async (data) => {
-  try {
-    const imageUrl = await uploadToImgBB();
-    if (!imageUrl) return;
+  const onSubmit = async (data) => {
+    try {
+      const imageUrl = await uploadToImgBB();
+      if (!imageUrl) return;
 
-    const { name, email, password } = data;
+      const { name, email, password } = data;
 
-    const userCredential = await createUser(email, password);
-    const user = userCredential.user;
+      const userCredential = await createUser(email, password);
+      const user = userCredential.user;
 
-    await updateUserProfile({
-      displayName: name,
-      photoURL: imageUrl,
-    });
+      await updateUserProfile({
+        displayName: name,
+        photoURL: imageUrl,
+      });
 
-    const token = await getIdToken(user);
-    localStorage.setItem('access-token', token);
+      const token = await getIdToken(user);
+      localStorage.setItem('access-token', token);
 
-    const userInfo = {
-      email,
-      name,
-      role: 'participant',
-      photo: imageUrl,
-      created_at: new Date().toISOString(),
-      last_login: new Date().toISOString(),
-    };
+      const userInfo = {
+        email,
+        name,
+        role: 'participant',
+        photo: imageUrl,
+        created_at: new Date().toISOString(),
+        last_login: new Date().toISOString(),
+      };
 
-    const userRes = await axiosBelal.post('/users', userInfo);
-    console.log('User saved:', userRes.data);
+      const userRes = await axiosBelal.post('/users', userInfo);
+      console.log('User saved:', userRes.data);
 
-    // Success alert
-    await Swal.fire({
-      icon: 'success',
-      title: 'Registration Successful!',
-      text: 'Welcome to MedCampMS.',
-      timer: 2000,
-      showConfirmButton: false,
-    });
+      // Success alert
+      await Swal.fire({
+        icon: 'success',
+        title: 'Registration Successful!',
+        text: 'Welcome to MedCampMS.',
+        timer: 2000,
+        showConfirmButton: false,
+      });
 
-    navigate(from, { replace: true });
+      navigate(from, { replace: true });
 
-  } catch (error) {
-    console.error("Error during registration:", error.message);
+    } catch (error) {
+      console.error("Error during registration:", error.message);
 
-    // Error alert
-    Swal.fire({
-      icon: 'error',
-      title: 'Registration Failed',
-      text: error.message,
-      confirmButtonText: 'OK',
-    });
-  }
-};
+      // Error alert
+      Swal.fire({
+        icon: 'error',
+        title: 'Registration Failed',
+        text: error.message,
+        confirmButtonText: 'OK',
+      });
+    }
+  };
 
   return (
     <div className="">
@@ -116,12 +116,12 @@ const onSubmit = async (data) => {
         <div className=" hero-content flex flex-col-reverse md:flex-row items-center justify-between w-full px-4 lg:px-16 py-10 gap-10">
 
           {/* Form Section */}
-       <div
-          className="card bg-base-100 w-full max-w-md shrink-0 
+          <div
+            className="card bg-base-100 w-full max-w-md shrink-0 
           shadow border border-gray-200 
           hover:shadow-2xl hover:border-blue-500 
           hover:scale-[1.02] transition-all duration-300"
-        >
+          >
             <div className="card bg-base-100 w-full max-w-sm shadow-2xl mx-auto">
               <div className="text-center mt-4">
                 <h1 className="text-2xl font-extrabold">Create an Account</h1>
