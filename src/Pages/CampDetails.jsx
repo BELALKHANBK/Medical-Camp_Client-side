@@ -17,7 +17,7 @@ const CampDetails = () => {
   const { data: camp, isLoading, refetch } = useQuery({
     queryKey: ["camp-details", id],
     queryFn: async () => {
-      const res = await axios.get(`http://localhost:5000/camps/${id}`);
+      const res = await axios.get(`https://medical-camp-server-sage.vercel.app/camps/${id}`);
       return res.data;
     },
   });

@@ -10,7 +10,7 @@ const FeedBackFrom = () => {
   const itemsPerPage = 6;
 
   useEffect(() => {
-    fetch('http://localhost:5000/feedbacks')
+    fetch('https://medical-camp-server-sage.vercel.app/feedbacks')
       .then((res) => res.json())
       .then((data) => {
         setFeedbacks(data);

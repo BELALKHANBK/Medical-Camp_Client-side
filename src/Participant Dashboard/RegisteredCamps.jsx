@@ -299,7 +299,7 @@ console.log("User Image:", user?.photoURL);
           min="1"
           max="5"
           required
-          className="input input-bordered text-white lg:text-white  w-full mb-4"
+          className="input input-bordered text-black lg:text-white  w-full mb-4"
         />
 
         <label className="block mb-2 font-semibold">Comment:</label>
@@ -307,7 +307,7 @@ console.log("User Image:", user?.photoURL);
           name="comment"
           rows="4"
           required
-          className="textarea textarea-bordered text-white lg:text-white  w-full mb-4"
+          className="textarea textarea-bordered text-black lg:text-white  w-full mb-4"
         />
 
         <div className="flex justify-end gap-3">

@@ -21,6 +21,8 @@ import Analytics from "../Participant Dashboard/Analytics";
 import PaymentFrom from "../Participant Dashboard/PaymentFrom";
 import ParticipentProfile from "../Participant Dashboard/ParticipentProfile";
 import NotFoundPages from "../Pages/NotFoundPages";
+import PrivateRouteParticipant from "../Participant Dashboard/PrivateRouteParticipant";
+import PrivateRouteOrganizer from "../DashBoard/PrivateRouteOrganizer";
 
 export const router = createBrowserRouter([
   {
@@ -59,7 +61,7 @@ export const router = createBrowserRouter([
   },
   {
     path:'/dashboard',
-    element:<PriveteRoute><DashBoardLayout/></PriveteRoute>,
+    element:<PrivateRouteOrganizer><DashBoardLayout></DashBoardLayout></PrivateRouteOrganizer>,
     children:[
       {
         path:'organizer',
@@ -91,7 +93,7 @@ export const router = createBrowserRouter([
   {
      
 path:'/participent',
-element:<PriveteRoute><ParticipantLayout/></PriveteRoute>,
+element:<PrivateRouteParticipant><ParticipantLayout></ParticipantLayout></PrivateRouteParticipant>,
 children:[
   {
     path:'analytics',

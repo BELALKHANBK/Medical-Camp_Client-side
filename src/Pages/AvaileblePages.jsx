@@ -16,7 +16,7 @@ const AvailablePages = () => {
   const axios = useAxoiseSecure();
 
   useEffect(() => {
-    axios.get("http://localhost:5000/camps")
+    axios.get("https://medical-camp-server-sage.vercel.app/camps")
       .then((res) => {
         setCamps(res.data);
         setFilteredCamps(res.data);

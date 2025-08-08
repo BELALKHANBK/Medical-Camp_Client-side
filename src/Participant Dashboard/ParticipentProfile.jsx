@@ -22,7 +22,7 @@ const ParticipentProfile = () => {
     const fetchProfile = async () => {
       try {
         const token = await getToken();
-        const res = await axios.get(`http://localhost:5000/users?email=${user.email}`, {
+        const res = await axios.get(`https://medical-camp-server-sage.vercel.app/users?email=${user.email}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setProfile(res.data);
@@ -57,7 +57,7 @@ const ParticipentProfile = () => {
       const token = await getToken();
 
       if (profile?._id) {
-        const res = await axios.put(`http://localhost:5000/users/${profile._id}`, data, {
+        const res = await axios.put(`https://medical-camp-server-sage.vercel.app/users/${profile._id}`, data, {
           headers: { Authorization: `Bearer ${token}` },
         });
 
@@ -74,7 +74,7 @@ const ParticipentProfile = () => {
           Swal.fire("Info", "No changes were made.", "info");
         }
       } else {
-        const res = await axios.post(`http://localhost:5000/users`, data, {
+        const res = await axios.post(`https://medical-camp-server-sage.vercel.app/users`, data, {
           headers: { Authorization: `Bearer ${token}` },
         });
 
@@ -125,6 +125,7 @@ const ParticipentProfile = () => {
               <p className="text-gray-600">
                 Contact: {profile.contactNumber || "N/A"}
               </p>
+              <p>Role: {profile.role}</p>
             </div>
           </div>
           <button onClick={() => setModalOpen(true)} className="btn btn-primary w-full">

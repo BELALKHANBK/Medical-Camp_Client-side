@@ -24,7 +24,7 @@ const ManageCamps = () => {
 
   const fetchCamps = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/camps");
+      const res = await axios.get("https://medical-camp-server-sage.vercel.app/camps");
       setCamps(res.data);
     } catch (error) {
       Swal.fire("Error", "Failed to load camps", "error");
@@ -44,7 +44,7 @@ const ManageCamps = () => {
 
     if (confirm.isConfirmed) {
       try {
-        await axios.delete(`http://localhost:5000/delete-camp/${id}`);
+        await axios.delete(`https://medical-camp-server-sage.vercel.app/delete-camp/${id}`);
         Swal.fire("Deleted!", "Camp has been deleted.", "success");
         fetchCamps();
       } catch (error) {
@@ -79,7 +79,7 @@ const ManageCamps = () => {
         fees: Number(data.fees),
       };
 
-      const res = await axios.put(`http://localhost:5000/update-camp/${id}`, updatedCamp);
+      const res = await axios.put(`https://medical-camp-server-sage.vercel.app/update-camp/${id}`, updatedCamp);
 
       if (res.data.modifiedCount > 0 || res.data.acknowledged) {
         Swal.fire("Success", "Camp updated successfully", "success");

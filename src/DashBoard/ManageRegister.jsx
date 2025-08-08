@@ -13,7 +13,7 @@ const ManageRegister = () => {
   useEffect(() => {
     if (role === "organizer") {
       axios
-        .get("http://localhost:5000/registrations")
+        .get("https://medical-camp-server-sage.vercel.app/registrations")
         .then((res) => setRegistrations(res.data))
         .catch((err) => console.error("Error loading data:", err));
     }
@@ -32,7 +32,7 @@ const ManageRegister = () => {
     }).then((result) => {
       if (result.isConfirmed) {
         axios
-          .delete(`http://localhost:5000/registrations/${id}`)
+          .delete(`https://medical-camp-server-sage.vercel.app/registrations/${id}`)
           .then(() => {
             setRegistrations((prev) => prev.filter((reg) => reg._id !== id));
             Swal.fire({
@@ -105,7 +105,7 @@ const ManageRegister = () => {
         <input
           type="text"
           placeholder="Search by name, email, camp or location..."
-          className="input input-bordered w-full max-w-md"
+          className="input input-bordered w-full max-w-md  bg-gray-400 text-black md:text-white lg:text-white"
           value={searchTerm}
           onChange={(e) => {
             setSearchTerm(e.target.value);

@@ -13,7 +13,7 @@ const CountDown = () => {
 
   useEffect(() => {
     // Replace with real API if needed
-    fetch('http://localhost:5000/stats') // optional endpoint
+    fetch('https://medical-camp-server-sage.vercel.app/stats') // optional endpoint
       .then(res => res.json())
       .then(data => {
         setStats(data);
