@@ -1,51 +1,37 @@
-import React from 'react';
-import { FcGoogle } from 'react-icons/fc';
-import { useLocation, useNavigate } from 'react-router';  // তোমার যদি react-router-dom হয়, তবে 'react-router-dom' করো
-import useAuth from '../AuthProvider/UseAuth';
-import OtherAxios from '../AuthProvider/OtherAxios';
+
+import { useNavigate, useLocation } from 'react-router';
+import Swal from 'sweetalert2';
+import { FcGoogle } from "react-icons/fc";
+import { useAuth } from '../../../../Lost and Found Website/Lost_and_Found_Website/src/AuthContext';
+
+
 
 const SignInGoogle = () => {
-  const { signInWithGoogle, user } = useAuth();
-  const location = useLocation();
-  const AxiosBelal = OtherAxios();
+  const { signInWithGoogle } =useAuth()
   const navigate = useNavigate();
-  const from = location.state?.from || '/';
+  const location = useLocation();
+  const from = new URLSearchParams(location.search).get('redirect') || '/';
 
-  const handleGoogle = () => {
+  const signInGoogle = () => {
     signInWithGoogle()
-      .then(async (result) => {
-        console.log("User created:", result.user);
-
+      .then((result) => {
+        Swal.fire('Login Successful!', 'Welcome back!', 'success');
         navigate(from, { replace: true });
-
-        /////user role/////////
-        const userInfo = {
-          email: user.email,
-          role: 'user',
-          created_at: new Date().toISOString(),
-          last_login: new Date().toISOString(),
-        };
-
-        const userRes = await AxiosBelal.post('/users', userInfo);
-        console.log('user update info', userRes.data);
-        ////////////
-        navigate(from);
       })
       .catch((error) => {
-        console.error("Error:", error.message);
+        Swal.fire('Login Failed', error.message, 'error');
       });
   };
 
   return (
-    <div className="flex justify-center mt-4">
+    <div>
+      <div className="divider">OR</div>
       <button
-        onClick={handleGoogle}
-        className="btn flex items-center gap-2 px-4 py-2 text-sm font-semibold
-                   bg-white border border-gray-300 rounded-md text-black shadow hover:bg-gray-100
-                   transition duration-300"
+        onClick={signInGoogle}
+        className="btn bg-white  w-full text-black border-[#e5e5e5]"
       >
-        <FcGoogle className="text-xl" />
-        Register With Google
+        
+        <FcGoogle />Register with Google
       </button>
     </div>
   );
