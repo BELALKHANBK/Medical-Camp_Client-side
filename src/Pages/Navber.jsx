@@ -191,7 +191,7 @@ const Navber = () => {
   );
 
   return (
-     <div
+     <div id="navbar"
         className={`navbar sticky top-0 z-50 w-full transition-colors duration-300
           ${
             isScrolled
@@ -200,9 +200,11 @@ const Navber = () => {
           }
         `}
       >
+      
+
       {/* Navbar */}
       <div className="navbar bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 shadow-sm -ml-2 fixed top-0 z-50 w-full">
-        <div className="navbar-start">
+        <div  className="navbar-start">
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
             className="btn btn-ghost lg:hidden text-white hover:bg-purple-700 transition-colors duration-300 rounded"

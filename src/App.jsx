@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+/* import React, { useEffect } from 'react';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import { RouterProvider } from 'react-router';
@@ -11,5 +11,20 @@ const App = () => {
 
   return <RouterProvider router={router} />;
 };
+
+export default App;
+ */
+import ScrollButton from "./Animation/ScrollButton";
+import Navber from '../src/Pages/Navber';
+
+function App() {
+  return (
+    <div className="bg-red-400">
+  <Navber/>
+      
+      <ScrollButton />
+    </div>
+  );
+}
 
 export default App;

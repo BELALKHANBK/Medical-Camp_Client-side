@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
-//import bgVideo from '../assets/image/1103996_1080p_Disease_3840x2160.mp4';
 import { FaStar } from 'react-icons/fa';
-
+import '../../src/App.css'
 const FeedBackFrom = () => {
   const [feedbacks, setFeedbacks] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -16,13 +15,16 @@ const FeedBackFrom = () => {
         setFeedbacks(data);
         setLoading(false);
       })
-      .catch((err) => {
+      .catch(() => {
         setError('Failed to fetch feedbacks.');
         setLoading(false);
       });
   }, []);
 
-  if (loading) return <p className="text-center mt-4 text-white">Loading feedbacks...</p>;
+  if (loading) return
+  <div class="flex items-center justify-center min-h-screen">
+  <span class="load"></span>
+</div>
   if (error) return <p className="text-center mt-4 text-red-600">{error}</p>;
   if (!feedbacks.length) return <p className="text-center mt-4 text-white">No feedbacks available.</p>;
 
@@ -31,34 +33,28 @@ const FeedBackFrom = () => {
   const currentFeedbacks = feedbacks.slice(startIndex, startIndex + itemsPerPage);
 
   return (
-    <div className="relative min-h-screen overflow-hidden">
-      {/* Background Video */}
-   
-      <div className="absolute inset-0 z-0 overflow-hidden">
-      {/*   <video
-          src={bgVideo}
-          autoPlay
-          loop
-          muted
-          playsInline
-          className="w-full h-full object-cover"
-        /> */}
-        <div className="absolute inset-0 bg-opacity-60" />
-      </div>
+    <div className="relative  overflow-hidden ">
+      {/* Background Overlay */}
+      <div className="absolute inset-0  bg-opacity-60 z-0" />
 
       {/* Main Content */}
-      <div className="relative z-10 max-w-6xl mx-auto p-6">
-        <h2 className="text-3xl font-bold mb-10 text-center text-white">📣 Participant Feedback</h2>
+      <div className="relative z-10 w-full">
+        <h2 className="text-3xl font-bold py-6 text-center text-white">
+          📣 Participant Feedback
+        </h2>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {/* Full Width Grid */}
+        <div className="grid grid-cols-1  md:grid-cols-2 px-6 lg:grid-cols-3 gap-10 w-full">
           {currentFeedbacks.map((fb) => (
             <div
               key={fb._id}
-              className="bg-white bg-opacity-90 backdrop-blur-md rounded-xl shadow-lg p-6 transition-transform hover:scale-105 duration-300"
+              className="bg-white bg-opacity-90 backdrop-blur-md shadow-md p-6 
+                         transition-transform hover:scale-105 duration-300 border 
+                         flex flex-col justify-between"
             >
               <div className="flex justify-between items-center mb-3">
                 <div>
-                  <img className='w-14 rounded-2xl' src={fb.participantImage} alt="" />
+                  <img className="w-14 rounded-2xl" src={fb.participantImage} alt="" />
                   <h3 className="font-semibold text-indigo-700">{fb.participantName}</h3>
                 </div>
                 <div className="flex items-center gap-1 text-yellow-500 font-bold">
@@ -69,7 +65,6 @@ const FeedBackFrom = () => {
                 </div>
               </div>
               <p className="text-gray-700 italic mb-3">"{fb.comment}"</p>
-             
               <p className="text-sm text-gray-500 text-right">
                 🕒 {fb.date ? new Date(fb.date).toLocaleDateString() : 'Unknown Date'}
               </p>

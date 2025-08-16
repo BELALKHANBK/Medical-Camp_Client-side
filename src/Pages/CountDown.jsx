@@ -17,7 +17,7 @@ const CountDown = () => {
       .then(data => setStats(data))
       .catch(() => {
         setStats({
-          totalCamps:1422,
+          totalCamps: 1422,
           totalParticipants: 1628,
           totalFeedbacks: 1395,
           totalOrganizers: 232,
@@ -35,23 +35,34 @@ const CountDown = () => {
   ];
 
   return (
-<div className="min-h-screen w-full p-8 mx-2 sm:mx-4 bg-white dark:bg-white transition-colors duration-500">
+    <div className=" transition-colors mt-8 duration-500  ">
+      <h1 className="text-3xl font-bold text-center text-blue-600 dark:text-blue-400">
+        Our Community Impact
+      </h1>
 
-
-      <h1 className='text-3xl text-center text-blue-600 dark:text-blue-400'>Our Community Impact</h1>
-
-      <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6 mt-8 max-w-6xl mx-auto">
+      {/* Responsive Grid */}
+      <div className="grid 
+                      grid-cols-1      /* mobile (default) */
+                      sm:grid-cols-2   /* small devices, tablets */
+                      md:grid-cols-3   /* medium devices, iPad/laptop */
+                      lg:grid-cols-4   /* large laptops */
+                      xl:grid-cols-5   /* extra large monitors */
+                      gap-6 mt-10 max-w-8xl mx-auto  sm:px-4 ">
         {items.map((item, idx) => (
           <div
             key={idx}
-            className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg text-center flex flex-col items-center transform transition-transform duration-300 hover:scale-105"
+            className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg 
+                       text-center flex flex-col items-center
+                       transform transition-transform duration-300 hover:scale-105"
             data-aos="zoom-in"
           >
             {item.icon}
             <h2 className="text-3xl font-bold text-gray-800 dark:text-gray-200 mt-2">
-              <CountUp end={item.value} duration={50} />
+              <CountUp end={item.value} duration={2.5} />
             </h2>
-            <p className="mt-2 text-gray-600 dark:text-gray-300 font-medium">{item.label}</p>
+            <p className="mt-2 text-gray-600 dark:text-gray-300 font-medium">
+              {item.label}
+            </p>
           </div>
         ))}
       </div>

@@ -119,7 +119,7 @@ const AvailablePages = () => {
         {currentItems.map((camp) => (
           <div
             key={camp._id}
-            className="border rounded-xl shadow-lg p-4 flex flex-col text-black bg-white hover:shadow-2xl transition-transform transform hover:-translate-y-2 duration-300 hover:scale-[1.03] hover:bg-indigo-50 dark:bg-gray-800 dark:text-white"
+            className="border rounded-xl shadow-lg p-4 flex flex-col text-black bg-white hover:shadow-2xl transition-transform transform hover:-translate-y-2 duration-300 hover:scale-[1.03]  dark:bg-gray-800 dark:text-white"
           >
             <img
               src={camp.image}

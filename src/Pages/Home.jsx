@@ -7,6 +7,7 @@ import CountDown from './CountDown';
 import { Helmet } from 'react-helmet-async';
 //import '../App.css'; // spinner CSS import
 import '../../src/App.css'
+import App from '../App';
 const Home = () => {
   const [loading, setLoading] = useState(true);
 
@@ -43,6 +44,7 @@ const Home = () => {
       <FeedbackFrom />
       <UnComingEvent />
       <CountDown />
+      <App/>
     </div>
   );
 };

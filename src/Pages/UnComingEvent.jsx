@@ -24,12 +24,12 @@ const UnComingEvent = () => {
   ];
 
   return (
-    <section className=" py-12  md:px-12">
+    <section className="mt-4  md:px-12">
       <h2 className="text-3xl font-bold text-center text-blue-700 mb-10">
         Upcoming Health Events
       </h2>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid w-9xl h-88  grid-cols-1 md:grid-cols-3 gap-6">
         {events.map((event, index) => (
           <motion.div
             key={index}
@@ -39,7 +39,7 @@ const UnComingEvent = () => {
             viewport={{ once: true }}
             className="bg-white p-6 rounded-2xl shadow-lg border hover:shadow-2xl transition duration-300"
           >
-            <h3 className="text-xl font-semibold text-blue-800 mb-2">
+            <h3 className="text-xl font-semibold mt-8 text-blue-800 mb-2">
               {event.title}
             </h3>
             <p className="text-gray-600 mb-1">
