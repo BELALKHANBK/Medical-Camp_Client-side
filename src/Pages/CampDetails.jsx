@@ -64,9 +64,9 @@ const CampDetails = () => {
         <title>Camp Details | MedCampMS</title>
         <meta name="description" content="Welcome to MedCampMS - Your trusted medical camp management system." />
       </Helmet>
-
+<h1 className="text-center  mt-4 text-3xl font-roboto hover:text-blue-700">Card Details Pages</h1>
       {/* Camp Details */}
-      <div className="bg-white text-black shadow-lg rounded-xl overflow-hidden md:flex md:space-x-6">
+      <div className="bg-white text-black font-cinzel hover:scale-[1.03] shadow-lg rounded-xl overflow-hidden md:flex md:space-x-6">
         <div className="md:w-1/2">
           <img
             src={camp?.image || "https://via.placeholder.com/400x300?text=No+Image"}

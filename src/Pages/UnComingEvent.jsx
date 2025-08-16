@@ -1,5 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
+import '../../src/App.css'
 
 const UnComingEvent = () => {
   const events = [
@@ -25,7 +26,7 @@ const UnComingEvent = () => {
 
   return (
     <section className="mt-4  md:px-12">
-      <h2 className="text-3xl font-bold text-center text-blue-700 mb-10">
+      <h2 className="text-3xl font-cinzel text-center text-blue-700 mb-10">
         Upcoming Health Events
       </h2>
 
@@ -39,16 +40,16 @@ const UnComingEvent = () => {
             viewport={{ once: true }}
             className="bg-white p-6 rounded-2xl shadow-lg border hover:shadow-2xl transition duration-300"
           >
-            <h3 className="text-xl font-semibold mt-8 text-blue-800 mb-2">
+            <h3 className="text-xl font-poppins mt-8 text-blue-800 mb-2">
               {event.title}
             </h3>
-            <p className="text-gray-600 mb-1">
+            <p className="text-gray-600 mb-1 font-montserrat">
               <strong>Date:</strong> {event.date}
             </p>
             <p className="text-gray-600 mb-1">
               <strong>Location:</strong> {event.location}
             </p>
-            <p className="text-gray-700 mt-2">{event.description}</p>
+            <p className="text-gray-700 font-roboto mt-2">{event.description}</p>
           </motion.div>
         ))}
       </div>

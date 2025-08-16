@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import useAuth from '../AuthProvider/UseAuth';
 import useAxiosSecure from '../AuthProvider/UseAxios';
-import vidbg from '../assets/image/1103996_1080p_Disease_3840x2160.mp4';
+//import vidbg from '../assets/image/1103996_1080p_Disease_3840x2160.mp4';
 import { Helmet } from 'react-helmet-async';
 import '../../src/App.css'
 const PaymentHistory = () => {
@@ -42,16 +42,16 @@ const PaymentHistory = () => {
   };
 
   return (
-    <div className="relative min-h-screen overflow-hidden">
+    <div className="relative min-h-screen overflow-hidden z-500">
       {/*  Background Video */}
-      <video
+     {/*  <video
         src={vidbg}
         autoPlay
         loop
         muted
         playsInline
         className="fixed top-0 left-0 w-full h-full object-cover z-0"
-      />
+      /> */}
       <Helmet>
         <title>ParmentHistory| MedCampMS</title>
         <meta name="description" content="Welcome to MedCampMS - Your trusted medical camp management system." />

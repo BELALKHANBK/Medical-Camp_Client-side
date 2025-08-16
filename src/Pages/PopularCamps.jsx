@@ -3,7 +3,7 @@ import axios from "axios";
 import { Link } from "react-router";
 import { Helmet } from "react-helmet-async";
 //import video from '../assets/image/img1.jpg'; // ভিডিও বা ব্যাকগ্রাউন্ড ইমেজ
-
+import '../../src/App.css'
 const PopularCamps = () => {
   const [camps, setCamps] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -33,7 +33,7 @@ const PopularCamps = () => {
       </Helmet>
       <div className="absolute inset-0  bg-opacity-50 z-0"></div>
 
-      <h2 className="relative z-10 text-3xl font-bold mb-8 text-center text-white">
+      <h2 className="relative z-10 text-3xl font-cinzel mb-8 text-center ">
         Popular Medical Camps
       </h2>
 
@@ -41,7 +41,7 @@ const PopularCamps = () => {
         {camps.map(camp => (
           <div
             key={camp._id}
-            className="bg-white text-black font-bold rounded-xl shadow-lg overflow-hidden
+            className="bg-white text-black font-bold font-cinzel rounded-xl shadow-lg overflow-hidden
                        hover:shadow-2xl hover:scale-105 transform transition duration-300 ease-in-out"
           >
             <img
@@ -49,8 +49,8 @@ const PopularCamps = () => {
              
               className="w-full h-48 object-cover"
             />
-            <h1 className="text-center font-bold">OrganizerName: {camp.name}</h1>
-            <div className="p-6">
+            <h1 className="text-center font-bold font-cinzel">OrganizerName: {camp.name}</h1>
+            <div className="p-6 ">
               <div className="flex justify-between items-center mb-3">
                 <h3 className="text-md font-semibold text-indigo-800">camp: {camp.camp_name}</h3>
                 <p className="text-lg  text-green-600">💰Camp Fees: ${camp.fees}</p>
@@ -63,7 +63,7 @@ const PopularCamps = () => {
              <div className="flex justify-end">
   <Link
     to={`/camp-details/${camp._id}`}
-    className="inline-block bg-indigo-600 text-white px-5 py-2 rounded-lg hover:bg-indigo-700 transition-colors duration-300 font-semibold"
+    className="inline-block bg-indigo-600 text-white px-5 py-2 rounded-lg hover:bg-indigo-700 transition-colors duration-300 font-semibold btn-gradient-hover"
   >
    View Details
   </Link>
@@ -77,7 +77,7 @@ const PopularCamps = () => {
       {/* See All Camps Button */}
       <div className="relative z-10 text-center mt-12">
         <Link to="/availecamp">
-          <button className="btn btn-primary bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-6 py-3 rounded-lg transition-colors duration-300">
+          <button className="btn btn-primary bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-6 py-3 rounded-lg transition-colors duration-300 btn-gradient-hover">
             See All Camps
           </button>
         </Link>

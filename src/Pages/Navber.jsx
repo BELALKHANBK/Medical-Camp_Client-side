@@ -203,7 +203,7 @@ const Navber = () => {
       
 
       {/* Navbar */}
-      <div className="navbar bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 shadow-sm -ml-2 fixed top-0 z-50 w-full">
+      <div className="navbar bg-gradient-to-r font-lora  from-indigo-600 via-purple-600 to-pink-600 shadow-sm -ml-2 fixed top-0 z-50 w-full">
         <div  className="navbar-start">
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}

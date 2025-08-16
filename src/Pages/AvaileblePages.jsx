@@ -119,7 +119,7 @@ const AvailablePages = () => {
         {currentItems.map((camp) => (
           <div
             key={camp._id}
-            className="border rounded-xl shadow-lg p-4 flex flex-col text-black bg-white hover:shadow-2xl transition-transform transform hover:-translate-y-2 duration-300 hover:scale-[1.03]  dark:bg-gray-800 dark:text-white"
+            className="border rounded-xl shadow-lg font-cinzel p-4 flex flex-col text-black bg-white hover:shadow-2xl transition-transform transform hover:-translate-y-2 duration-300 hover:scale-[1.03]  dark:bg-gray-800 dark:text-white"
           >
             <img
               src={camp.image}
@@ -137,18 +137,19 @@ const AvailablePages = () => {
             <p className="text-sm"><strong>👥 Participants count:</strong> {camp.participantCount}</p>
             <p className="flex-grow text-sm italic text-gray-700 dark:text-gray-300 mt-2">{camp.description}</p>
 
-            <Link
-              to={`/camp-details/${camp._id}`}
-              className="btn btn-primary mt-4"
-            >
-              View Details
-            </Link>
+           <Link
+  to={`/camp-details/${camp._id}`}
+  className="btn mt-4 btn-gradient-hover"
+>
+  View Details
+</Link>
+
           </div>
         ))}
       </div>
 
       {/* Pagination */}
-      <div className="mt-10">
+      <div className="mt-10 text-blue-700">
         <Pagination
           totalItems={filteredCamps.length}
           itemsPerPage={itemsPerPage}
