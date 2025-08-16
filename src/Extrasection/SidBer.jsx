@@ -38,7 +38,7 @@ const SidBer = () => {
       <li>
         <NavLink to="/dashboard/managereg" className={linkStyle} onClick={closeDrawer}>
           <FaClipboardList className="text-lg" />
-          <span>Manage Register Camps</span>
+          <span className=''>Manage Register Camps</span>
         </NavLink>
       </li>
     </ul>

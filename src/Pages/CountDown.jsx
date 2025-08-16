@@ -35,8 +35,8 @@ const CountDown = () => {
   ];
 
   return (
-    <div className=" transition-colors lg:mt-4 md:mt-4 mt-90 duration-500  ">
-      <h1 className="text-3xl  text-center font-cinzel ">
+    <div className=" transition-colors lg:mt-4 md:mt-4 mt-110 duration-500  ">
+      <h1 className="lg:text-3xl md:text-3xl text-2xl mt-30 text-center font-cinzel ">
         Our Community Impact
       </h1>
 

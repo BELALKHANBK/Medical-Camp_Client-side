@@ -26,7 +26,7 @@ const UnComingEvent = () => {
 
   return (
     <section className="mt-4  md:px-12">
-      <h2 className="text-3xl font-cinzel text-center text-blue-700 mb-10">
+      <h2 className="lg:text-3xl md:text-3xl text-2xl font-cinzel text-center text-blue-700 mb-10">
         Upcoming Health Events
       </h2>
 

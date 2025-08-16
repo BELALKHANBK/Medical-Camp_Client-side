@@ -39,7 +39,7 @@ const FeedBackFrom = () => {
 
       {/* Main Content */}
       <div className="relative z-10 w-full">
-        <h2 className="text-3xl  py-6 font-cinzel text-center ">
+        <h2 className="lg:text-3xl md:text-3xl  text-2xl py-6 font-cinzel text-center ">
           📣 Participant Feedback
         </h2>
 

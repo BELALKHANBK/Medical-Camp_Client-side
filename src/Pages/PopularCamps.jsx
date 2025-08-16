@@ -33,7 +33,7 @@ const PopularCamps = () => {
       </Helmet>
       <div className="absolute inset-0  bg-opacity-50 z-0"></div>
 
-      <h2 className="relative z-10 text-3xl font-cinzel mb-8 text-center ">
+      <h2 className="relative z-10 lg:text-3xl md:text-3xl text-2xl font-cinzel mb-8 text-center ">
         Popular Medical Camps
       </h2>
 
@@ -51,7 +51,7 @@ const PopularCamps = () => {
             />
             <h1 className="text-center font-bold font-cinzel">OrganizerName: {camp.name}</h1>
             <div className="p-6 ">
-              <div className="flex justify-between items-center mb-3">
+              <div className="grid justify-between items-center mb-3">
                 <h3 className="text-md font-semibold text-indigo-800">camp: {camp.camp_name}</h3>
                 <p className="text-lg  text-green-600">💰Camp Fees: ${camp.fees}</p>
               </div>

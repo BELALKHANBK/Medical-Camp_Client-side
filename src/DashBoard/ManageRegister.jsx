@@ -8,7 +8,7 @@ const ManageRegister = () => {
   const [registrations, setRegistrations] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 6;
+  const itemsPerPage = 9;
 
   useEffect(() => {
     if (role === "organizer") {
@@ -174,7 +174,7 @@ const ManageRegister = () => {
 
       {/* Pagination Controls */}
       {totalPages > 1 && (
-        <div className="flex justify-center mt-4 gap-2 flex-wrap">
+        <div className="flex justify-center mt-20 gap-2 flex-wrap">
           <button
             onClick={() => goToPage(currentPage - 1)}
             disabled={currentPage === 1}

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router";
+import { Link } from "react-router"; // ✅ fixed
 import useAxoiseSecure from "../AuthProvider/UseAxios";
 import Pagination from "../pagination/Pagination";
 import { Helmet } from "react-helmet-async";
@@ -64,9 +64,8 @@ const AvailablePages = () => {
     return (
       <div className="flex flex-col justify-center items-center min-h-screen">
         <div className="flex space-x-2">
-      <span class="loader"></span>    
+          <span className="loader"></span>   {/* ✅ fixed */}
         </div>
-   
       </div>
     );
   }
@@ -127,23 +126,21 @@ const AvailablePages = () => {
               alt={camp.name}
             />
             <h1 className="text-center font-bold">OrganizerName: {camp.name}</h1>
-            <div className="flex justify-between items-center mb-2">
-              <h3 className="text-lg font-bold text-indigo-700 dark:text-indigo-400">campName: {camp.name}</h3>
+            <div className="grid justify-between items-center mb-2">
+              <h3 className="text-lg font-bold text-indigo-700 dark:text-indigo-400">campName: {camp.camp_name}</h3>
               <p className="text-sm font-medium">💰Camp Fees: ${camp.fees}</p>
             </div>
             <p className="text-sm"><strong>📅 Date & Time:</strong> {new Date(camp.dateTime).toLocaleString()}</p>
             <p className="text-sm"><strong>📍 Location:</strong> {camp.location}</p>
             <p className="text-sm"><strong>👨‍⚕️ Professional:</strong> {camp.doctor}</p>
             <p className="text-sm"><strong>👥 Participants count:</strong> {camp.participantCount}</p>
-            <p className="flex-grow text-sm italic text-gray-700 dark:text-gray-300 mt-2">{camp.description}</p>
-
-           <Link
-  to={`/camp-details/${camp._id}`}
-  className="btn mt-4 btn-gradient-hover"
->
-  View Details
-</Link>
-
+          
+            <Link
+              to={`/camp-details/${camp._id}`}
+              className="btn mt-4 btn-gradient-hover"
+            >
+              View Details
+            </Link>
           </div>
         ))}
       </div>

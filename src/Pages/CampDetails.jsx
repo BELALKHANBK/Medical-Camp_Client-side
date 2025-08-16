@@ -5,11 +5,13 @@ import { useState } from "react";
 import useAuth from "../AuthProvider/UseAuth";
 import useAxiosSecure from "../AuthProvider/UseAxios";
 import { Helmet } from "react-helmet-async";
+import '../../src/App.css'
 
 const CampDetails = () => {
   const { id } = useParams();
   const { user } = useAuth();
   const [showModal, setShowModal] = useState(false);
+  const [showFullDesc, setShowFullDesc] = useState(false); // 👈 description toggle state
   const axios = useAxiosSecure();
   const navigate = useNavigate();
 
@@ -58,15 +60,22 @@ const CampDetails = () => {
   if (isLoading) return <p className="text-center mt-10">Loading...</p>;
   if (!camp) return <p className="text-center mt-10">Camp not found</p>;
 
+  // limit description text
+  const description = camp?.description || "No description available.";
+  const shortDesc = description.slice(0, 150); // 👈 প্রথম 150 character
+
   return (
     <div className="max-w-6xl mx-auto px-4 py-10 sm:px-6 md:px-10 mt-10 md:mt-20">
       <Helmet>
         <title>Camp Details | MedCampMS</title>
         <meta name="description" content="Welcome to MedCampMS - Your trusted medical camp management system." />
       </Helmet>
-<h1 className="text-center  mt-4 text-3xl font-roboto hover:text-blue-700">Card Details Pages</h1>
+      <h1 className="text-center mt-4 text-3xl font-roboto hover:text-blue-700">
+        Card Details Pages
+      </h1>
+
       {/* Camp Details */}
-      <div className="bg-white text-black font-cinzel hover:scale-[1.03] shadow-lg rounded-xl overflow-hidden md:flex md:space-x-6">
+      <div className="bg-white mt-8 text-black font-cinzel hover:scale-[1.03] shadow-lg rounded-xl overflow-hidden md:flex md:space-x-6">
         <div className="md:w-1/2">
           <img
             src={camp?.image || "https://via.placeholder.com/400x300?text=No+Image"}
@@ -82,11 +91,24 @@ const CampDetails = () => {
             <p><strong>Location:</strong> {camp?.location ?? "N/A"}</p>
             <p><strong>Healthcare Professional:</strong> {camp?.doctor ?? "N/A"}</p>
             <p><strong>Participants:</strong> {camp?.participantCount ?? 0}</p>
-            <p className="mt-4 text-gray-600">{camp?.description ?? "No description available."}</p>
+
+            {/* description with see more/less */}
+            <p className="mt-4 text-gray-600">
+              {showFullDesc ? description : `${shortDesc}...`}
+            </p>
+            {description.length > 150 && (
+              <button
+                onClick={() => setShowFullDesc(!showFullDesc)}
+                className="text-blue-600 mt-1 hover:underline"
+              >
+                {showFullDesc ? "See Less" : "See More"}
+              </button>
+            )}
           </div>
+
           <button
             onClick={() => setShowModal(true)}
-            className="btn btn-primary mt-6 w-full"
+            className="btn btn-primary mt-6 w-full btn-gradient-hover"
           >
             Join Camp
           </button>
@@ -155,7 +177,7 @@ const CampDetails = () => {
                 className="input input-bordered w-full"
               />
 
-              <button type="submit" className="btn btn-primary w-full mt-2">
+              <button type="submit" className="btn btn-primary w-full mt-2 btn-gradient-hover">
                 Confirm Join
               </button>
             </form>
