@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import bgVideo from '../assets/image/1103996_1080p_Disease_3840x2160.mp4';
+//import bgVideo from '../assets/image/1103996_1080p_Disease_3840x2160.mp4';
 import { FaStar } from 'react-icons/fa';
 
 const FeedBackFrom = () => {
@@ -35,14 +35,14 @@ const FeedBackFrom = () => {
       {/* Background Video */}
    
       <div className="absolute inset-0 z-0 overflow-hidden">
-        <video
+      {/*   <video
           src={bgVideo}
           autoPlay
           loop
           muted
           playsInline
           className="w-full h-full object-cover"
-        />
+        /> */}
         <div className="absolute inset-0 bg-opacity-60" />
       </div>
 

@@ -25,3 +25,45 @@ input.custom-input:focus {
     /* Tailwind blue-500 */
     box-shadow: 8px 8px 8px 8px rgba(19, 12, 211, 0.3), 8px 8px 8px rgba(255, 0, 0, 0.3), 2px -2px 5px rgba(0, 255, 0, 0.3), -2px 2px 5px rgba(255, 255, 0, 0.3);
 }
+
+.loader {
+  display: inline-block;
+  position: relative;
+  width: 1em;
+  height: 4em;
+  background: #000; /* light mode black */
+  animation: scaleY 10s infinite ease-in-out;
+}
+
+.loader:before,
+.loader:after {
+  content: '';
+  position: absolute;
+  top: 0;
+  width: 1em;
+  height: 4em;
+  background: #000;
+  animation: scaleY 10s infinite ease-in-out;
+}
+
+.loader:before {
+  left: -2em;
+  animation-delay: -3.33s;
+}
+
+.loader:after {
+  left: 2em;
+  animation-delay: -6.66s;
+}
+
+@keyframes scaleY {
+  0%, 80%, 100% { transform: scaleY(0.4); }
+  40% { transform: scaleY(1); }
+}
+
+/* Dark mode */
+.dark .loader,
+.dark .loader:before,
+.dark .loader:after {
+  background: #fff;
+}

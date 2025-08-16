@@ -2,12 +2,13 @@
 import { useNavigate, useLocation } from 'react-router';
 import Swal from 'sweetalert2';
 import { FcGoogle } from "react-icons/fc";
-import { useAuth } from '../../../../Lost and Found Website/Lost_and_Found_Website/src/AuthContext';
+import useAuth from '../AuthProvider/UseAuth';
+
 
 
 
 const SignInGoogle = () => {
-  const { signInWithGoogle } =useAuth()
+  const {   signInWithGoogle } =useAuth()
   const navigate = useNavigate();
   const location = useLocation();
   const from = new URLSearchParams(location.search).get('redirect') || '/';

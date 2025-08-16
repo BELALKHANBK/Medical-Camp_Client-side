@@ -4,7 +4,7 @@ import { Link, useLocation, useNavigate } from 'react-router';
 import useAuth from '../AuthProvider/UseAuth';
 import SignInGoogle from './SignInGoogle';
 import { Helmet } from 'react-helmet-async';
-import groovyWalkAnimation from '../../src/assets/image/TemanASN Home Mobile.json';
+import groovyWalkAnimation from '../assets/image/register.json';
 import Lottie from 'lottie-react';
 import { FaRegEye, FaRegEyeSlash } from 'react-icons/fa6';
 import Swal from 'sweetalert2';
@@ -118,7 +118,7 @@ const Login = () => {
                 Don’t have an account? <Link to='/register' className='underline text-blue-600'>Register</Link>
               </p>
 
-              <h1 className='text-center mt-4'>Or</h1>
+              
               <SignInGoogle />
             </div>
           </div>

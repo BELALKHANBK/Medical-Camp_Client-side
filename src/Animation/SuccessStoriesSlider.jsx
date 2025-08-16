@@ -78,7 +78,7 @@ const SuccessStoriesSlider = () => {
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 1 }}
         viewport={{ once: true }}
-        style={{ padding: "60px 20px", backgroundColor: "#f7f9fc" }}
+        style={{ padding: "60px 20px" }}
       >
         <div style={{ maxWidth: "900px", margin: "auto", textAlign: "center" }}>
           <h2 style={{ fontFamily: 'Poppins, sans-serif', fontSize: "2.5rem", marginBottom: "1rem", color: "#004d40" }}>

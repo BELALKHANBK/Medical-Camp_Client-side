@@ -8,11 +8,12 @@ import useAuth from '../AuthProvider/UseAuth';
 import SignInGoogle from './SignInGoogle';
 import OtherAxios from '../AuthProvider/OtherAxios';
 import { Helmet } from 'react-helmet-async';
-import groovyWalkAnimation from '../../src/assets/image/TemanASN Home Mobile.json';
+import groovyWalkAnimation from '../assets/image/register.json';
 import Lottie from 'lottie-react';
 import { FaRegEye, FaRegEyeSlash } from 'react-icons/fa6';
 import '../app.css'; // ✅ Custom CSS import
 import Swal from 'sweetalert2';
+
 const Register = () => {
   const { register, handleSubmit, formState: { errors } } = useForm();
   const { createUser, updateUserProfile } = useAuth();
@@ -197,7 +198,7 @@ const Register = () => {
                   </Link>
                 </p>
 
-                <h1 className="text-center mt-2">Or</h1>
+             
                 <SignInGoogle />
               </div>
             </div>

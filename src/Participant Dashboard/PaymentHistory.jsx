@@ -4,7 +4,7 @@ import useAuth from '../AuthProvider/UseAuth';
 import useAxiosSecure from '../AuthProvider/UseAxios';
 import vidbg from '../assets/image/1103996_1080p_Disease_3840x2160.mp4';
 import { Helmet } from 'react-helmet-async';
-
+import '../../src/App.css'
 const PaymentHistory = () => {
   const { user } = useAuth();
   const axiosSecure = useAxiosSecure();
@@ -24,7 +24,7 @@ const PaymentHistory = () => {
   });
 
   if (isLoading) {
-    return <p className="text-center mt-6 text-white">Loading Payment History...</p>;
+    return   <div className="loader"></div>
   }
 
   const filteredPayments = payments.filter(payment =>

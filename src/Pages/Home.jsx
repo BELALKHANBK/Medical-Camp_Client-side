@@ -1,32 +1,50 @@
-import React from 'react';
-
+import React, { useState, useEffect } from 'react';
 import PopularCamps from './PopularCamps';
 import UnComingEvent from './UnComingEvent';
 import FeedbackFrom from '../Participant Dashboard/FeedBackFrom';
-
-import { Helmet } from 'react-helmet-async';
 import SuccessStoriesSlider from '../Animation/SuccessStoriesSlider';
 import CountDown from './CountDown';
-
-
-
+import { Helmet } from 'react-helmet-async';
+//import '../App.css'; // spinner CSS import
+import '../../src/App.css'
 const Home = () => {
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // spinner 5s ধরে দেখানোর উদাহরণ
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 5000); // 5s delay, চাইলে 10000 (10s) দিতে পারেন
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (loading) {
     return (
-    <dev>
+      <div className="flex justify-center items-center min-h-screen">
+        <div className="loader"></div>
+      </div>
+    );
+  }
+
+  return (
+    <div>
       <Helmet>
         <title>Home | MedCampMS</title>
-        <meta name="description" content="Welcome to MedCampMS - Your trusted medical camp management system." />
+        <meta
+          name="description"
+          content="Welcome to MedCampMS - Your trusted medical camp management system."
+        />
       </Helmet>
-   <SuccessStoriesSlider/>
-       {/*  <Banner/> */}
-      <PopularCamps/>
-      <FeedbackFrom/>
-      <UnComingEvent/>
-<CountDown/>
 
-      
-    </dev>
-    );
+      <SuccessStoriesSlider />
+      {/* <Banner/> */}
+      <PopularCamps />
+      <FeedbackFrom />
+      <UnComingEvent />
+      <CountDown />
+    </div>
+  );
 };
 
 export default Home;

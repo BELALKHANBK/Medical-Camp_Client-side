@@ -24,7 +24,7 @@ const UnComingEvent = () => {
   ];
 
   return (
-    <section className=" py-12 px-4 md:px-12">
+    <section className=" py-12  md:px-12">
       <h2 className="text-3xl font-bold text-center text-blue-700 mb-10">
         Upcoming Health Events
       </h2>
