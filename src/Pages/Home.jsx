@@ -6,28 +6,28 @@ import SuccessStoriesSlider from '../Animation/SuccessStoriesSlider';
 import CountDown from './CountDown';
 import { Helmet } from 'react-helmet-async';
 import { Fade, Slide, Zoom } from 'react-awesome-reveal'; // 👈 scroll animation
-import '../../src/App.css'
+//import '../../src/App.css'
 import App from '../App';
 import CardGalary from './CardGalary';
 
 const Home = () => {
-  const [loading, setLoading] = useState(true);
+  //const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
+  /* useEffect(() => {
     const timer = setTimeout(() => {
       setLoading(false);
     }, 5000);
 
     return () => clearTimeout(timer);
-  }, []);
+  }, []); */
 
-  if (loading) {
+  /* if (loading) {
     return (
       <div className="flex justify-center items-center min-h-screen">
         <div className="loader"></div>
       </div>
     );
-  }
+  } */
 
   return (
     <div>

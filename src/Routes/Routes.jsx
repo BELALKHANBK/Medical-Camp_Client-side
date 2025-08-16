@@ -23,6 +23,7 @@ import ParticipentProfile from "../Participant Dashboard/ParticipentProfile";
 import NotFoundPages from "../Pages/NotFoundPages";
 import PrivateRouteParticipant from "../Participant Dashboard/PrivateRouteParticipant";
 import PrivateRouteOrganizer from "../DashBoard/PrivateRouteOrganizer";
+import AboutMe from "../Animation/AboutMe";
 
 export const router = createBrowserRouter([
   {
@@ -40,7 +41,11 @@ export const router = createBrowserRouter([
     {
          path: "/camp-details/:id", 
  element:<PriveteRoute><CampDetails></CampDetails></PriveteRoute>
-    }
+    },
+     {
+        path:'aboutme',
+        Component:AboutMe
+      }
 
     ],
     
@@ -116,6 +121,7 @@ Component:ParticipentProfile
         path:'payments/:campId',
         Component:PaymentFrom
       }
+     
 ]
       
   },

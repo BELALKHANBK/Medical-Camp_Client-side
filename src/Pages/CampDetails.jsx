@@ -86,6 +86,7 @@ const CampDetails = () => {
         <div className="md:w-1/2 p-6 flex flex-col justify-between">
           <div>
             <h2 className="text-3xl font-bold mb-2 text-blue-700">{camp?.name || "No Name"}</h2>
+            <h2 className="text-xl font-bold mb-2 text-blue-700">Camp Nane:{camp?.camp_name || "No Name"}</h2>
             <p><strong>Camp Fees:</strong> ${camp?.fees ?? "N/A"}</p>
             <p><strong>Date & Time:</strong> {camp?.dateTime ?? "N/A"}</p>
             <p><strong>Location:</strong> {camp?.location ?? "N/A"}</p>

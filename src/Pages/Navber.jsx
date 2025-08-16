@@ -274,7 +274,13 @@ const Navber = () => {
       {isMenuOpen && (
         
         <div className="fixed top-[60px] left-0 right-0 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 z-40 p-4 lg:hidden">
-        
+         <button
+                onClick={toggleTheme}
+                className="p-2 rounded-full bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors ml-2"
+                aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
+              >
+                {theme === "dark" ? "🌞" : "🌙"}
+              </button>
           {navItems}
         </div>
          
