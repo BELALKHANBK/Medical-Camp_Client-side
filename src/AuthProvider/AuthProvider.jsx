@@ -3,6 +3,7 @@ import {
   createUserWithEmailAndPassword,
   GoogleAuthProvider,
   onAuthStateChanged,
+  sendPasswordResetEmail,
   signInWithEmailAndPassword,
   signInWithPopup,
   signOut,
@@ -43,6 +44,9 @@ const logOut = async () => {
   window.location.reload();  // page reload করবে
   // অথবা যদি React Router ব্যবহার করো:
   // navigate('/login');
+};
+const resetPassword = (email) => {
+  return sendPasswordResetEmail(auth, email);
 };
 
 // getToken function add করো
@@ -103,7 +107,8 @@ useEffect(() => {
     signInWithGoogle,
     updateUserProfile,
     logOut,
-    getToken
+    getToken,
+    resetPassword
   };
 
   return <AuthContext.Provider value={authInfo}>{children}</AuthContext.Provider>;

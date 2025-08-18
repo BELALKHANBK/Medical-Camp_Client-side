@@ -70,7 +70,7 @@ const CampDetails = () => {
         <title>Camp Details | MedCampMS</title>
         <meta name="description" content="Welcome to MedCampMS - Your trusted medical camp management system." />
       </Helmet>
-      <h1 className="text-center mt-4 text-3xl font-roboto hover:text-blue-700">
+      <h1 className="text-center mt-4 text-3xl font-cinzel hover:text-blue-700">
         Card Details Pages
       </h1>
 

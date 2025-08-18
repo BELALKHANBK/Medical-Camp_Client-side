@@ -82,7 +82,7 @@ const SuccessStoriesSlider = () => {
       >
         <div style={{ maxWidth: "900px", margin: "auto", textAlign: "center" }}>
           <h2 style={{ fontFamily: 'Poppins, sans-serif', fontSize: "2.5rem", marginBottom: "1rem", color: "#004d40" }}>
-            <FaHeartbeat className="inline text-red-500 mr-2 font-cinzel" /> Success Stories from Our Medical Camps
+            <FaHeartbeat className="inline text-red-500 font-cinzel mr-2 font-cinzel" /> Success Stories from Our Medical Camps
           </h2>
           <p style={{ fontSize: "1.1rem", marginBottom: "40px", color: "#555" }}>
             Celebrating impactful moments and achievements from our past camps.

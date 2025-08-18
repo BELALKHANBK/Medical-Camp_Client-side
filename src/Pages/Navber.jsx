@@ -65,7 +65,7 @@ const Navber = () => {
   };
 
 
-  
+
   const { user, role, loading, logOut } = useAuth();
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -200,7 +200,7 @@ const Navber = () => {
           }
         `}
       >
-      
+
 
       {/* Navbar */}
       <div className="navbar bg-gradient-to-r font-lora  from-indigo-600 via-purple-600 to-pink-600 shadow-sm -ml-2 fixed top-0 z-50 w-full">
@@ -272,8 +272,9 @@ const Navber = () => {
       </div>
 
       {isMenuOpen && (
-        
+
         <div className="fixed top-[60px] left-0 right-0 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 z-40 p-4 lg:hidden">
+        
          <button
                 onClick={toggleTheme}
                 className="p-2 rounded-full bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors ml-2"
@@ -283,7 +284,7 @@ const Navber = () => {
               </button>
           {navItems}
         </div>
-         
+
       )}
 
       {/* Profile Drawer */}
@@ -293,7 +294,7 @@ const Navber = () => {
             onClick={() =>{ 
                speakText('close sidbar');
               setIsDrawerOpen(false)}}
-            className="absolute top-2 right-2 text-xl text-gray-500 hover:text-red-500 transition"
+            className="absolute top-2 right-2 btn btn-secondary hover:bg-blue-600 text-xl text-gray-500 hover:text-red-500 transition"
           >
             ✕
           </button>

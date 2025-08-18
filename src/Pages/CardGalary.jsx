@@ -6,9 +6,9 @@ const BeautifulCard = ({ image, title, subtitle, description }) => {
     <div className="max-w-6xl  bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-shadow duration-300 transform hover:-translate-y-2 hover:scale-105">
       <img src={image} alt={title} className="w-full h-56 object-cover" />
       <div className="p-6">
-        <h2 className="text-2xl font-bold text-gray-800 mb-1">{title}</h2>
+        <h2 className="text-2xl font-montserrat  text-gray-800 mb-1">{title}</h2>
         {subtitle && <h3 className="text-md font-medium text-indigo-600 mb-2">{subtitle}</h3>}
-        <p className="text-gray-600 mb-4">{description}</p>
+        <p className="text-gray-600 mb-4 font-cinzel">{description}</p>
        
       </div>
     </div>
@@ -63,7 +63,10 @@ const CardGallery = () => {
   ];
 
   return (
-    <div className="p-6 w-full grid grid-cols-1   md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div>
+       <h1 className='text-center font-cinzel text-2xl font-bold mt-8'>Other Medical Camps</h1>
+      <div className="p-6 w-full grid grid-cols-1   md:grid-cols-2 lg:grid-cols-3 gap-6">
+   
       {cards.map((card, index) => (
         <BeautifulCard
           key={index}
@@ -74,6 +77,7 @@ const CardGallery = () => {
           
         />
       ))}
+    </div>
     </div>
   );
 };

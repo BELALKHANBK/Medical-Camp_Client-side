@@ -12,7 +12,7 @@ import '../app.css'; // custom input styles
 
 const Login = () => {
   const { register, handleSubmit, formState: { errors } } = useForm();
-  const { signIn } = useAuth();
+  const { signIn,resetPassword } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
@@ -100,9 +100,34 @@ const Login = () => {
                   <p className='text-red-600' role="alert">Password must be at least 6 characters</p>
                 )}
 
-                <div className="mt-2">
-                  <a className="link link-hover text-blue-600 text-sm">Forgot password?</a>
-                </div>
+          <div className="mt-2">
+       <button 
+         type="button"
+         onClick={async () => {
+           const email = prompt(`👉Enter your registered email & send code email:`);
+           if (!email) return;
+
+           try {
+             await resetPassword(email);
+             Swal.fire({
+               icon: 'success',
+               title: 'Password Reset Email Sent!',
+               text: `Check your email: ${email}`,
+             });
+           } catch (error) {
+             Swal.fire({
+               icon: 'error',
+               title: 'Error',
+               text: error.message,
+             });
+           }
+         }}
+         className="link link-hover text-blue-600 text-sm"
+       >
+         Forgot password?
+       </button>
+     </div>
+
 
                 <button
                   type="submit"

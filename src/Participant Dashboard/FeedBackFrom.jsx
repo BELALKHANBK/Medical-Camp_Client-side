@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { FaStar } from 'react-icons/fa';
 import '../../src/App.css'
+import image from '../assets/image/no data.jpg'
 const FeedBackFrom = () => {
   const [feedbacks, setFeedbacks] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -25,8 +26,12 @@ const FeedBackFrom = () => {
   <div class="flex items-center justify-center min-h-screen">
   <span class="load"></span>
 </div>
-  if (error) return <p className="text-center mt-4 text-red-600">{error}</p>;
-  if (!feedbacks.length) return <p className="text-center mt-4 text-white">No feedbacks available.</p>;
+  if (error) return <p className="text-center text-2xl font-bold mt-4 text-red-600">{error}
+  <img src={image} alt=''/>
+  </p>;
+  if (!feedbacks.length) return <p className="text-center mt-4 text-white">No feedbacks available.
+  
+  </p>;
 
   const totalPages = Math.ceil(feedbacks.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;

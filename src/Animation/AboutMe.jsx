@@ -1,7 +1,7 @@
 import React from "react";
 import { Helmet } from "react-helmet-async";
 import profileImg from '../../src/assets/image/belal khan.jpg'; // তোমার ছবি path
-
+import '../../src/App.css'
 const AboutMe = () => {
   const qualifications = [
     {
@@ -17,7 +17,7 @@ const AboutMe = () => {
   ];
 
   return (
-    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10" style={{ fontFamily: "'Poppins', sans-serif" }}>
+    <div className="max-w-4xl mx-auto px-4 sm:px-6 font-cinzel lg:px-8 py-10" style={{ fontFamily: "'Poppins', sans-serif" }}>
       <Helmet>
         <title>About Me | MedCampMS</title>
         <meta name="description" content="About the creator of MedCampMS website" />
@@ -33,10 +33,10 @@ const AboutMe = () => {
       </div>
 
       {/* Heading */}
-      <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center text-indigo-600 mb-6">About Me & My Qualifications</h1>
+      <h1 className="text-2xl sm:text-3xl font-cinzel md:text-4xl font-bold text-center text-indigo-600 mb-6">About Me & My Qualifications</h1>
 
       {/* Main Info Card */}
-      <div className="bg-white dark:bg-gray-800 dark:text-white shadow-lg rounded-xl p-6 sm:p-8 md:p-10 space-y-4 text-sm sm:text-base md:text-lg">
+      <div className="bg-white dark:bg-gray-800 font-playfair  dark:text-white shadow-lg rounded-xl p-6 sm:p-8 md:p-10 space-y-4 text-sm sm:text-base md:text-lg">
         <p><strong>Website Name:</strong> MedCampMS</p>
         <p><strong>Created By:</strong> Md. Belal Khan</p>
         <p><strong>Email:</strong> belalkhanloverboy2004@gmail.com</p>
@@ -50,8 +50,8 @@ const AboutMe = () => {
       </div>
 
       {/* Qualification Section */}
-      <h2 className="text-xl sm:text-2xl md:text-3xl font-semibold text-indigo-600 mt-10 mb-4 text-center">My Education & Certificates</h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+      <h2 className="text-xl sm:text-2xl md:text-3xl font-roboto font-semibold text-indigo-600 mt-10 mb-4 text-center">My Education & Certificates</h2>
+      <div className="grid grid-cols-1 sm:grid-cols-2 font-roboto gap-6">
         {qualifications.map((q, index) => (
           <div key={index} className="bg-white dark:bg-gray-700 dark:text-white shadow-md rounded-xl p-4 hover:shadow-lg transition-shadow duration-300">
             <h3 className="text-lg font-bold text-indigo-600 mb-2">{q.degree}</h3>

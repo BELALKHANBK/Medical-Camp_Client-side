@@ -29,7 +29,7 @@ export const router = createBrowserRouter([
   {
     path: "/",
     element: <RootLayout />,
-    errorElement:<NotFoundPages/>, // ✅ component instance, not just JSX
+    errorElement:<NotFoundPages/>, // component instance, not just JSX
     children: [
     {
       index:true,

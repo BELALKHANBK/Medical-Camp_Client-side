@@ -19,7 +19,7 @@ import Navber from '../src/Pages/Navber';
 
 function App() {
   return (
-    <div className="bg-red-400">
+    <div className="bg-gray-900">
   <Navber/>
       
       <ScrollButton />
